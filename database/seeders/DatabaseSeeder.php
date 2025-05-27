@@ -15,9 +15,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // // Check if the user already exists before creating
+        // User::firstOrCreate(
+        //     ['email' => 'test@example.com'], // Check condition
+        //     [ // Attributes to set if the user doesn't exist
+        //         'name' => 'Test User',
+        //         'email' => 'test@example.com',
+        //     ]);
+        
+        $this->call([
+            EmployeeSeeder::class,
+            // Add other seeders here as needed
         ]);
     }
 }
