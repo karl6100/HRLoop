@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeController;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
@@ -11,9 +12,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('employee', function () {
-    return view('employee');
-})->name('employee');
+Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

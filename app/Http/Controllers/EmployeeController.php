@@ -12,9 +12,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
-    }
-
+        $employee = Employee::all(); // Fetch all employees
+        
+        return view('employee.index', compact('employee'));
+    }    
     /**
      * Show the form for creating a new resource.
      */
@@ -44,7 +45,8 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        //
+        $employee = Employee::findOrFail($employee_id); // Fetch the employee by ID
+        return view('employee.edit', compact('employee')); // Return the edit view
     }
 
     /**
