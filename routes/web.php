@@ -12,7 +12,8 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
+Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
+Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
