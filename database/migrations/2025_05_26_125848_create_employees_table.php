@@ -19,23 +19,27 @@ return new class extends Migration
             $table->string('first_name')->nullable(false);
             $table->string('last_name')->nullable(false);
             $table->string('middle_name')->nullable(true);
-            $table->enum('suffix', ['Jr.', 'Sr.', 'III', 'IV', 'V', 'None'])->default('None');
-            $table->enum('civil_status', ['Single', 'Married', 'Widowed', 'Separated', 'Divorced'])->default('Single');
+            $table->string('suffix');
+            $table->string('civil_status');
             $table->date('birth_date');
             $table->string('birth_place');
-            $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->default('O+');
+            $table->string('blood_type');
+            $table->string('gender');
+            $table->string('nationality');
+            $table->string('religion');
             $table->string('telephone_number');
             $table->string('mobile_number')->unique();
             $table->string('email')->unique();
             $table->string('department');
+            $table->string('company');
             $table->string('position_title');
-            $table->enum('job_level', ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'])->default('None');
+            $table->enum('job_level');
             $table->string('function');
             $table->date('regularization_date')->nullable();
-            $table->enum('employment_status', ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order']);
+            $table->enum('employment_status');
         });
 
-        Schema::create('address', function (Blueprint $table) {
+        Schema::create('employee_address', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
@@ -48,7 +52,7 @@ return new class extends Migration
             $table->boolean('is_current')->default(false);
         });
 
-        Schema::create('salary', function (Blueprint $table) {
+        Schema::create('employee_salary', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
@@ -58,7 +62,7 @@ return new class extends Migration
             $table->decimal('allowances', 10, 2)->nullable();
         });
 
-        Schema::create('premiums', function (Blueprint $table) {
+        Schema::create('employee_premiums', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
@@ -68,7 +72,7 @@ return new class extends Migration
             $table->string('tin_number')->nullable();
         });
 
-        Schema::create('education', function (Blueprint $table) {
+        Schema::create('employee_education', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
@@ -77,7 +81,7 @@ return new class extends Migration
             $table->string('year')->nullable();
         });
 
-        Schema::create('dependents', function (Blueprint $table) {
+        Schema::create('employee_dependents', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
@@ -92,10 +96,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('employees');
-        Schema::dropIfExists('address');
-        Schema::dropIfExists('salary');
-        Schema::dropIfExists('premiums');
-        Schema::dropIfExists('education');
-        Schema::dropIfExists('dependents');
+        Schema::dropIfExists('employee_address');
+        Schema::dropIfExists('employee_salary');
+        Schema::dropIfExists('employee_premiums');
+        Schema::dropIfExists('employee_education');
+        Schema::dropIfExists('employee_dependents');
     }
 };

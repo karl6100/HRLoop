@@ -21,7 +21,15 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employee.create'); // Return the create view
+        $suffixOptions = ['N/A','Jr.', 'Sr.', 'III', 'IV', 'V'];
+        $bloodOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+','O-'];
+        $civilStatusOptions = ['Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
+        $genderOptions = ['Male','Female'];
+        $jobLevelOptions =['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
+        $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
+        
+        return view('employee.create', compact('suffixOptions', 'bloodOptions', 'civilStatusOptions', 'genderOptions',
+            'jobLevelOptions', 'employmentStatusOptions'));
     }
 
     /**
