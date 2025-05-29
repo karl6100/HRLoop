@@ -9,7 +9,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth',/* 'verified'*/])
     ->name('dashboard');
 
 Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
