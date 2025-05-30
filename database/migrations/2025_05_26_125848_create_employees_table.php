@@ -33,60 +33,10 @@ return new class extends Migration
             $table->string('department');
             $table->string('company');
             $table->string('position_title');
-            $table->enum('job_level');
+            $table->string('job_level');
             $table->string('function');
-            $table->date('regularization_date')->nullable();
-            $table->enum('employment_status');
-        });
-
-        Schema::create('employee_address', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->foreignId('employee_id');
-            $table->string('street_address');
-            $table->string('barangay');
-            $table->string('city');
-            $table->string('province');
-            $table->string('zip_code');
-            $table->string('country')->default('Philippines');
-            $table->boolean('is_current')->default(false);
-        });
-
-        Schema::create('employee_salary', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->foreignId('employee_id');
-            $table->enum('pay_type', ['Monthly', 'Daily', 'Hourly'])->default('Daily');
-            $table->decimal('basic_salary', 10, 2);
-            $table->decimal('monthly_rate', 10, 2);
-            $table->decimal('allowances', 10, 2)->nullable();
-        });
-
-        Schema::create('employee_premiums', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->foreignId('employee_id');
-            $table->string('sss_no')->nullable();
-            $table->string('philhealth_number')->nullable();
-            $table->string('pagibig_number')->nullable();
-            $table->string('tin_number')->nullable();
-        });
-
-        Schema::create('employee_education', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->foreignId('employee_id');
-            $table->string('school')->nullable();
-            $table->string('attainment')->nullable();
-            $table->string('year')->nullable();
-        });
-
-        Schema::create('employee_dependents', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->foreignId('employee_id');
-            $table->string('fullname')->nullable();
-            $table->string('birth_date')->nullable();
+            $table->date('regularization_date');
+            $table->string('employment_status');
         });
     }
 
@@ -96,10 +46,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('employees');
-        Schema::dropIfExists('employee_address');
-        Schema::dropIfExists('employee_salary');
-        Schema::dropIfExists('employee_premiums');
-        Schema::dropIfExists('employee_education');
-        Schema::dropIfExists('employee_dependents');
     }
 };
