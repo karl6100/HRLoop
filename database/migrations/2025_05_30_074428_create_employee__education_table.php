@@ -16,8 +16,10 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('employee_id');
             $table->string('school')->nullable();
-            $table->string('attainment')->nullable();
-            $table->string('year')->nullable();
+            $table->string('education_level')->nullable();
+            $table->string('degree')->nullable();
+            $table->string('start_year')->nullable();
+            $table->string('end_year')->nullable();
         });
     }
 
