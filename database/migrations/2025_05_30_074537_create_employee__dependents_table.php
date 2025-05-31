@@ -16,7 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('employee_id');
             $table->string('fullname')->nullable();
-            $table->string('birth_date')->nullable();
+            $table->string('relationship')->nullable();
+            $table->date('birth_date')->nullable();
         });
     }
 

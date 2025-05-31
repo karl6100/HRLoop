@@ -175,73 +175,165 @@
             </div>
             <form>
                 <!-- Dynamic Input Section -->
-                <div class="mb-6">
-                    <div id="dynamic-input-container">
-                        <div class="grid gap-6 mb-6 md:grid-cols-4">
-                            <div>
-                                <label for="level_of_education" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level of Education</label>
-                                <input type="text" name="level_of_education[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
-                            </div>
-                            <div>
-                                <label for="school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School</label>
-                                <input type="text" name="school[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
-                            </div>
-                            <div>
-                                <label for="degree" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Degree</label>
-                                <input type="text" name="degree[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
-                            </div>
-                            <div>
-                                <label for="inclusive_years" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Inclusive Years</label>
-                                <div class="flex gap-2">
-                                    <input type="number" name="start_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Year" min="1900" max="2099" />
-                                    <input type="number" name="end_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Year" min="1900" max="2099" />
-                                </div>
+                <div id="education-input-container">
+                    <div class="grid gap-6 mb-6 md:grid-cols-4">
+                        <div>
+                            <label for="level_of_education" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level of Education</label>
+                            <input type="text" name="level_of_education[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
+                        </div>
+                        <div>
+                            <label for="school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School</label>
+                            <input type="text" name="school[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
+                        </div>
+                        <div>
+                            <label for="degree" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Degree</label>
+                            <input type="text" name="degree[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
+                        </div>
+                        <div>
+                            <label for="inclusive_years" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Inclusive Years</label>
+                            <div class="flex gap-2">
+                                <input type="number" name="start_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Year" min="1900" max="2099" />
+                                <input type="number" name="end_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Year" min="1900" max="2099" />
+                                <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('education-input-container')">+</button>
+                                <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onclick="removeInputField(this)">-</button>
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="mt-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="addInputField()">Add More</button>
-                </div>
-                <hr class="mt-2 border-gray-300 dark:border-gray-600">
-                <div class="mb-6">
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Educational Background</h1>
-                    <hr class="mt-2 border-gray-300 dark:border-gray-600">
-                </div>
-                <!-- Submit Button -->
-                <div class="mt-6">
-                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
                 </div>
             </form>
 
-            <!-- JavaScript for Dynamic Input Fields -->
-            <script>
-                function addInputField() {
-                    const container = document.getElementById('dynamic-input-container');
-                    const newField = document.createElement('div');
-                    newField.className = 'grid gap-6 mb-6 md:grid-cols-4';
-                    newField.innerHTML = `
-            <div>
-                <label for="level_of_education" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level of Education</label>
-                <input type="text" name="level_of_education[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
+            <hr class="mt-2 border-gray-300 dark:border-gray-600">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dependents</h1>
+                <hr class="mt-2 border-gray-300 dark:border-gray-600">
             </div>
-            <div>
-                <label for="school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School</label>
-                <input type="text" name="school[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
-            </div>
-            <div>
-                <label for="degree" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Degree</label>
-                <input type="text" name="degree[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
-            </div>
-            <div>
-                <label for="inclusive_years" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Inclusive Years</label>
-                <div class="flex gap-2">
-                    <input type="number" name="start_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Year" />
-                    <input type="number" name="end_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Year" />
+            <form>
+                <div id="dependents-input-container">
+                    <div class="grid gap-6 mb-6 md:grid-cols-4">
+                        <div>
+                            <label for="dependents_fullname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full name</label>
+                            <input type="text" name="dependent_fullname[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
+                        </div>
+                        <div>
+                            <label for="relationship" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Relationship</label>
+                            <input type="text" name="relationship[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
+                        </div>
+                        <div>
+                            <label for="dependents_birthdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
+                            <input type="text" name="dependents_birthdate[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
+                        </div>
+                        <div>
+                            <label for="dependent_age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
+                            <div class="flex gap-2">
+                                <input type="text" name="dependent_age[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" />
+                                <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('dependents-input-container')">+</button>
+                                <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onclick="removeInputField(this)">-</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </form>
+            <div class="mb-6">
             </div>
-        `;
-                    container.appendChild(newField);
-                }
-            </script>
+            <hr class="mt-2 border-gray-300 dark:border-gray-600">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Other Informations</h1>
+                <hr class="mt-2 border-gray-300 dark:border-gray-600">
+            </div>
+            <!-- Submit Button -->
+            <div class="mt-6">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+            </div>
     </div>
+    <!-- JavaScript for Dynamic Input Fields -->
+    <script>
+        function addInputField(containerId) {
+            const container = document.getElementById(containerId);
+            const newField = document.createElement('div');
+            newField.className = 'grid gap-6 mb-6 md:grid-cols-4';
+
+            // Generate fields based on the container ID
+            if (containerId === 'education-input-container') {
+                newField.innerHTML = `
+                <div>
+                    <input type="text" name="level_of_education[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
+                </div>
+                <div>
+                    <input type="text" name="school[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
+                </div>
+                <div>
+                    <input type="text" name="degree[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
+                </div>
+                <div>
+                    <div class="flex gap-2">
+                        <input type="number" name="start_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Year" min="1900" max="2099" />
+                        <input type="number" name="end_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Year" min="1900" max="2099" />
+                        <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('${containerId}')">+</button>
+                        <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
+                    </div>
+                </div>
+            `;
+            } else if (containerId === 'dependents-input-container') {
+                newField.innerHTML = `
+                <div>
+                    <input type="text" name="dependents_fullname[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Full name" />
+                </div>
+                <div>
+                    <input type="text" name="relationship[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Spouse, Son, Daughter, etc." />
+                </div>
+                <div>
+                    <input type="date" name="dependent_birthdate[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                </div>
+                <div>
+                    <div class="flex gap-2">
+                        <input type="text" id="disabled-input" aria-label="disabled input" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value="0" disabled>
+                        <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('${containerId}')">+</button>
+                        <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
+                    </div>
+                </div>
+            `;
+            }
+
+            container.appendChild(newField);
+            updateRemoveButtons(containerId); // Update remove button visibility
+        }
+
+        function removeInputField(button, containerId) {
+            const container = document.getElementById(containerId);
+            const rows = container.querySelectorAll('.grid');
+            if (rows.length > 1) {
+                const row = button.closest('.grid');
+                row.remove();
+            }
+            updateRemoveButtons(containerId); // Update remove button visibility
+        }
+
+        function updateRemoveButtons(containerId) {
+            const container = document.getElementById(containerId);
+            const rows = container.querySelectorAll('.grid');
+            const removeButtons = container.querySelectorAll('.remove-btn');
+
+            // Hide or disable remove buttons if only one row remains
+            if (rows.length === 1) {
+                removeButtons.forEach(button => {
+                    button.style.display = 'none'; // Hide the button
+                    button.disabled = true; // Optionally disable the button
+                });
+            } else {
+                removeButtons.forEach(button => {
+                    button.style.display = 'inline-block'; // Show the button
+                    button.disabled = false; // Enable the button
+                });
+            }
+        }
+
+        // Initial call to update remove button visibility
+        document.addEventListener('DOMContentLoaded', () => {
+            updateRemoveButtons('education-input-container');
+            updateRemoveButtons('dependents-input-container');
+        });
+    </script>
+
+
 
 </x-layouts.app>
