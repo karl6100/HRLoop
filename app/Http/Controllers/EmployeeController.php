@@ -30,6 +30,8 @@ class EmployeeController extends Controller
         
         return view('employee.create', compact('suffixOptions', 'bloodOptions', 'civilStatusOptions', 'genderOptions',
             'jobLevelOptions', 'employmentStatusOptions'));
+
+        
     }
 
     /**
@@ -37,7 +39,37 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request->all());
+        $request->validate([
+            'employee_id' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_name' => 'nullable|string',
+            'suffix' => 'nullable|string',
+            'civil_status' => 'required|string',
+            'birth_date' => 'required|date',
+            'birth_place' => 'required|string',
+            'blood_type' => 'required|string',
+            'gender' => 'required|string',
+            'nationality' => 'required|string',
+            'religion' => 'required|string',
+            'telephone_number' => 'required|string',
+            'mobile_number' => 'required|string|unique:employees,mobile_number',
+            'email' => 'required|string|email|unique:employees,email',
+            'department' => 'required|string',
+            'company' => 'required|string',
+            'position_title' => 'required|string',
+            'job_level' => 'required|string',
+            'function' => 'required|string',
+            'hired_date' => 'required|date',
+            'employment_status' => 'required|string',
+        ]);
+
+        // Save the employee data
+        Employee::create($request->all());
+
+        return redirect()->back()->with('success', 'Employee saved successfully!');
+
     }
 
     /**

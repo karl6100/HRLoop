@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee__dependents', function (Blueprint $table) {
+        Schema::create('employee_education', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
-            $table->string('fullname')->nullable();
-            $table->string('relationship')->nullable();
-            $table->date('birth_date')->nullable();
+            $table->string('school')->nullable();
+            $table->string('education_level')->nullable();
+            $table->string('degree')->nullable();
+            $table->string('start_year')->nullable();
+            $table->string('end_year')->nullable();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee__dependents');
+        Schema::dropIfExists('employee_education');
     }
 };

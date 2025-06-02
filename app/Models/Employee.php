@@ -20,14 +20,18 @@ class Employee extends Model
         'birth_date',
         'birth_place',
         'blood_type',
+        'gender',
+        'nationality',
+        'religion',
         'telephone_number',
         'mobile_number',
         'email',
         'department',
+        'company',
         'position_title',
         'job_level',
         'function',
-        'regularization_date',
-        'employment_status'
+        'hired_date',
+        'employment_status',
     ];
 }

@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('position_title');
             $table->string('job_level');
             $table->string('function');
-            $table->date('regularization_date');
+            $table->date('hired_date');
             $table->string('employment_status');
         });
     }

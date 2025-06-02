@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee__premiums', function (Blueprint $table) {
+        Schema::create('employee_salaries', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
-            $table->string('sss_no')->nullable();
-            $table->string('philhealth_number')->nullable();
-            $table->string('pagibig_number')->nullable();
-            $table->string('tin_number')->nullable();
+            $table->string('pay_type');
+            $table->decimal('basic_salary', 10, 2);
+            $table->decimal('monthly_rate', 10, 2);
+            $table->decimal('allowances', 10, 2)->nullable();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee__premiums');
+        Schema::dropIfExists('employee_salaries');
     }
 };

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee__salaries', function (Blueprint $table) {
+        Schema::create('employee_dependents', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
-            $table->string('pay_type');
-            $table->decimal('basic_salary', 10, 2);
-            $table->decimal('monthly_rate', 10, 2);
-            $table->decimal('allowances', 10, 2)->nullable();
+            $table->string('fullname')->nullable();
+            $table->string('relationship')->nullable();
+            $table->date('birth_date')->nullable();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee__salaries');
+        Schema::dropIfExists('employee_dependents');
     }
 };

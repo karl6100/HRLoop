@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee__education', function (Blueprint $table) {
+        Schema::create('employee_premiums', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignId('employee_id');
-            $table->string('school')->nullable();
-            $table->string('education_level')->nullable();
-            $table->string('degree')->nullable();
-            $table->string('start_year')->nullable();
-            $table->string('end_year')->nullable();
+            $table->string('sss_no')->nullable();
+            $table->string('philhealth_number')->nullable();
+            $table->string('pagibig_number')->nullable();
+            $table->string('tin_number')->nullable();
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee__education');
+        Schema::dropIfExists('employee_premiums');
     }
 };
