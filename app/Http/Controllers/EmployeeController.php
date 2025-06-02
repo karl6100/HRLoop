@@ -39,7 +39,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        // dd($request->all());
         $request->validate([
             'employee_id' => 'required|string',
             'first_name' => 'required|string',
@@ -60,7 +60,6 @@ class EmployeeController extends Controller
             'company' => 'required|string',
             'position_title' => 'required|string',
             'job_level' => 'required|string',
-            'function' => 'required|string',
             'hired_date' => 'required|date',
             'employment_status' => 'required|string',
         ]);
@@ -69,7 +68,31 @@ class EmployeeController extends Controller
         Employee::create($request->all());
 
         return redirect()->back()->with('success', 'Employee saved successfully!');
-
+        // $employee = Employee::create([
+        //     'employee_id' => '12345',
+        //     'first_name' => 'John',
+        //     'last_name' => 'Doe',
+        //     'middle_name' => 'Smith',
+        //     'suffix' => 'Jr.',
+        //     'civil_status' => 'Single',
+        //     'birth_date' => '1990-01-01',
+        //     'birth_place' => 'City',
+        //     'blood_type' => 'O+',
+        //     'gender' => 'Male',
+        //     'nationality' => 'American',
+        //     'religion' => 'Christian',
+        //     'telephone_number' => '123-456-7890',
+        //     'mobile_number' => '987-654-3210',
+        //     'email' => 'john.doe@example.com',
+        //     'department' => 'IT',
+        //     'company' => 'TechCorp',
+        //     'position_title' => 'Developer',
+        //     'job_level' => 'Staff',
+        //     'hired_date' => '2023-01-01',
+        //     'employment_status' => 'Regular',
+        // ]);
+    
+        // dd('Employee saved successfully!', $employee);
     }
 
     /**

@@ -30,7 +30,6 @@ class Employee extends Model
         'company',
         'position_title',
         'job_level',
-        'function',
         'hired_date',
         'employment_status',
     ];
