@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($employee as $employee)
+                    @foreach ($employees as $employee)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $employee->first_name }} {{ $employee->last_name }}
@@ -40,6 +40,11 @@
                     @endforeach
                 </tbody>
             </table>
+            <!-- Pagination Links -->
+            <div class="mt-4">
+                {{ $employees->links() }}
+            </div>
         </div>
+
     </div>
 </x-layouts.app>

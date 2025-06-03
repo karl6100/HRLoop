@@ -12,26 +12,30 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employee = Employee::all(); // Fetch all employees
-        
-        return view('employee.index', compact('employee'));
-    }    
+        $employees = Employee::paginate(20); // Fetch all employees
+
+        return view('employee.index', compact('employees'));
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $suffixOptions = ['N/A','Jr.', 'Sr.', 'III', 'IV', 'V'];
-        $bloodOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+','O-'];
+        $suffixOptions = ['N/A', 'Jr.', 'Sr.', 'III', 'IV', 'V'];
+        $bloodOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
         $civilStatusOptions = ['Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
-        $genderOptions = ['Male','Female'];
-        $jobLevelOptions =['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
+        $genderOptions = ['Male', 'Female'];
+        $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
         $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
-        
-        return view('employee.create', compact('suffixOptions', 'bloodOptions', 'civilStatusOptions', 'genderOptions',
-            'jobLevelOptions', 'employmentStatusOptions'));
 
-        
+        return view('employee.create', compact(
+            'suffixOptions',
+            'bloodOptions',
+            'civilStatusOptions',
+            'genderOptions',
+            'jobLevelOptions',
+            'employmentStatusOptions'
+        ));
     }
 
     /**
@@ -67,8 +71,10 @@ class EmployeeController extends Controller
         // Save the employee data
         Employee::create($request->all());
 
-        return redirect()->back()->with('success', 'Employee saved successfully!');
+        // Flash a success message to the session
+        session()->flash('success', 'Employee saved successfully! Would you like to add another employee?');
 
+        return redirect()->route('employee.create'); // Redirect to the create page
     }
 
     /**

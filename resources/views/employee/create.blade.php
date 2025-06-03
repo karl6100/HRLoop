@@ -1,5 +1,17 @@
 <x-layouts.app :title="__('Employee')">
-    <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+<!-- Success Message and Confirmation Dialog -->
+    @if (session('success'))
+        <script>
+            if (confirm("{{ session('success') }}")) {
+                // Redirect to the create page if the user clicks "Yes"
+                window.location.href = "{{ route('employee.create') }}";
+            } else {
+                // Redirect to the index page if the user clicks "No"
+                window.location.href = "{{ route('employee.index') }}";
+            }
+        </script>
+    @endif    
+<div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
         <form action="{{ route('employee.store') }}" method="POST">
             @csrf
             <div class="mb-6">
@@ -269,8 +281,8 @@
                         <input type="text" name="country[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter country" />
                     </div>
                     <div>
-                        <label for="is_current" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Current Address?</label>
                         <div class="flex items-center gap-2">
+                            <label for="is_current" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Current Address?</label>
                             <input type="checkbox" name="is_current[]" class="bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <span class="text-sm text-gray-900 dark:text-white">Yes</span>
                         </div>
