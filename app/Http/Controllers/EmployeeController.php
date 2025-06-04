@@ -87,7 +87,6 @@ class EmployeeController extends Controller
             'dependent_fullname.*' => 'nullable|string',
             'relationship.*' => 'nullable|string',
             'dependent_birthdate.*' => 'nullable|date',
-            'dependent_age.*' => 'nullable|integer',
         ]);
 
         // Save the main employee data
@@ -120,10 +119,10 @@ class EmployeeController extends Controller
     ]));
 
         // Save education data
-        if ($request->has('job_level')) {
-            foreach ($request->level_of_education as $index => $level) {
+        if ($request->has('education_level')) {
+            foreach ($request->education_level as $index => $level) {
                 $employee->employee_educations()->create([
-                    'job_level' => $level,
+                    'education_level' => $level,
                     'school' => $request->school[$index],
                     'degree' => $request->degree[$index],
                     'start_year' => $request->start_year[$index],

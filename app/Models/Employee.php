@@ -32,6 +32,10 @@ class Employee extends Model
         'job_level',
         'hired_date',
         'employment_status',
+        'sss_number',
+        'philhealth_number',
+        'pagibig_number',
+        'tin_number',        
     ];
     
     public function employee_educations()
