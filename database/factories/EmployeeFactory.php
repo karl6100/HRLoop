@@ -38,6 +38,10 @@ class EmployeeFactory extends Factory
             'job_level' => $this->faker->randomElement(['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None']),
             'hired_date' => $this->faker->date(),
             'employment_status' => $this->faker->randomElement(['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order']),
+            'tin_number' => $this->faker->unique()->numerify('TIN-#####'),
+            'sss_number' => $this->faker->unique()->numerify('SSS-#####'),
+            'philhealth_number' => $this->faker->unique()->numerify('PH-#####'),
+            'pagibig_number' => $this->faker->unique()->numerify('HDMF-#####'),
         ];
     }
 }

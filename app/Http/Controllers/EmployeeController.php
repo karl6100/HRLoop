@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+
+
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -50,32 +52,114 @@ class EmployeeController extends Controller
             'last_name' => 'required|string',
             'middle_name' => 'nullable|string',
             'suffix' => 'nullable|string',
-            'civil_status' => 'required|string',
-            'birth_date' => 'required|date',
-            'birth_place' => 'required|string',
-            'blood_type' => 'required|string',
-            'gender' => 'required|string',
-            'nationality' => 'required|string',
-            'religion' => 'required|string',
-            'telephone_number' => 'required|string',
-            'mobile_number' => 'required|string|unique:employees,mobile_number',
-            'email' => 'required|string|email|unique:employees,email',
+            'civil_status' => 'nullable|string',
+            'birth_date' => 'nullable|date',
+            'birth_place' => 'nullable|string',
+            'blood_type' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'nationality' => 'nullable|string',
+            'religion' => 'nullable|string',
+            'telephone_number' => 'nullable|string',
+            'mobile_number' => 'nullable|string|unique:employees,mobile_number',
+            'email' => 'nullable|string|email|unique:employees,email',
             'department' => 'required|string',
             'company' => 'required|string',
             'position_title' => 'required|string',
-            'job_level' => 'required|string',
+            'job_level' => 'nullable|string',
             'hired_date' => 'required|date',
             'employment_status' => 'required|string',
+            'sss_number' => 'nullable|string|unique:employees,sss_number',
+            'philhealth_number' => 'nullable|string|unique:employees,philhealth_number',
+            'pagibig_number' => 'nullable|string|unique:employees,pagibig_number',
+            'tin_number' => 'nullable|string|unique:employees,tin_number',
+            'level_of_education.*' => 'nullable|string',
+            'school.*' => 'nullable|string',
+            'degree.*' => 'nullable|string',
+            'start_year.*' => 'nullable|integer',
+            'end_year.*' => 'nullable|integer',
+            'street_address.*' => 'nullable|string',
+            'barangay.*' => 'nullable|string',
+            'city.*' => 'nullable|string',
+            'province.*' => 'nullable|string',
+            'zip_code.*' => 'nullable|string',
+            'country.*' => 'nullable|string',
+            'is_current.*' => 'nullable|boolean',
+            'dependent_fullname.*' => 'nullable|string',
+            'relationship.*' => 'nullable|string',
+            'dependent_birthdate.*' => 'nullable|date',
+            'dependent_age.*' => 'nullable|integer',
         ]);
 
-        // Save the employee data
-        Employee::create($request->all());
+        // Save the main employee data
+    $employee = Employee::create($request->only([
+        'employee_id',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'suffix',
+        'civil_status',
+        'birth_date',
+        'birth_place',
+        'blood_type',
+        'gender',
+        'nationality',
+        'religion',
+        'telephone_number',
+        'mobile_number',
+        'email',
+        'department',
+        'company',
+        'position_title',
+        'job_level',
+        'hired_date',
+        'employment_status',
+        'sss_number',
+        'philhealth_number',
+        'pagibig_number',
+        'tin_number',
+    ]));
 
-        // Flash a success message to the session
-        session()->flash('success', 'Employee saved successfully! Would you like to add another employee?');
+        // Save education data
+        if ($request->has('job_level')) {
+            foreach ($request->level_of_education as $index => $level) {
+                $employee->employee_educations()->create([
+                    'job_level' => $level,
+                    'school' => $request->school[$index],
+                    'degree' => $request->degree[$index],
+                    'start_year' => $request->start_year[$index],
+                    'end_year' => $request->end_year[$index],
+                ]);
+            }
+        }
 
-        return redirect()->route('employee.create'); // Redirect to the create page
+        if ($request->has('street_address')) {
+            foreach ($request->street_address as $index => $street) {
+                $employee->employee_addresses()->create([
+                    'street_address' => $street,
+                    'barangay' => $request->barangay[$index],
+                    'city' => $request->city[$index],
+                    'province' => $request->province[$index],
+                    'zip_code' => $request->zip_code[$index],
+                    'country' => $request->country[$index],
+                    'is_current' => $request->is_current[$index] ?? false,
+                ]);
+            }
+        }
+
+        // Save dependents data
+        if ($request->has('dependent_fullname')) {
+            foreach ($request->dependent_fullname as $index => $fullname) {
+                $employee->employee_dependents()->create([
+                    'fullname' => $fullname,
+                    'relationship' => $request->relationship[$index],
+                    'birthdate' => $request->dependent_birthdate[$index],
+                    'age' => $request->dependent_age[$index],
+                ]);
+            }
+        }
     }
+
+
 
     /**
      * Display the specified resource.

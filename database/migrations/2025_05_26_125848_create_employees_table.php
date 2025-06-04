@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('employee_id')->nullable(false);
+            $table->string('employee_id')->unique()->nullable(false);
             $table->string('first_name')->nullable(false);
             $table->string('last_name')->nullable(false);
             $table->string('middle_name')->nullable(true);
@@ -36,6 +36,10 @@ return new class extends Migration
             $table->string('job_level');
             $table->date('hired_date');
             $table->string('employment_status');
+            $table->string('sss_number')->nullable();
+            $table->string('philhealth_number')->nullable();
+            $table->string('pagibig_number')->nullable();
+            $table->string('tin_number')->nullable();
         });
     }
 

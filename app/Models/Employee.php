@@ -33,4 +33,20 @@ class Employee extends Model
         'hired_date',
         'employment_status',
     ];
+    
+    public function employee_educations()
+    {
+        return $this->hasMany(Employee_Education::class);
+    }
+    
+    public function employee_addresses()
+    {
+        return $this->hasMany(Employee_Address::class);
+    }
+    
+    public function employee_dependents()
+    {
+        return $this->hasMany(Employee_Dependents::class);
+    }
 }
+

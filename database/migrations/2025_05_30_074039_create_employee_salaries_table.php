@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('basic_salary', 10, 2);
             $table->decimal('monthly_rate', 10, 2);
             $table->decimal('allowances', 10, 2)->nullable();
+            $table->boolean('is_current')->default(false);
         });
     }
 
