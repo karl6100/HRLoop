@@ -11,15 +11,16 @@ class EmployeeEducation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_id',
+        'employee_id', // Foreign key to the Employee table
+        'education_level',
         'school',
         'degree',
-        'education_level',
         'start_year',
         'end_year',
     ];
+
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 }

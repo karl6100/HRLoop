@@ -40,17 +40,17 @@ class Employee extends Model
     
     public function employee_educations()
     {
-        return $this->hasMany(Employee_Education::class);
+        return $this->hasMany(EmployeeEducation::class);
     }
     
     public function employee_addresses()
     {
-        return $this->hasMany(Employee_Address::class);
+        return $this->hasMany(EmployeeAddress::class);
     }
     
     public function employee_dependents()
     {
-        return $this->hasMany(Employee_Dependents::class);
+        return $this->hasMany(EmployeeDependents::class);
     }
 }
 

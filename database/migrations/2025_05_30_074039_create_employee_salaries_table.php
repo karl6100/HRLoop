@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('employee_salaries', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('employee_id');
+            $table->string('employee_id');
+            $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('pay_type');
             $table->decimal('basic_salary', 10, 2);
             $table->decimal('monthly_rate', 10, 2);
