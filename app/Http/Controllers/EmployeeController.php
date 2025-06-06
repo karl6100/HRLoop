@@ -45,7 +45,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $request->validate([
             'employee_id' => 'required|string',
             'first_name' => 'required|string',
@@ -72,7 +72,7 @@ class EmployeeController extends Controller
             'philhealth_number' => 'nullable|string|unique:employees,philhealth_number',
             'pagibig_number' => 'nullable|string|unique:employees,pagibig_number',
             'tin_number' => 'nullable|string|unique:employees,tin_number',
-            'level_of_education.*' => 'nullable|string',
+            'education_level.*' => 'nullable|string',
             'school.*' => 'nullable|string',
             'degree.*' => 'nullable|string',
             'start_year.*' => 'nullable|integer',
@@ -121,16 +121,16 @@ class EmployeeController extends Controller
         // Save education data
         if ($request->has('education_level')) {
             foreach ($request->education_level as $index => $level) {
-                $employee->employee_educations()->create([
+                $employee->employee_educations()->create([                    
                     'education_level' => $level,
                     'school' => $request->school[$index],
                     'degree' => $request->degree[$index],
                     'start_year' => $request->start_year[$index],
-                    'end_year' => $request->end_year[$index],
+                    'end_year' => $request->end_year[$index],                
                 ]);
             }
         }
-
+        // Save street data
         if ($request->has('street_address')) {
             foreach ($request->street_address as $index => $street) {
                 $employee->employee_addresses()->create([
@@ -140,14 +140,14 @@ class EmployeeController extends Controller
                     'province' => $request->province[$index],
                     'zip_code' => $request->zip_code[$index],
                     'country' => $request->country[$index],
-                    'is_current' => $request->is_current[$index] ?? false,
+                    'is_current' => (bool) ($request->is_current[$index] ?? 0),
                 ]);
             }
         }
 
         // Save dependents data
-        if ($request->has('dependent_fullname')) {
-            foreach ($request->dependent_fullname as $index => $fullname) {
+        if ($request->has('fullname')) {
+            foreach ($request->fullname as $index => $fullname) {
                 $employee->employee_dependents()->create([
                     'fullname' => $fullname,
                     'relationship' => $request->relationship[$index],
@@ -156,6 +156,8 @@ class EmployeeController extends Controller
                 ]);
             }
         }
+        return redirect()->route('employees.show', $employee)
+        ->with('message', 'Employee saved!');
     }
 
 

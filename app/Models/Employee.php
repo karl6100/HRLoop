@@ -9,7 +9,11 @@ class Employee extends Model
 {
     /** @use HasFactory<\Database\Factories\EmployeeFactory> */
     use HasFactory;
-
+    
+    protected $primaryKey = 'employee_id';
+    public $incrementing = false;      // employee_id comes from the UI, not AUTO_INCREMENT
+    protected $keyType = 'string';     // or 'int' if it’s numeric
+    
     protected $fillable = [
         'employee_id',
         'first_name',
@@ -35,22 +39,21 @@ class Employee extends Model
         'sss_number',
         'philhealth_number',
         'pagibig_number',
-        'tin_number',        
+        'tin_number',
     ];
-    
+
     public function employee_educations()
     {
-        return $this->hasMany(EmployeeEducation::class);
+        return $this->hasMany(EmployeeEducation::class, 'employee_id', 'employee_id');
     }
-    
+
     public function employee_addresses()
     {
-        return $this->hasMany(EmployeeAddress::class);
+        return $this->hasMany(EmployeeAddress::class, 'employee_id', 'employee_id');
     }
-    
+
     public function employee_dependents()
     {
-        return $this->hasMany(EmployeeDependents::class);
+        return $this->hasMany(EmployeeDependents::class, 'employee_id', 'employee_id');
     }
 }
-
