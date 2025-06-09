@@ -11,7 +11,7 @@ class EmployeeAddress extends Model
     use HasFactory;
 
     protected $fillable = [
-        'employee_id', // Foreign key to the Employee table
+        'fkey_employee_id', // Foreign key to the Employee table
         'street_address',
         'barangay',
         'city',
@@ -23,6 +23,6 @@ class EmployeeAddress extends Model
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
+        return $this->belongsTo(Employee::class, 'fkey_employee_id', 'employee_id');
     }
 }

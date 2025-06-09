@@ -44,16 +44,16 @@ class Employee extends Model
 
     public function employee_educations()
     {
-        return $this->hasMany(EmployeeEducation::class, 'employee_id', 'employee_id');
+        return $this->hasMany(EmployeeEducation::class, 'fkey_employee_id', 'employee_id');
     }
 
     public function employee_addresses()
     {
-        return $this->hasMany(EmployeeAddress::class, 'employee_id', 'employee_id');
+        return $this->hasMany(EmployeeAddress::class, 'fkey_employee_id', 'employee_id');
     }
 
     public function employee_dependents()
     {
-        return $this->hasMany(EmployeeDependents::class, 'employee_id', 'employee_id');
+        return $this->hasMany(EmployeeDependents::class, 'fkey_employee_id', 'employee_id');
     }
 }

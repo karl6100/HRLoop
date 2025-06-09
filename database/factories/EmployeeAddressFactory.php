@@ -17,7 +17,7 @@ class EmployeeAddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'employee_id' => \App\Models\Employee::factory(),
+            'fkey_employee_id' => \App\Models\Employee::factory(),
             'street_address' => $this->faker->streetAddress,
             'barangay' => $this->faker->word,
             'city' => $this->faker->city,

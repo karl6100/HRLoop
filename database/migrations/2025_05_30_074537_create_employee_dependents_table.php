@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('employee_dependents', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('employee_id');
-            $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
+            $table->string('fkey_employee_id');
+            $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('fullname')->nullable();
             $table->string('relationship')->nullable();
             $table->date('birth_date')->nullable();

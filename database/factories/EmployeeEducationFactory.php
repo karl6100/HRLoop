@@ -17,7 +17,7 @@ class EmployeeEducationFactory extends Factory
     public function definition(): array
     {
         return [
-            'employee_id' => \App\Models\Employee::factory(),
+            'fkey_employee_id' => \App\Models\Employee::factory(),
             'education_level' => $this->faker->word,
             'school' => $this->faker->company,
             'degree' => $this->faker->word,

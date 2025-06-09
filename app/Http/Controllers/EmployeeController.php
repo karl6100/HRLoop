@@ -85,8 +85,8 @@ class EmployeeController extends Controller
             'country.*' => 'nullable|string',
             'is_current.*' => 'nullable|boolean',
             'dependent_fullname.*' => 'nullable|string',
-            'relationship.*' => 'nullable|string',
-            'dependent_birthdate.*' => 'nullable|date',
+            'dependent_relationship.*' => 'nullable|string',
+            'dependent_birth_date.*' => 'nullable|date',
         ]);
 
         // Save the main employee data
@@ -146,17 +146,16 @@ class EmployeeController extends Controller
         }
 
         // Save dependents data
-        if ($request->has('fullname')) {
-            foreach ($request->fullname as $index => $fullname) {
+        if ($request->has('dependent_fullname')) {
+            foreach ($request->dependent_fullname as $index => $dependent_fullname) {
                 $employee->employee_dependents()->create([
-                    'fullname' => $fullname,
-                    'relationship' => $request->relationship[$index],
-                    'birthdate' => $request->dependent_birthdate[$index],
-                    'age' => $request->dependent_age[$index],
+                    'fullname' => $dependent_fullname,
+                    'relationship' => $request->dependent_relationship[$index],
+                    'birth_date' => $request->dependent_birth_date[$index],
                 ]);
             }
         }
-        return redirect()->route('employees.show', $employee)
+        return redirect()->route('employees.create', $employee)
         ->with('message', 'Employee saved!');
     }
 
