@@ -20,6 +20,10 @@ class EmployeeAddress extends Model
         'country',
         'is_current',
     ];
+    
+    protected $casts = [
+        'is_current' => 'boolean',
+    ];
 
     public function employee()
     {

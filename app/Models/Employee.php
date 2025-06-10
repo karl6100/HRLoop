@@ -42,17 +42,22 @@ class Employee extends Model
         'tin_number',
     ];
 
-    public function employee_educations()
+    protected $casts = [
+        'birth_date' => 'date',
+        'hired_date' => 'date',
+    ];
+
+    public function employeeEducations()
     {
         return $this->hasMany(EmployeeEducation::class, 'fkey_employee_id', 'employee_id');
     }
 
-    public function employee_addresses()
+    public function employeeAddresses()
     {
         return $this->hasMany(EmployeeAddress::class, 'fkey_employee_id', 'employee_id');
     }
 
-    public function employee_dependents()
+    public function employeeDependents()
     {
         return $this->hasMany(EmployeeDependents::class, 'fkey_employee_id', 'employee_id');
     }

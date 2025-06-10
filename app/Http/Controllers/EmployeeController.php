@@ -121,7 +121,7 @@ class EmployeeController extends Controller
         // Save education data
         if ($request->has('education_level')) {
             foreach ($request->education_level as $index => $level) {
-                $employee->employee_educations()->create([                    
+                $employee->employeeEducations()->create([                    
                     'education_level' => $level,
                     'school' => $request->school[$index],
                     'degree' => $request->degree[$index],
@@ -133,7 +133,7 @@ class EmployeeController extends Controller
         // Save street data
         if ($request->has('street_address')) {
             foreach ($request->street_address as $index => $street) {
-                $employee->employee_addresses()->create([
+                $employee->employeeAddresses()->create([
                     'street_address' => $street,
                     'barangay' => $request->barangay[$index],
                     'city' => $request->city[$index],
@@ -148,14 +148,14 @@ class EmployeeController extends Controller
         // Save dependents data
         if ($request->has('dependent_fullname')) {
             foreach ($request->dependent_fullname as $index => $dependent_fullname) {
-                $employee->employee_dependents()->create([
+                $employee->employeeDependents()->create([
                     'fullname' => $dependent_fullname,
                     'relationship' => $request->dependent_relationship[$index],
                     'birth_date' => $request->dependent_birth_date[$index],
                 ]);
             }
         }
-        return redirect()->route('employees.create', $employee)
+        return redirect()->route('employee.create')
         ->with('message', 'Employee saved!');
     }
 
@@ -174,8 +174,7 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        $employee = Employee::findOrFail($employee_id); // Fetch the employee by ID
-        return view('employee.edit', compact('employee')); // Return the edit view
+        //
     }
 
     /**

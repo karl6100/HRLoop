@@ -17,6 +17,10 @@ class EmployeeDependents extends Model
         'birth_date',
     ];
 
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'fkey_employee_id', 'employee_id');
