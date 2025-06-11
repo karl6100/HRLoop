@@ -29,6 +29,7 @@ class EmployeeController extends Controller
         $genderOptions = ['Male', 'Female'];
         $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
         $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
+        $employeePayTypeOptions = ['Monthly', 'Daily', 'Hourly'];
 
         return view('employee.create', compact(
             'suffixOptions',
@@ -36,7 +37,8 @@ class EmployeeController extends Controller
             'civilStatusOptions',
             'genderOptions',
             'jobLevelOptions',
-            'employmentStatusOptions'
+            'employmentStatusOptions',
+            'employeePayTypeOptions'
         ));
     }
 
@@ -166,7 +168,11 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+        // Fetch the employee with related data
+        // $employee = Employee::with(['employeeEducations', 'employeeAddresses', 'employeeDependents'])
+        //     ->findOrFail($employee->employee_id);
+
+        return view('employee.show');
     }
 
     /**

@@ -18,8 +18,9 @@ return new class extends Migration
             $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('pay_type');
             $table->decimal('basic_salary', 10, 2);
-            $table->decimal('monthly_rate', 10, 2);
-            $table->decimal('allowances', 10, 2)->nullable();
+            $table->decimal('allowance', 10, 2)->nullable();
+            $table->date('effective_date');
+            $table->string('remarks')->nullable();
             $table->boolean('is_current')->default(false);
         });
     }
