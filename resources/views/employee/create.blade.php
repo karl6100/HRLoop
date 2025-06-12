@@ -1,20 +1,19 @@
 <x-layouts.app :title="__('Employee')">
-
-    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-        <li class="me-2">
-            <a href="#" id="tab-profile" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" onclick="showView('profile')">Profile</a>
-        </li>
-        <li class="me-2">
-            <a href="#" id="tab-compensation" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('compensation')">Compensation</a>
-        </li>
-        <li class="me-2">
-            <a href="#" id="tab-credits" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('credits')">Leave Credits</a>
-        </li>
-        <li class="me-2">
-            <a href="#" id="tab-writeups" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('contacts')">Other Information</a>
-        </li>
-    </ul>
-    <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 mt-1">
+    <div class="relative h-full flex-1 p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 mt-1">
+        <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+            <li class="me-2">
+                <a href="#" id="tab-profile" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" onclick="showView('profile')">Profile</a>
+            </li>
+            <li class="me-2">
+                <a href="#" id="tab-compensation" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('compensation')">Compensation</a>
+            </li>
+            <li class="me-2">
+                <a href="#" id="tab-credits" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('credits')">Leave Credits</a>
+            </li>
+            <li class="me-2">
+                <a href="#" id="tab-writeups" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('contacts')">Other Information</a>
+            </li>
+        </ul>
         <form action="{{ route('employee.store') }}" method="POST">
             @csrf
             <div id="view-profile" class="view-section">
@@ -329,37 +328,73 @@
                 </div>
             </div>
             <div id="view-compensation" class="view-section hidden">
-                Compensation Details
-                <div>
-                    Pay Information
+                <div class="mb-6">
+                    <h class="text-2xl font-bold text-gray-900 dark:text-white">Compensation Details</h>
+                    <hr class="mt-1 border-gray-300 dark:border-gray-600">
+                    <div class="grid gap-6 mb-6 md:grid-cols-2">
+                        <div class="relative w-full h-full mt-1  p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                            <label for="employment_status" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Pay Type</label>
+                            <select name="employment_status" id="employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                @foreach ($employeePayTypeOptions as $employeePayType)
+                                <option value="{{ $employeePayType }}">{{ $employeePayType }}</option>
+                                @endforeach
+                            </select>
+
+                            <label for="basic_salary" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Basic Salary</label>
+                            <input type="number" name="basic_salary" id="numberInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="0.00" />
+
+                            <label for="allowance" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
+                            <input type="number" name="allowance" id="numberInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="0.00" />
+
+                            <label for="total_compensation" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Total Compensation</label>
+                            <input type="number" name="total_compensation" id="numberInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="0.00" disabled />
+                        </div>
+
+                        <div>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
-                    <div>
-                        <label for="employment_status" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Pay Type</label>
-                        <select name="employment_status" id="employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            @foreach ($employeePayTypeOptions as $employeePayType)
-                            <option value="{{ $employeePayType }}">{{ $employeePayType }}</option>
-                            @endforeach
-                        </select>
 
-                        <label for="basic_salary" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Basic Salary</label>
-                        <input type="number" name="basic_salary" id="numberInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="0.00" />
+                <!-- Compensation Table -->
+                <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Effective Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Basic Salary
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Allowance
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Total Compensation
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        <label for="allowance" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
-                        <input type="number" name="allowance" id="numberInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="0.00" />
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4"></td>
+                                    <td class="px-6 py-4"></td>
+                                    <td class="px-6 py-4"></td>
+                                    <td class="px-6 py-4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- Pagination Links -->
+                        <div class="mt-4">
 
-                        <label for="total_compensation" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Total Compensation</label>
-                        <input type="number" name="total_compensation" id="numberInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="0.00" disabled />
+                        </div>
                     </div>
-
-                    <div>
-                    </div>
-
                 </div>
             </div>
-
             <!-- Submit Button -->
-            <div class="mt-2">
+            <div class="mt-6 flex justify-start">
                 <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
             </div>
         </form>
@@ -549,7 +584,7 @@
         }
     </script>
 
-        <!-- Age Calculation Script -->
+    <!-- Age Calculation Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const birthDateInput = document.getElementById('birth_date');
@@ -579,33 +614,33 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const dependentsContainer = document.getElementById('dependents-input-container');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dependentsContainer = document.getElementById('dependents-input-container');
 
-        dependentsContainer.addEventListener('input', function (event) {
-            if (event.target.name === 'dependent_birth_date[]') {
-                const birthDateInput = event.target;
-                const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
-                const birthDate = new Date(birthDateInput.value);
-                const today = new Date();
+            dependentsContainer.addEventListener('input', function(event) {
+                if (event.target.name === 'dependent_birth_date[]') {
+                    const birthDateInput = event.target;
+                    const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
+                    const birthDate = new Date(birthDateInput.value);
+                    const today = new Date();
 
-                if (birthDateInput.value) {
-                    let age = today.getFullYear() - birthDate.getFullYear();
-                    const monthDiff = today.getMonth() - birthDate.getMonth();
-                    const dayDiff = today.getDate() - birthDate.getDate();
+                    if (birthDateInput.value) {
+                        let age = today.getFullYear() - birthDate.getFullYear();
+                        const monthDiff = today.getMonth() - birthDate.getMonth();
+                        const dayDiff = today.getDate() - birthDate.getDate();
 
-                    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                        age--;
+                        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                            age--;
+                        }
+
+                        ageInput.value = age;
+                    } else {
+                        ageInput.value = ''; // Clear the age input if no date is selected
                     }
-
-                    ageInput.value = age;
-                } else {
-                    ageInput.value = ''; // Clear the age input if no date is selected
                 }
-            }
+            });
         });
-    });
-</script>
+    </script>
 
 </x-layouts.app>
