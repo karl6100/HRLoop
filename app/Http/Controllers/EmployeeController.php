@@ -48,7 +48,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        $request->validate([
+        $request->validate([ //Fields from view
             'employee_id' => 'required|string',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -89,46 +89,52 @@ class EmployeeController extends Controller
             'dependent_fullname.*' => 'nullable|string',
             'dependent_relationship.*' => 'nullable|string',
             'dependent_birth_date.*' => 'nullable|date',
+            'employee_pay_type' => 'nullable|string',
+            'basic_salary' => 'nullable|numeric',
+            'allowance' => 'nullable|numeric',
+            'salary_effective_date' => 'nullable|date',
+            'total_compensation' => 'nullable|numeric',
+            'compensation_remarks' => 'nullable|string',
         ]);
 
         // Save the main employee data
-    $employee = Employee::create($request->only([
-        'employee_id',
-        'first_name',
-        'last_name',
-        'middle_name',
-        'suffix',
-        'civil_status',
-        'birth_date',
-        'birth_place',
-        'blood_type',
-        'gender',
-        'nationality',
-        'religion',
-        'telephone_number',
-        'mobile_number',
-        'email',
-        'department',
-        'company',
-        'position_title',
-        'job_level',
-        'hired_date',
-        'employment_status',
-        'sss_number',
-        'philhealth_number',
-        'pagibig_number',
-        'tin_number',
-    ]));
+        $employee = Employee::create($request->only([
+            'employee_id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'suffix',
+            'civil_status',
+            'birth_date',
+            'birth_place',
+            'blood_type',
+            'gender',
+            'nationality',
+            'religion',
+            'telephone_number',
+            'mobile_number',
+            'email',
+            'department',
+            'company',
+            'position_title',
+            'job_level',
+            'hired_date',
+            'employment_status',
+            'sss_number',
+            'philhealth_number',
+            'pagibig_number',
+            'tin_number',
+        ]));
 
         // Save education data
         if ($request->has('education_level')) {
             foreach ($request->education_level as $index => $level) {
-                $employee->employeeEducations()->create([                    
+                $employee->employeeEducations()->create([
                     'education_level' => $level,
                     'school' => $request->school[$index],
                     'degree' => $request->degree[$index],
                     'start_year' => $request->start_year[$index],
-                    'end_year' => $request->end_year[$index],                
+                    'end_year' => $request->end_year[$index],
                 ]);
             }
         }
@@ -157,8 +163,19 @@ class EmployeeController extends Controller
                 ]);
             }
         }
+
+        // Save employee salary data
+        $employee->employeeSalaries()->create([
+            'pay_type' => $request->employee_pay_type,
+            'basic_salary' => $request->basic_salary,
+            'allowance' => $request->allowance,
+            'effective_date' => $request->salary_effective_date,
+            'monthly_rate' => $request->total_compensation,
+            'remarks' => $request->compensation_remarks,
+        ]);
+
         return redirect()->route('employee.create')
-        ->with('message', 'Employee saved!');
+            ->with('message', 'Employee saved!');
     }
 
 
@@ -166,13 +183,17 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Employee $employee)
+    public function show($id)
     {
-        // Fetch the employee with related data
-        // $employee = Employee::with(['employeeEducations', 'employeeAddresses', 'employeeDependents'])
-        //     ->findOrFail($employee->employee_id);
+        // Retrieve the employee record along with related data
+        $employee = Employee::with([
+            'employeeEducations',
+            'employeeAddresses',
+            'employeeDependents',
+        ])->findOrFail($id);
 
-        return view('employee.show');
+        // Pass the employee data to the view
+        return view('employee.show', compact('employee'));
     }
 
     /**
