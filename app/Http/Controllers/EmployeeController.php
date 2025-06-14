@@ -183,17 +183,33 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($employee_id)
     {
+        $suffixOptions = ['N/A', 'Jr.', 'Sr.', 'III', 'IV', 'V'];
+        $bloodOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+        $civilStatusOptions = ['Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
+        $genderOptions = ['Male', 'Female'];
+        $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
+        $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
+        $employeePayTypeOptions = ['Monthly', 'Daily', 'Hourly'];
+
         // Retrieve the employee record along with related data
         $employee = Employee::with([
             'employeeEducations',
             'employeeAddresses',
             'employeeDependents',
-        ])->findOrFail($id);
+        ])->findOrFail($employee_id);
 
         // Pass the employee data to the view
-        return view('employee.show', compact('employee'));
+        return view('employee.show', compact(
+            'employee',
+            'suffixOptions',
+            'bloodOptions',
+            'civilStatusOptions',
+            'genderOptions',
+            'jobLevelOptions',
+            'employmentStatusOptions',
+            'employeePayTypeOptions'));
     }
 
     /**

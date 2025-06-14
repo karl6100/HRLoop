@@ -15,7 +15,7 @@ Route::view('dashboard', 'dashboard')
 Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
 Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
 Route::post('/employee', [EmployeeController::class, 'store'])->name('employee.store');
-Route::get('employee/show', [EmployeeController::class, 'show'])->name('employee.show');
+Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
