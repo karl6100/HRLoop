@@ -17,10 +17,10 @@ class EmployeeDependentsFactory extends Factory
     public function definition(): array
     {
         return [
-           'fkey_employee_id' => $employee->id, // Associate with the employee
-            'fullname' => $this->faker->firstName() . ' ' . $employee->last_name, // Use employee's last name
+           'fkey_employee_id' => \App\Models\Employee::factory(), // Associate with the employee
+            'fullname' => $this->faker->firstName() . ' ' . $this->faker->lastName(), // Generate a random last name
             'relationship' => $this->faker->randomElement(['Spouse', 'Son', 'Daughter']),
-            'birthdate' => $this->faker->dateTimeBetween('-30 years', '-1 year')->format('Y-m-d'),
+            'birth_date' => $this->faker->dateTimeBetween('-30 years', '-1 year')->format('Y-m-d'),
         ];
     }
 }

@@ -17,7 +17,16 @@ class EmployeeSalaryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'fkey_employee_id' => \App\Models\Employee::factory(),
+            'basic_salary' => $this->faker->numberBetween(20000, 100000),
+            'allowance' => $this->faker->numberBetween(5000, 20000),
+            'monthly_rate' => function (array $attributes) {
+                return $attributes['basic_salary'] + $attributes['allowance'];
+            },
+            'effective_date' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'remarks' => $this->faker->sentence,
+            'is_current' => $this->faker->boolean(100),
+            'pay_type' => $this->faker->randomElement(['Monthly', 'Bi-Weekly', 'Weekly']),
         ];
     }
 }

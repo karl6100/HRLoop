@@ -42,6 +42,7 @@ class EmployeeFactory extends Factory
             'sss_number' => $this->faker->unique()->numerify('SSS-#####'),
             'philhealth_number' => $this->faker->unique()->numerify('PH-#####'),
             'pagibig_number' => $this->faker->unique()->numerify('HDMF-#####'),
+            
         ];
     }
 }

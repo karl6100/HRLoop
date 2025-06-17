@@ -12,6 +12,8 @@ class EmployeeSalarySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        \App\Models\EmployeeSalary::factory()
+            ->count(3)
+            ->create();
     }
 }
