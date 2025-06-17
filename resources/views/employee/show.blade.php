@@ -1,5 +1,30 @@
 <x-layouts.app :title="__('Employee')">
+
+
     <div class="relative h-full flex-1 p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 mt-1">
+
+        <!-- Header -->
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="py-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <img src="{{ $employee->avatar }}" alt="{{ $employee->name }}" class="w-16 h-16 rounded-full object-cover">
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $employee->first_name }} {{ $employee->last_name }}
+                                    @if ($employee->suffix !== 'N/A')
+                                    {{ $employee->suffix }}
+                                    @endif
+                                </h1>
+                                <p class="text-lg text-gray-600">{{ $employee->position_title }} • {{ $employee->department }}</p>
+                                <p class="text-sm text-gray-500">Employee ID: {{ $employee->employee_id }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Navigation -->
         <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
             <li class="me-2">
                 <a href="#" id="tab-profile" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500" onclick="showView('profile')">Profile</a>
@@ -417,20 +442,18 @@
                 <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
             </div>
         </form>
-    </div>
 
 
+        <!-- JavaScript for Dynamic Input Fields -->
+        <script>
+            function addInputField(containerId) {
+                const container = document.getElementById(containerId);
+                const newField = document.createElement('div');
+                newField.className = 'grid gap-6 mb-6 md:grid-cols-4';
 
-    <!-- JavaScript for Dynamic Input Fields -->
-    <script>
-        function addInputField(containerId) {
-            const container = document.getElementById(containerId);
-            const newField = document.createElement('div');
-            newField.className = 'grid gap-6 mb-6 md:grid-cols-4';
-
-            // Generate fields based on the container ID
-            if (containerId === 'education-input-container') {
-                newField.innerHTML = `
+                // Generate fields based on the container ID
+                if (containerId === 'education-input-container') {
+                    newField.innerHTML = `
                 <div>
                     <input type="text" name="education_level[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
                 </div>
@@ -449,8 +472,8 @@
                     </div>
                 </div>
             `;
-            } else if (containerId === 'dependents-input-container') {
-                newField.innerHTML = `
+                } else if (containerId === 'dependents-input-container') {
+                    newField.innerHTML = `
                 <div>
                     <input type="text" name="dependent_fullname[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Full name" />
                 </div>
@@ -466,8 +489,8 @@
                     <button type="button" class="inline-flex items-center justify-center text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
                 </div>
             `;
-            } else if (containerId === 'address-input-container') {
-                newField.innerHTML = `
+                } else if (containerId === 'address-input-container') {
+                    newField.innerHTML = `
                 <div>
                     <label for="street_address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street Address</label>
                     <input type="text" name="street_address[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter street address" />
@@ -502,164 +525,164 @@
                     <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
                 </div>
             `;
+                }
+                container.appendChild(newField);
+                updateRemoveButtons(containerId); // Update remove button visibility
             }
-            container.appendChild(newField);
-            updateRemoveButtons(containerId); // Update remove button visibility
-        }
 
-        function removeInputField(button, containerId) {
-            const container = document.getElementById(containerId);
-            const rows = container.querySelectorAll('.grid');
-            if (rows.length > 1) {
-                const row = button.closest('.grid');
-                row.remove();
+            function removeInputField(button, containerId) {
+                const container = document.getElementById(containerId);
+                const rows = container.querySelectorAll('.grid');
+                if (rows.length > 1) {
+                    const row = button.closest('.grid');
+                    row.remove();
+                }
+                updateRemoveButtons(containerId); // Update remove button visibility
             }
-            updateRemoveButtons(containerId); // Update remove button visibility
-        }
 
-        function updateRemoveButtons(containerId) {
-            const container = document.getElementById(containerId);
-            const rows = container.querySelectorAll('.grid');
-            const removeButtons = container.querySelectorAll('.remove-btn');
+            function updateRemoveButtons(containerId) {
+                const container = document.getElementById(containerId);
+                const rows = container.querySelectorAll('.grid');
+                const removeButtons = container.querySelectorAll('.remove-btn');
 
-            // Hide or disable remove buttons if only one row remains
-            if (rows.length === 1) {
-                removeButtons.forEach(button => {
-                    button.style.display = 'none'; // Hide the button
-                    button.disabled = true; // Optionally disable the button
-                });
-            } else {
-                removeButtons.forEach(button => {
-                    button.style.display = 'inline-block'; // Show the button
-                    button.disabled = false; // Enable the button
-                });
-            }
-        }
-
-        // Initial call to update remove button visibility
-        document.addEventListener('DOMContentLoaded', () => {
-            updateRemoveButtons('education-input-container');
-            updateRemoveButtons('dependents-input-container');
-            updateRemoveButtons('address-input-container');
-        });
-    </script>
-
-    <script>
-        // Function to format input with dashes
-        function formatWithDashes(input, pattern) {
-            let value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-            let formattedValue = '';
-            let index = 0;
-
-            for (let i = 0; i < pattern.length; i++) {
-                if (pattern[i] === '-') {
-                    formattedValue += '-';
+                // Hide or disable remove buttons if only one row remains
+                if (rows.length === 1) {
+                    removeButtons.forEach(button => {
+                        button.style.display = 'none'; // Hide the button
+                        button.disabled = true; // Optionally disable the button
+                    });
                 } else {
-                    if (index < value.length) {
-                        formattedValue += value[index];
-                        index++;
-                    }
+                    removeButtons.forEach(button => {
+                        button.style.display = 'inline-block'; // Show the button
+                        button.disabled = false; // Enable the button
+                    });
                 }
             }
 
-            input.value = formattedValue;
-        }
-
-        // Add event listeners for each input field
-        document.getElementById('tin_number').addEventListener('input', function() {
-            formatWithDashes(this, '123-456-789-000');
-        });
-
-        document.getElementById('sss_number').addEventListener('input', function() {
-            formatWithDashes(this, '123-456-7890');
-        });
-
-        document.getElementById('philhealth_number').addEventListener('input', function() {
-            formatWithDashes(this, '00-123456789-0');
-        });
-
-        document.getElementById('pagibig_number').addEventListener('input', function() {
-            formatWithDashes(this, '1234-5678-9101');
-        });
-    </script>
-
-    <script>
-        function showView(viewId) {
-            // Hide all view sections
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.add('hidden');
+            // Initial call to update remove button visibility
+            document.addEventListener('DOMContentLoaded', () => {
+                updateRemoveButtons('education-input-container');
+                updateRemoveButtons('dependents-input-container');
+                updateRemoveButtons('address-input-container');
             });
+        </script>
 
-            // Show the selected view section
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+        <script>
+            // Function to format input with dashes
+            function formatWithDashes(input, pattern) {
+                let value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                let formattedValue = '';
+                let index = 0;
 
-            // Remove active class from all tabs
-            document.querySelectorAll('ul > li > a').forEach(tab => {
-                tab.classList.remove('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
-            });
-
-            // Add active class to the selected tab
-            document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
-        }
-    </script>
-
-    <!-- Age Calculation Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const birthDateInput = document.getElementById('birth_date');
-            const ageInput = document.getElementById('age');
-
-            birthDateInput.addEventListener('input', function() {
-                const birthDate = new Date(birthDateInput.value);
-                const today = new Date();
-
-                if (birthDateInput.value) {
-                    // Compute the age
-                    let age = today.getFullYear() - birthDate.getFullYear();
-                    const monthDiff = today.getMonth() - birthDate.getMonth();
-                    const dayDiff = today.getDate() - birthDate.getDate();
-
-                    // Adjust age if the birthdate hasn't occurred yet this year
-                    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                        age--;
+                for (let i = 0; i < pattern.length; i++) {
+                    if (pattern[i] === '-') {
+                        formattedValue += '-';
+                    } else {
+                        if (index < value.length) {
+                            formattedValue += value[index];
+                            index++;
+                        }
                     }
-
-                    // Display the computed age
-                    ageInput.value = age;
-                } else {
-                    ageInput.value = ''; // Clear the age input if no date is selected
                 }
+
+                input.value = formattedValue;
+            }
+
+            // Add event listeners for each input field
+            document.getElementById('tin_number').addEventListener('input', function() {
+                formatWithDashes(this, '123-456-789-000');
             });
-        });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dependentsContainer = document.getElementById('dependents-input-container');
+            document.getElementById('sss_number').addEventListener('input', function() {
+                formatWithDashes(this, '123-456-7890');
+            });
 
-            dependentsContainer.addEventListener('input', function(event) {
-                if (event.target.name === 'dependent_birth_date[]') {
-                    const birthDateInput = event.target;
-                    const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
+            document.getElementById('philhealth_number').addEventListener('input', function() {
+                formatWithDashes(this, '00-123456789-0');
+            });
+
+            document.getElementById('pagibig_number').addEventListener('input', function() {
+                formatWithDashes(this, '1234-5678-9101');
+            });
+        </script>
+
+        <script>
+            function showView(viewId) {
+                // Hide all view sections
+                document.querySelectorAll('.view-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Show the selected view section
+                document.getElementById(`view-${viewId}`).classList.remove('hidden');
+
+                // Remove active class from all tabs
+                document.querySelectorAll('ul > li > a').forEach(tab => {
+                    tab.classList.remove('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+                });
+
+                // Add active class to the selected tab
+                document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+            }
+        </script>
+
+        <!-- Age Calculation Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const birthDateInput = document.getElementById('birth_date');
+                const ageInput = document.getElementById('age');
+
+                birthDateInput.addEventListener('input', function() {
                     const birthDate = new Date(birthDateInput.value);
                     const today = new Date();
 
                     if (birthDateInput.value) {
+                        // Compute the age
                         let age = today.getFullYear() - birthDate.getFullYear();
                         const monthDiff = today.getMonth() - birthDate.getMonth();
                         const dayDiff = today.getDate() - birthDate.getDate();
 
+                        // Adjust age if the birthdate hasn't occurred yet this year
                         if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
                             age--;
                         }
 
+                        // Display the computed age
                         ageInput.value = age;
                     } else {
                         ageInput.value = ''; // Clear the age input if no date is selected
                     }
-                }
+                });
             });
-        });
-    </script>
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const dependentsContainer = document.getElementById('dependents-input-container');
+
+                dependentsContainer.addEventListener('input', function(event) {
+                    if (event.target.name === 'dependent_birth_date[]') {
+                        const birthDateInput = event.target;
+                        const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
+                        const birthDate = new Date(birthDateInput.value);
+                        const today = new Date();
+
+                        if (birthDateInput.value) {
+                            let age = today.getFullYear() - birthDate.getFullYear();
+                            const monthDiff = today.getMonth() - birthDate.getMonth();
+                            const dayDiff = today.getDate() - birthDate.getDate();
+
+                            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                                age--;
+                            }
+
+                            ageInput.value = age;
+                        } else {
+                            ageInput.value = ''; // Clear the age input if no date is selected
+                        }
+                    }
+                });
+            });
+        </script>
 
 </x-layouts.app>
