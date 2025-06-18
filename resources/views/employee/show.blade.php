@@ -188,7 +188,7 @@
                     </div>
                     <div>
                         <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Level</label>
-                        <input type="text" name="job_level" id="job_level" value="{{ $employee->job_level }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />                    
+                        <input type="text" name="job_level" id="job_level" value="{{ $employee->job_level }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
                     </div>
                 </div>
                 <div class="grid gap-6 mb-6 md:grid-cols-4">
@@ -198,9 +198,9 @@
                             value="{{ \Carbon\Carbon::parse($employee->hired_date)->format('m/d/Y') }}"
                             readonly
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    
                     </div>
                 </div>
+
                 <div class="mb-6">
                 </div>
                 <hr class="mt-2 border-gray-300 dark:border-gray-600">
@@ -212,27 +212,31 @@
                 <!-- Dynamic Input Section -->
                 <div id="education-input-container">
                     <div class="grid gap-6 mb-6 md:grid-cols-4">
+                        @if($employee->employeeEducations->count() > 0)
+                        @foreach($employee->employeeEducations as $education)
                         <div>
                             <label for="education_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level of Education</label>
-                            <input type="text" name="education_level[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
+                            <input type="text" name="education_level[]" value="{{ $education->education_level }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
                         </div>
                         <div>
                             <label for="school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School</label>
-                            <input type="text" name="school[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
+                            <input type="text" name="school[]" value="{{ $education->school }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
                         </div>
                         <div>
                             <label for="degree" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Degree</label>
-                            <input type="text" name="degree[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
+                            <input type="text" name="degree[]" value="{{ $education->degree }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
                         </div>
                         <div>
                             <label for="inclusive_years" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Inclusive Years</label>
                             <div class="flex gap-2">
-                                <input type="number" name="start_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="Start Year" min="1900" max="2099" />
-                                <input type="number" name="end_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="End Year" min="1900" max="2099" />
-                                <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('education-input-container')">+</button>
-                                <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onclick="removeInputField(this)">-</button>
+                                <input type="number" name="start_year[]" value="{{ $education->start_year }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="Start Year" min="1900" max="2099" />
+                                <input type="number" name="end_year[]" value="{{ $education->end_year }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="End Year" min="1900" max="2099" />
                             </div>
                         </div>
+                        @endforeach
+                        @else
+                        <p class="text-sm text-gray-500">No education records found.</p>
+                        @endif
                     </div>
                 </div>
 
@@ -242,29 +246,40 @@
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dependents</h1>
                     <hr class="mt-2 border-gray-300 dark:border-gray-600">
                 </div>
-
+                @if($employee->employeeDependents->count() > 0)
+                @foreach($employee->employeeDependents as $dependent)
+                <p>{{ $dependent->dependent_fullname }}</p>
+                <p>{{ $dependent->dependent_relationship }}</p>
+                <p>{{ $dependent->dependent_birth_date }}</p>
+                @endforeach
+                @else
+                <p class="text-sm text-gray-500">No dependent records found.</p>
+                @endif
+                <!-- Dynamic Input Section -->
                 <div id="dependents-input-container">
                     <div class="grid gap-6 mb-6 md:grid-cols-4">
+                        @if($employee->employeeDependents->count() > 0)
+                        @foreach($employee->employeeDependents as $dependent)
                         <div>
-                            <label for="dependent_fullname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full name</label>
-                            <input type="text" name="dependent_fullname[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Full name" />
+                            <label for="dependent_fullname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                            <input type="text" name="dependent_fullname[]" value="{{ $dependent->dependent_fullname }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Full name" />
                         </div>
                         <div>
                             <label for="dependent_relationship" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Relationship</label>
-                            <input type="text" name="dependent_relationship[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Spouse, Son, Daughter, etc." />
+                            <input type="text" name="dependent_relationship[]" value="{{ $dependent->dependent_relationship }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Spouse, Son, Daughter, etc." />
                         </div>
                         <div>
                             <label for="dependent_birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
-                            <input type="date" name="dependent_birth_date[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                            <input type="text" name="dependent_birth_date[]" value="{{ $dependent->dependent_birth_date }}" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date of Birth" />
                         </div>
                         <div>
                             <label for="dependent_age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
-                            <div class="flex gap-2">
-                                <input type="text" name="dependent_age[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" disabled />
-                                <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('dependents-input-container')">+</button>
-                                <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onclick="removeInputField(this)">-</button>
-                            </div>
+                            <input type="text" name="dependent_age[]" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Age" />
                         </div>
+                        @endforeach
+                        @else
+                        <p class="text-sm text-gray-500">No dependent records found.</p>
+                        @endif
                     </div>
                 </div>
 

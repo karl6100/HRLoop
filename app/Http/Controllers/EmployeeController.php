@@ -201,6 +201,9 @@ class EmployeeController extends Controller
 
         $employee->birth_date = Carbon::parse($employee->birth_date)->format('m/d/Y'); // Example: 10/01/23
         $employee->hired_date = Carbon::parse($employee->hired_date)->format('m/d/Y');
+        $employee->employeeDependents->each(function ($dependent) {
+            $dependent->dependent_birth_date = Carbon::parse($dependent->dependent_birth_date)->format('m/d/Y');
+        });
 
         // Pass the employee data to the view
         return view('employee.show', compact(

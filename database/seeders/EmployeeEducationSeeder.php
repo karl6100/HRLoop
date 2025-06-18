@@ -13,7 +13,7 @@ class EmployeeEducationSeeder extends Seeder
     public function run(): void
     {
         \App\Models\EmployeeEducation::factory()
-            ->count(5)
+            ->count(500)
             ->create();
     }
 }

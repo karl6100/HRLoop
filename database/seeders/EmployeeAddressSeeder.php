@@ -13,7 +13,7 @@ class EmployeeAddressSeeder extends Seeder
     public function run(): void
     {
         \App\Models\EmployeeAddress::factory()
-            ->count(2)
+            ->count(200)
             ->create();
     }
 }
