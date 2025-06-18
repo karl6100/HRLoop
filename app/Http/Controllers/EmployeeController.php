@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
-
-
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
@@ -199,6 +198,9 @@ class EmployeeController extends Controller
             'employeeAddresses',
             'employeeDependents',
         ])->findOrFail($employee_id);
+
+        $employee->birth_date = Carbon::parse($employee->birth_date)->format('m/d/Y'); // Example: 10/01/23
+        $employee->hired_date = Carbon::parse($employee->hired_date)->format('m/d/Y');
 
         // Pass the employee data to the view
         return view('employee.show', compact(
