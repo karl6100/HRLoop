@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Employee;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee_Address>
@@ -17,7 +18,7 @@ class EmployeeAddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'fkey_employee_id' => \App\Models\Employee::factory(),
+            'fkey_employee_id' => Employee::query()->inRandomOrder()->value('employee_id'),
             'street_address' => $this->faker->streetAddress,
             'barangay' => $this->faker->word,
             'city' => $this->faker->city,

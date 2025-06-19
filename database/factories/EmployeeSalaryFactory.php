@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Employee;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee_Salary>
@@ -17,7 +18,7 @@ class EmployeeSalaryFactory extends Factory
     public function definition(): array
     {
         return [
-            'fkey_employee_id' => \App\Models\Employee::factory(),
+            'fkey_employee_id' => Employee::query()->inRandomOrder()->value('employee_id'),
             'basic_salary' => $this->faker->numberBetween(20000, 100000),
             'allowance' => $this->faker->numberBetween(5000, 20000),
             'monthly_rate' => function (array $attributes) {

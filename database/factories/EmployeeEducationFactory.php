@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Employee;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee_Education>
@@ -17,7 +18,7 @@ class EmployeeEducationFactory extends Factory
     public function definition(): array
     {
         return [
-            'fkey_employee_id' => \App\Models\Employee::factory(),
+            'fkey_employee_id' => Employee::query()->inRandomOrder()->value('employee_id'),
             'education_level' => $this->faker->word,
             'school' => $this->faker->company,
             'degree' => $this->faker->word,
