@@ -142,6 +142,15 @@ class EmployeeController extends Controller
             // Save street data
             if ($request->has('street_address')) {
                 foreach ($request->street_address as $index => $street) {
+                    // Check if the current address is marked as "is_current"
+                    $isCurrent = (bool) ($request->is_current[$index] ?? 0);
+            
+                    if ($isCurrent) {
+                        // Set all other addresses of the employee to "is_current = false"
+                        $employee->employeeAddresses()->update(['is_current' => false]);
+                    }
+            
+                    // Create the new address
                     $employee->employeeAddresses()->create([
                         'street_address' => $street,
                         'barangay' => $request->barangay[$index],
@@ -149,7 +158,7 @@ class EmployeeController extends Controller
                         'province' => $request->province[$index],
                         'zip_code' => $request->zip_code[$index],
                         'country' => $request->country[$index],
-                        'is_current' => (bool) ($request->is_current[$index] ?? 0),
+                        'is_current' => $isCurrent,
                     ]);
                 }
             }

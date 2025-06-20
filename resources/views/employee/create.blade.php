@@ -316,7 +316,12 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <label for="is_current" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Current Address?</label>
-                                <input type="checkbox" name="is_current[]" class="bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                <!-- Hidden field forces '0' when checkbox is not checked -->
+                                <input type="hidden" name="is_current[]" value="0">
+
+                                <!-- Checkbox overrides it with '1' if checked -->
+                                <input type="checkbox" name="is_current[]" value="1" class="is-current-checkbox bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
                                 <span class="text-sm text-gray-900 dark:text-white">Yes</span>
                             </div>
                         </div>
@@ -514,10 +519,17 @@
                     <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
                     <input type="text" name="country[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter country" />
                 </div>
-                <div class="flex items-center gap-2">
-                    <label for="is_current" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Current Address?</label>
-                    <input type="checkbox" name="is_current[]" class="bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    <span class="text-sm text-gray-900 dark:text-white">Yes</span>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <label for="is_current" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Current Address?</label>
+                        <!-- Hidden field forces '0' when checkbox is not checked -->
+                        <input type="hidden" name="is_current[]" value="0">
+
+                        <!-- Checkbox overrides it with '1' if checked -->
+                        <input type="checkbox" name="is_current[]" value="1" class="is-current-checkbox bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+                        <span class="text-sm text-gray-900 dark:text-white">Yes</span>
+                    </div>
                 </div>
                 <div class="flex gap-2 items-center">
                     <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('${containerId}')">+</button>
@@ -707,6 +719,24 @@
         });
     </script>
 
+    <script>
+        // Select all checkboxes with the class "is-current-checkbox"
+        const checkboxes = document.querySelectorAll('.is-current-checkbox');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    // Uncheck all other checkboxes
+                    checkboxes.forEach(cb => {
+                        if (cb !== this) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    
     <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const basicSalaryInput = document.getElementById('basic_salary');
