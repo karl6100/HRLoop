@@ -16,6 +16,8 @@ Route::get('employee', [EmployeeController::class, 'index'])->name('employee.ind
 Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
 Route::post('/employee', [EmployeeController::class, 'store'])->name('employee.store');
 Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');
+Route::get('/employee/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
+Route::put('/employee/{employee_id}', [EmployeeController::class, 'update'])->name('employee.update');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

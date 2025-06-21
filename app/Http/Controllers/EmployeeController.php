@@ -144,12 +144,12 @@ class EmployeeController extends Controller
                 foreach ($request->street_address as $index => $street) {
                     // Check if the current address is marked as "is_current"
                     $isCurrent = (bool) ($request->is_current[$index] ?? 0);
-            
+
                     if ($isCurrent) {
                         // Set all other addresses of the employee to "is_current = false"
                         $employee->employeeAddresses()->update(['is_current' => false]);
                     }
-            
+
                     // Create the new address
                     $employee->employeeAddresses()->create([
                         'street_address' => $street,
@@ -175,14 +175,26 @@ class EmployeeController extends Controller
             }
 
             // Save employee salary data
-            $employee->employeeSalaries()->create([
-                'pay_type' => $request->employee_pay_type,
-                'basic_salary' => $request->basic_salary,
-                'allowance' => $request->allowance,
-                'effective_date' => $request->salary_effective_date,
-                'monthly_rate' => $request->total_compensation,
-                'remarks' => $request->compensation_remarks,
-            ]);
+            if ($request->has('employee_pay_type')) {
+                foreach ($request->employee_pay_type as $index => $employee_pay_type) {
+                    // Check if the current compensation is marked as "is_current"
+                    $isCurrent = (bool) ($request->is_current[$index] ?? 0);
+
+                    if ($isCurrent) {
+                        // Set all other compensation of the employee to "is_current = false"
+                        $employee->employeeSalaries()->update(['is_current' => false]);
+                    }
+
+                    $employee->employeeSalaries()->create([
+                        'pay_type' => $request->employee_pay_type,
+                        'basic_salary' => $request->basic_salary,
+                        'allowance' => $request->allowance,
+                        'effective_date' => $request->salary_effective_date,
+                        'monthly_rate' => $request->total_compensation,
+                        'remarks' => $request->compensation_remarks,
+                    ]);
+                }
+            }
 
             return redirect()->route('employee.create')
                 ->with('message', 'Employee saved successfully!');
@@ -224,9 +236,39 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Employee $employee)
+    public function edit($employee_id)
     {
-        //
+        // Retrieve the employee record along with related data
+        $suffixOptions = ['N/A', 'Jr.', 'Sr.', 'III', 'IV', 'V'];
+        $bloodOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+        $civilStatusOptions = ['Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
+        $genderOptions = ['Male', 'Female'];
+        $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
+        $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
+        $employeePayTypeOptions = ['Monthly', 'Daily', 'Hourly'];
+
+        $employee = Employee::with([
+            'employeeEducations',
+            'employeeAddresses',
+            'employeeDependents',
+            'employeeSalaries',
+        ])->findOrFail($employee_id);
+
+        $employee->birth_date = Carbon::parse($employee->birth_date)->format('m/d/Y'); // Example: 10/01/23
+        $employee->hired_date = Carbon::parse($employee->hired_date)->format('m/d/Y');
+        $employee->employeeDependents->each(function ($dependent) {
+            $dependent->dependent_birth_date = Carbon::parse($dependent->dependent_birth_date)->format('m/d/Y');
+        });
+
+        // Pass the employee data to the view
+        return view('employee.edit', compact('employee',
+            'suffixOptions',
+            'bloodOptions',
+            'civilStatusOptions',
+            'genderOptions',
+            'jobLevelOptions',
+            'employmentStatusOptions',
+            'employeePayTypeOptions'));
     }
 
     /**
