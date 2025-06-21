@@ -39,20 +39,6 @@
                 </li>
             </ul>
             <div id="view-profile" class="view-section">
-                <!-- Success Message and Confirmation Dialog -->
-                @if (session('success'))
-                <script>
-                    if (confirm("{{ session('success') }}")) {
-                        // Redirect to the create page if the user clicks "Yes"
-                        window.location.href = "{{ route('employee.create') }}";
-                    } else {
-                        // Redirect to the index page if the user clicks "No"
-                        window.location.href = "{{ route('employee.index') }}";
-                    }
-                </script>
-                @endif
-
-
                 <div class="mb-6">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
                     <hr class="mt-1 border-gray-300 dark:border-gray-600">

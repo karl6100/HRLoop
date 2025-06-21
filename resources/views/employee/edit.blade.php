@@ -18,23 +18,10 @@
                 <a href="#" id="tab-writeups" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('contacts')">Other Information</a>
             </li>
         </ul>
-        <form action="{{ route('employee.update', ['employee_id' => $employee->employee_id]) }}" method="PUT">
+        <form action="{{ route('employee.update', ['employee_id' => $employee->employee_id]) }}" method="POST">
             @csrf
+            @method('PUT')
             <div id="view-profile" class="view-section">
-                <!-- Success Message and Confirmation Dialog -->
-                @if (session('success'))
-                <script>
-                    if (confirm("{{ session('success') }}")) {
-                        // Redirect to the create page if the user clicks "Yes"
-                        window.location.href = "{{ route('employee.create') }}";
-                    } else {
-                        // Redirect to the index page if the user clicks "No"
-                        window.location.href = "{{ route('employee.index') }}";
-                    }
-                </script>
-                @endif
-
-
                 <div class="mb-6">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
                     <hr class="mt-1 border-gray-300 dark:border-gray-600">
@@ -310,15 +297,16 @@
                         </div>
                         <div>
                             <label for="dependent_birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
-                            <input datepicker name="dependent_birth_date[]" type="text"
-                                value="{{ \Carbon\Carbon::parse($dependent->birth_date)->format('m/d/Y') }}"
-                                readonly
-                                class="dependent_birth_date bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input
+                                type="date"
+                                name="dependent_birth_date[]"
+                                value="{{ \Carbon\Carbon::parse($dependent->birth_date)->format('Y-m-d') }}"
+                                class="dependent_birth_date bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                         </div>
                         <div>
                             <label for="dependent_age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
                             <div class="flex gap-2">
-                                <input type="text" name="dependent_age[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" disabled />
+                                <input type="text" name="dependent_age[]" class="dependent_age bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" disabled />
                                 <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('dependents-input-container')">+</button>
                                 <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onclick="removeInputField(this)">-</button>
                             </div>
@@ -359,29 +347,31 @@
 
                 <div id="address-input-container">
                     <div class="grid gap-6 mb-6 md:grid-cols-4">
+                        @if($employee->employeeAddresses->count() > 0)
+                        @foreach($employee->employeeAddresses as $address)
                         <div>
                             <label for="street_address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street Address</label>
-                            <input type="text" name="street_address[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter street address" />
+                            <input type="text" name="street_address[]" value="{{ $address->street_address }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter street address" />
                         </div>
                         <div>
                             <label for="barangay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Barangay</label>
-                            <input type="text" name="barangay[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter barangay" />
+                            <input type="text" name="barangay[]" value="{{ $address->barangay }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter barangay" />
                         </div>
                         <div>
                             <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                            <input type="text" name="city[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter city" />
+                            <input type="text" name="city[]" value="{{ $address->city }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter city" />
                         </div>
                         <div>
                             <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                            <input type="text" name="province[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter province" />
+                            <input type="text" name="province[]" value="{{ $address->province }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter province" />
                         </div>
                         <div>
                             <label for="zip_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Zip Code</label>
-                            <input type="text" name="zip_code[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter zip code" />
+                            <input type="text" name="zip_code[]" value="{{ $address->zip_code }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter zip code" />
                         </div>
                         <div>
                             <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                            <input type="text" name="country[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter country" />
+                            <input type="text" name="country[]" value="{{ $address->country }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter country" />
                         </div>
                         <div>
                             <div class="flex items-center gap-2">
@@ -390,7 +380,7 @@
                                 <input type="hidden" name="is_current[0]" value="0">
 
                                 <!-- Checkbox overrides it with '1' if checked -->
-                                <input type="checkbox" name="is_current[0]" value="1" class="is-current-checkbox bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                <input type="checkbox" name="is_current[0]" value="1" {{ $address->is_current ? 'checked' : '' }} class="is-current-checkbox bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
                                 <span class="text-sm text-gray-900 dark:text-white">Yes</span>
                             </div>
@@ -399,6 +389,10 @@
                             <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('address-input-container')">+</button>
                             <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onclick="removeInputField(this)">-</button>
                         </div>
+                        @endforeach
+                        @else
+                        <p class="text-sm text-gray-500">No address records found.</p>
+                        @endif
                     </div>
                 </div>
             </div>
