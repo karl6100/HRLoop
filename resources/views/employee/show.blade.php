@@ -78,7 +78,7 @@
                     <div>
                         <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
                         <input datepicker name="birth_date" id="birth_date" type="text"
-                            value="{{ \Carbon\Carbon::parse($employee->birth_date)->format('m/d/Y') }}"
+                            value="{{ $employee->birth_date ? \Carbon\Carbon::parse($employee->birth_date)->format('m/d/Y') : '' }}"
                             readonly
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>

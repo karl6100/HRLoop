@@ -52,7 +52,7 @@
                             <td class="px-6 py-4">{{ $employee->employee_id }}</td>
                             <td class="px-6 py-4">
                                 {{ $employee->first_name }} {{ $employee->last_name }}
-                                @if ($employee->suffix !== 'N/A')
+                                @if ($employee->suffix !== '')
                                 {{ $employee->suffix }}
                                 @endif
                             </td>

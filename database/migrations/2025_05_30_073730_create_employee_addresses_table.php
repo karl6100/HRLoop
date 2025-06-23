@@ -16,12 +16,12 @@ return new class extends Migration
             $table->timestamps();
             $table->string('fkey_employee_id');
             $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
-            $table->string('street_address');
-            $table->string('barangay');
-            $table->string('city');
-            $table->string('province');
-            $table->string('zip_code');
-            $table->string('country');
+            $table->string('street_address')->nullable(true);
+            $table->string('barangay')->nullable(true);
+            $table->string('city')->nullable(true);
+            $table->string('province')->nullable(true);
+            $table->string('zip_code')->nullable(true);
+            $table->string('country')->nullable(true);
             $table->boolean('is_current')->default(false);
         });
     }
