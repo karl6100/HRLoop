@@ -326,7 +326,7 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             // Validate the incoming request
-            // dd($request->all());
+            dd($request->all());
             // dd('Update function hit');
             $request->validate([
                 'employee_id' => 'required|string',
@@ -342,18 +342,18 @@ class EmployeeController extends Controller
                 'nationality' => 'nullable|string',
                 'religion' => 'nullable|string',
                 'telephone_number' => 'nullable|string',
-                'mobile_number' => 'nullable|string|unique:employees,mobile_number,' . $employee_id,
-                'email' => 'nullable|string|email|unique:employees,email,' . $employee_id,
+                'unique:employees,mobile_number,' . $employee_id . ',employee_id',
+                'unique:employees,email,' . $employee_id . ',employee_id',
                 'department' => 'required|string',
                 'company' => 'required|string',
                 'position_title' => 'required|string',
                 'job_level' => 'required|string',
                 'hired_date' => 'required|date',
                 'employment_status' => 'required|string',
-                'sss_number' => 'nullable|string|unique:employees,sss_number,' . $employee_id,
-                'philhealth_number' => 'nullable|string|unique:employees,philhealth_number,' . $employee_id,
-                'pagibig_number' => 'nullable|string|unique:employees,pagibig_number,' . $employee_id,
-                'tin_number' => 'nullable|string|unique:employees,tin_number,' . $employee_id,
+                'unique:employees,sss_number,' . $employee_id . ',employee_id',
+                'unique:employees,philhealth_number,' . $employee_id . ',employee_id',
+                'unique:employees,pagibig_number,' . $employee_id . ',employee_id',
+                'unique:employees,tin_number,' . $employee_id . ',employee_id',
                 'education_level' => 'nullable|array',
                 'education_level.*' => 'nullable|string',
                 'school' => 'nullable|array',
@@ -426,64 +426,65 @@ class EmployeeController extends Controller
             // dd($employee);
             // Update education data
             $employee->employeeEducations()->delete(); // Remove existing records
-            if ($request->has('education_level')) {
-                // dd($request->education_level);
+            if (is_array($request->education_level)) {
                 foreach ($request->education_level as $index => $level) {
                     $employee->employeeEducations()->create([
                         'education_level' => $level,
-                        'school' => $request->school[$index],
-                        'degree' => $request->degree[$index],
-                        'start_year' => $request->start_year[$index],
-                        'end_year' => $request->end_year[$index],
+                        'school' => $request->school[$index] ?? null,
+                        'degree' => $request->degree[$index] ?? null,
+                        'start_year' => $request->start_year[$index] ?? null,
+                        'end_year' => $request->end_year[$index] ?? null,
                     ]);
                 }
             }
+            
 
             // Update address data
             $employee->employeeAddresses()->delete(); // Remove existing records
-            if ($request->has('street_address')) {
+            if (is_array($request->street_address)) {
                 foreach ($request->street_address as $index => $street) {
                     $isCurrent = (bool) ($request->is_current[$index] ?? 0);
-
+            
                     $employee->employeeAddresses()->create([
                         'street_address' => $street,
-                        'barangay' => $request->barangay[$index],
-                        'city' => $request->city[$index],
-                        'province' => $request->province[$index],
-                        'zip_code' => $request->zip_code[$index],
-                        'country' => $request->country[$index],
+                        'barangay' => $request->barangay[$index] ?? null,
+                        'city' => $request->city[$index] ?? null,
+                        'province' => $request->province[$index] ?? null,
+                        'zip_code' => $request->zip_code[$index] ?? null,
+                        'country' => $request->country[$index] ?? null,
                         'is_current' => $isCurrent,
                     ]);
                 }
             }
+            
 
             // Update dependents data
             $employee->employeeDependents()->delete(); // Remove existing records
-            if ($request->has('dependent_fullname')) {
-                foreach ($request->dependent_fullname as $index => $dependent_fullname) {
+            if (is_array($request->dependent_fullname)) {
+                foreach ($request->dependent_fullname as $index => $fullname) {
                     $employee->employeeDependents()->create([
-                        'fullname' => $dependent_fullname,
-                        'relationship' => $request->dependent_relationship[$index],
-                        'birth_date' => $request->dependent_birth_date[$index],
+                        'fullname' => $fullname,
+                        'relationship' => $request->dependent_relationship[$index] ?? null,
+                        'birth_date' => $request->dependent_birth_date[$index] ?? null,
                     ]);
                 }
             }
+            
 
             // Update salary data
             $employee->employeeSalaries()->delete(); // Remove existing records
-            if ($request->has('employee_pay_type')) {
-                foreach ($request->employee_pay_type as $index => $employee_pay_type) {
-                    $employee->employeeSalaries()->create([
-                        'pay_type' => $employee_pay_type,
-                        'basic_salary' => $request->basic_salary,
-                        'allowance' => $request->allowance,
-                        'effective_date' => $request->salary_effective_date,
-                        'monthly_rate' => $request->total_compensation,
-                        'remarks' => $request->compensation_remarks,
-                    ]);
-                }
+            if ($request->filled('employee_pay_type')) {
+                $employee->employeeSalaries()->create([
+                    'pay_type' => $request->employee_pay_type,
+                    'basic_salary' => $request->basic_salary,
+                    'allowance' => $request->allowance,
+                    'effective_date' => $request->salary_effective_date,
+                    'monthly_rate' => $request->total_compensation,
+                    'remarks' => $request->compensation_remarks,
+                ]);
             }
-
+            
+            \Log::info('Employee updated', ['employee_id' => $employee_id]);
             DB::commit();
             return redirect()->route('employee.show', $employee_id)
                 ->with('message', 'Employee updated successfully!');
