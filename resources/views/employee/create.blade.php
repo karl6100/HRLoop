@@ -17,11 +17,10 @@
         <form action="{{ route('employee.store') }}" method="POST">
             @csrf
             <div id="view-profile" class="view-section">
-                <div class="mb-6">
+                <div class="mb-4 mt-4 rounded bg-blue-100 p-1">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
-                    <hr class="mt-1 border-gray-300 dark:border-gray-600">
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
+                <div class="grid gap-2 mb-2 md:grid-cols-4">
                     <div>
                         <label for="employee_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee ID</label>
                         <input type="text" name="employee_id" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ID" required />
@@ -39,7 +38,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
+                <div class="grid gap-2 mb-2 md:grid-cols-4">
                     <div>
                         <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
                         <input type="text" name="first_name" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
@@ -53,14 +52,12 @@
                         <input type="text" name="middle_name" id="middle_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Die" />
                     </div>
                     <div>
-
                         <label for="suffix" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
                         <select name="suffix" id="suffix" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @foreach ($suffixOptions as $suffix)
                             <option value="{{ $suffix }}">{{ $suffix }}</option>
                             @endforeach
                         </select>
-
                     </div>
                     <div>
                         <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
@@ -82,17 +79,15 @@
                         <input type="text" name="birth_place" id="birth_place" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Place of Birth" />
                     </div>
                     <div>
-
                         <label for="blood_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Blood Type</label>
                         <select name="blood_type" id="blood_type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @foreach ($bloodOptions as $bloodType)
                             <option value="{{ $bloodType }}">{{ $bloodType }}</option>
                             @endforeach
                         </select>
-
                     </div>
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
+                <div class="grid gap-2 mb-2 md:grid-cols-4">
                     <div>
                         <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
                         <select name="gender" id="gender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -121,7 +116,7 @@
                         <input type="text" name="religion" id="religion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                     </div>
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
+                <div class="grid gap-2 mb-2 md:grid-cols-4">
                     <div>
                         <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
                         <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" />
@@ -135,7 +130,7 @@
                         <input type="tel" name="mobile_number" id="mobile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09**-***-****" />
                     </div>
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
+                <div class="grid gap-2 mb-2 md:grid-cols-4">
                     <div>
                         <label for="tin_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TIN Number</label>
                         <input type="text" name="tin_number" id="tin_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-456-789-000" maxlength="15" />
@@ -153,14 +148,10 @@
                         <input type="text" name="pagibig_number" id="pagibig_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1234-5678-9101" maxlength="14" />
                     </div>
                 </div>
-                <div class="mb-6">
-                </div>
-                <hr class="mt-2 border-gray-300 dark:border-gray-600">
-                <div class="mb-6">
+                <div class="mb-4 mt-4 rounded bg-blue-100 p-1">
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employment Information</h1>
-                    <hr class="mt-2 border-gray-300 dark:border-gray-600">
                 </div>
-                <div class="grid gap-6 mb-6 md:grid-cols-4">
+                <div class="grid gap-2 mb-2 md:grid-cols-4">
                     <div>
                         <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
                         <input type="text" name="company" id="company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
@@ -199,7 +190,7 @@
                 </div>
 
 
-                
+
 
 
                 <div id="address-input-container">
