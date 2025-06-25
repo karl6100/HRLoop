@@ -77,6 +77,21 @@ class EmployeeForm extends Component
         ];
     }
 
+    public function updatedDependents($value, $key)
+{
+    // Example: $key = "2.birth_date"
+    if (str_ends_with($key, 'dependent_birth_date')) {
+        [$index, $field] = explode('.', $key);
+        $birthDate = $this->dependents[$index]['dependent_birth_date'];
+
+        if ($birthDate) {
+            $this->dependents[$index]['age'] = \Carbon\Carbon::parse($birthDate)->age;
+        } else {
+            $this->dependents[$index]['age'] = '';
+        }
+    }
+}
+
     public function removeAddress($index)
     {
         unset($this->addresses[$index]);
