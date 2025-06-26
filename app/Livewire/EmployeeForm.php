@@ -42,7 +42,6 @@ class EmployeeForm extends Component
                 'dependent_birth_date' => '',
             ]
         ];
-
     }
 
     public function addAddress()
@@ -83,7 +82,7 @@ class EmployeeForm extends Component
         if (str_ends_with($key, 'dependent_birth_date')) {
             [$index, $field] = explode('.', $key);
             $birthDate = $this->dependents[$index]['dependent_birth_date'] ?? null;
-    
+
             if ($birthDate) {
                 $this->dependents[$index]['dependent_age'] = Carbon::parse($birthDate)->age;
             } else {
@@ -109,6 +108,22 @@ class EmployeeForm extends Component
         unset($this->dependents[$index]);
         $this->dependents = array_values($this->dependents); // reindex
     }
+
+    public function getEducationsJsonProperty()
+    {
+        return json_encode($this->educations);
+    }
+
+    public function getAddressesJsonProperty()
+    {
+        return json_encode($this->addresses);
+    }
+
+    public function getDependentsJsonProperty()
+    {
+        return json_encode($this->dependents);
+    }
+
 
     public function render()
     {

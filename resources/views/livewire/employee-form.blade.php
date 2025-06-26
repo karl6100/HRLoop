@@ -48,6 +48,7 @@
         </div>
     </div>
     @endforeach
+    <input type="hidden" name="educations_json" value="{{ \Livewire\Livewire::getProperty('employee-form', 'educationsJson') }}">
 
     <!-- Dependent Information -->
     {{-- Dependent Form --}}
@@ -119,6 +120,7 @@
         </div>
     </div>
     @endforeach
+    <input type="hidden" name="dependents_json" value="{{ $this->dependentsJson }}">
 
     <!-- Address Information -->
 
@@ -189,4 +191,5 @@
         </div>
     </div>
     @endforeach
+    <input type="hidden" name="addresses_json" value="{{ $this->addressesJson }}">
 </div>

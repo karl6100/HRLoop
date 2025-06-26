@@ -6,6 +6,7 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
 {
@@ -49,6 +50,9 @@ class EmployeeController extends Controller
     {
         DB::beginTransaction();
         try {
+            $educations = json_decode($request->educations_json, true);
+            $addresses = json_decode($request->addresses_json, true);
+            $dependents = json_decode($request->dependents_json, true);
 
             // dd($request->all());
             $validatedData = $request->validate([ //Fields from view
@@ -77,26 +81,38 @@ class EmployeeController extends Controller
                 'philhealth_number' => 'nullable|string|unique:employees,philhealth_number',
                 'pagibig_number' => 'nullable|string|unique:employees,pagibig_number',
                 'tin_number' => 'nullable|string|unique:employees,tin_number',
-                'educations' => 'nullable|array',
-                'educations.*.education_level' => 'nullable|string',
-                'educations.*.school' => 'nullable|string',
-                'educations.*.degree' => 'nullable|string',
-                'educations.*.start_year' => 'nullable|integer',
-                'educations.*.end_year' => 'nullable|integer',
-                'addresses' => 'nullable|array',
-                'addresses.*.street_address.*' => 'nullable|string',
-                'addresses.*.barangay.*' => 'nullable|string',
-                'addresses.*.city' => 'nullable|string',
-                'addresses.*.province' => 'nullable|string',
-                'addresses.*.zip_code' => 'nullable|string',
-                'addresses.*.country' => 'nullable|string',
-                'addresses.*.is_current' => 'nullable|boolean',
-                'dependents' => 'nullable|array',
-                'dependents.*.dependent_fullname' => 'nullable|string',
-                'dependents.*.dependent_relationship' => 'nullable|string',
-                'dependents.*.dependent_birth_date' => 'nullable|date',
-
             ]);
+
+            foreach ($educations as $education) {
+                Validator::make($education, [
+                    'level_of_education' => 'nullable|string',
+                    'school' => 'nullable|string',
+                    'degree' => 'nullable|string',
+                    'start_year' => 'nullable|integer',
+                    'end_year' => 'nullable|integer',
+                ])->validate();
+            }
+
+            foreach ($dependents as $dependent) {
+                Validator::make($dependent, [
+                    'dependent_fullname' => 'nullable|string',
+                    'dependent_relationship' => 'nullable|string',
+                    'dependent_birth_date' => 'nullable|date',
+                ])->validate();
+            }
+
+            foreach ($addresses as $address) {
+                Validator::make($address, [
+                    'street' => 'nullable|string',
+                    'barangay' => 'nullable|string',
+                    'city' => 'nullable|string',
+                    'province' => 'nullable|string',
+                    'zip_code' => 'nullable|string',
+                    'country' => 'nullable|string',
+                    'is_current' => 'nullable|boolean',
+                ])->validate();
+            }
+
             \Log::info('✅ Validated request', $validatedData);
 
             // Save the main employee data
@@ -105,19 +121,20 @@ class EmployeeController extends Controller
             \Log::info('✅ Employee created', ['employee_id' => $employee->employee_id]);
 
             // Save education data
-            foreach ($validatedData['educations'] ?? [] as $education) {
+            foreach ($educations ?? [] as $education) {
                 $employee->employeeEducations()->create($education);
             }
 
-            // Save street data
-            foreach ($validatedData['addresses'] ?? [] as $address) {
+            // Save address data
+            foreach ($addresses ?? [] as $address) {
                 $employee->employeeAddresses()->create($address);
             }
 
             // Save dependents data
-            foreach ($validatedData['dependents'] ?? [] as $dependent) {
+            foreach ($dependents ?? [] as $dependent) {
                 $employee->employeeDependents()->create($dependent);
             }
+
 
             // Save employee salary data
             if ($request->filled('employee_pay_type')) {
@@ -354,14 +371,14 @@ class EmployeeController extends Controller
                     ]);
                 }
             }
-            
+
 
             // Update address data
             $employee->employeeAddresses()->delete(); // Remove existing records
             if (is_array($request->street_address)) {
                 foreach ($request->street_address as $index => $street) {
                     $isCurrent = (bool) ($request->is_current[$index] ?? 0);
-            
+
                     $employee->employeeAddresses()->create([
                         'street_address' => $street,
                         'barangay' => $request->barangay[$index] ?? null,
@@ -373,7 +390,7 @@ class EmployeeController extends Controller
                     ]);
                 }
             }
-            
+
 
             // Update dependents data
             $employee->employeeDependents()->delete(); // Remove existing records
@@ -386,7 +403,7 @@ class EmployeeController extends Controller
                     ]);
                 }
             }
-            
+
 
             // Update salary data
             $employee->employeeSalaries()->delete(); // Remove existing records
@@ -400,7 +417,7 @@ class EmployeeController extends Controller
                     'remarks' => $request->compensation_remarks,
                 ]);
             }
-            
+
             \Log::info('Employee updated', ['employee_id' => $employee_id]);
             DB::commit();
             return redirect()->route('employee.show', $employee_id)
