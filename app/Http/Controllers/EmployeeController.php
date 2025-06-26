@@ -51,7 +51,7 @@ class EmployeeController extends Controller
         try {
 
             // dd($request->all());
-            $request->validate([ //Fields from view
+            $validatedData = $request->validate([ //Fields from view
                 'employee_id' => 'required|string',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
@@ -77,129 +77,46 @@ class EmployeeController extends Controller
                 'philhealth_number' => 'nullable|string|unique:employees,philhealth_number',
                 'pagibig_number' => 'nullable|string|unique:employees,pagibig_number',
                 'tin_number' => 'nullable|string|unique:employees,tin_number',
-                'education_level' => 'nullable|array',
-                'education_level.*' => 'nullable|string',
-                'school' => 'nullable|array',
-                'school.*' => 'nullable|string',
-                'degree' => 'nullable|array',
-                'degree.*' => 'nullable|string',
-                'start_year' => 'nullable|array',
-                'start_year.*' => 'nullable|integer',
-                'end_year' => 'nullable|array',
-                'end_year.*' => 'nullable|integer',
-                'street_address' => 'nullable|array',
-                'street_address.*' => 'nullable|string',
-                'barangay' => 'nullable|array',
-                'barangay.*' => 'nullable|string',
-                'city' => 'nullable|array',
-                'city.*' => 'nullable|string',
-                'province' => 'nullable|array',
-                'province.*' => 'nullable|string',
-                'zip_code' => 'nullable|array',
-                'zip_code.*' => 'nullable|string',
-                'country' => 'nullable|array',
-                'country.*' => 'nullable|string',
-                'is_current' => 'nullable|array',
-                'is_current.*' => 'nullable|boolean',
-                'dependent_fullname.*' => 'nullable|string',
-                'dependent_relationship.*' => 'nullable|string',
-                'dependent_birth_date.*' => 'nullable|date',
-                'employee_pay_type' => 'nullable|string',
-                'basic_salary' => 'nullable|numeric',
-                'allowance' => 'nullable|numeric',
-                'salary_effective_date' => 'nullable|date',
-                'total_compensation' => 'nullable|numeric',
-                'compensation_remarks' => 'nullable|string',
+                'educations' => 'nullable|array',
+                'educations.*.education_level' => 'nullable|string',
+                'educations.*.school' => 'nullable|string',
+                'educations.*.degree' => 'nullable|string',
+                'educations.*.start_year' => 'nullable|integer',
+                'educations.*.end_year' => 'nullable|integer',
+                'addresses' => 'nullable|array',
+                'addresses.*.street_address.*' => 'nullable|string',
+                'addresses.*.barangay.*' => 'nullable|string',
+                'addresses.*.city' => 'nullable|string',
+                'addresses.*.province' => 'nullable|string',
+                'addresses.*.zip_code' => 'nullable|string',
+                'addresses.*.country' => 'nullable|string',
+                'addresses.*.is_current' => 'nullable|boolean',
+                'dependents' => 'nullable|array',
+                'dependents.*.dependent_fullname' => 'nullable|string',
+                'dependents.*.dependent_relationship' => 'nullable|string',
+                'dependents.*.dependent_birth_date' => 'nullable|date',
+
             ]);
-            \Log::info('✅ Validated request', $request->all());
+            \Log::info('✅ Validated request', $validatedData);
 
             // Save the main employee data
-            $employee = Employee::create($request->only([
-                'employee_id',
-                'first_name',
-                'last_name',
-                'middle_name',
-                'suffix',
-                'civil_status',
-                'birth_date',
-                'birth_place',
-                'blood_type',
-                'gender',
-                'nationality',
-                'religion',
-                'telephone_number',
-                'mobile_number',
-                'email',
-                'department',
-                'company',
-                'position_title',
-                'job_level',
-                'hired_date',
-                'employment_status',
-                'sss_number',
-                'philhealth_number',
-                'pagibig_number',
-                'tin_number',
-            ]));
+            $employee = Employee::create($validatedData);
+
             \Log::info('✅ Employee created', ['employee_id' => $employee->employee_id]);
 
             // Save education data
-            if ($request->has('education_level')) {
-                foreach ($request->education_level as $index => $level) {
-                    // 🛡 Skip if any required paired field is missing for this index
-                    if (
-                        !isset($request->school[$index]) ||
-                        !isset($request->degree[$index]) ||
-                        !isset($request->start_year[$index]) ||
-                        !isset($request->end_year[$index])
-                    ) {
-                        continue;
-                    }
-
-                    // ✅ Safe to insert
-                    $employee->employeeEducations()->create([
-                        'education_level' => $level,
-                        'school' => $request->school[$index],
-                        'degree' => $request->degree[$index],
-                        'start_year' => $request->start_year[$index],
-                        'end_year' => $request->end_year[$index],
-                    ]);
-                }
+            foreach ($validatedData['educations'] ?? [] as $education) {
+                $employee->employeeEducations()->create($education);
             }
 
             // Save street data
-            if ($request->has('street_address')) {
-                foreach ($request->street_address as $index => $street) {
-                    // Check if the current address is marked as "is_current"
-                    $isCurrent = (bool) ($request->is_current[$index] ?? 0);
-
-                    if ($isCurrent) {
-                        // Set all other addresses of the employee to "is_current = false"
-                        $employee->employeeAddresses()->update(['is_current' => false]);
-                    }
-
-                    // Create the new address
-                    $employee->employeeAddresses()->create([
-                        'street_address' => $street,
-                        'barangay' => $request->barangay[$index],
-                        'city' => $request->city[$index],
-                        'province' => $request->province[$index],
-                        'zip_code' => $request->zip_code[$index],
-                        'country' => $request->country[$index],
-                        'is_current' => $isCurrent,
-                    ]);
-                }
+            foreach ($validatedData['addresses'] ?? [] as $address) {
+                $employee->employeeAddresses()->create($address);
             }
 
             // Save dependents data
-            if ($request->has('dependent_fullname')) {
-                foreach ($request->dependent_fullname as $index => $dependent_fullname) {
-                    $employee->employeeDependents()->create([
-                        'fullname' => $dependent_fullname,
-                        'relationship' => $request->dependent_relationship[$index],
-                        'birth_date' => $request->dependent_birth_date[$index],
-                    ]);
-                }
+            foreach ($validatedData['dependents'] ?? [] as $dependent) {
+                $employee->employeeDependents()->create($dependent);
             }
 
             // Save employee salary data

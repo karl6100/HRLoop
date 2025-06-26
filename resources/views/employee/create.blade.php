@@ -17,7 +17,7 @@
         <form action="{{ route('employee.store') }}" method="POST">
             @csrf
             <div id="view-profile" class="view-section">
-                <div class="mb-4 mt-4 rounded bg-blue-100 p-1">
+                <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
                 </div>
                 <div class="grid gap-2 mb-2 md:grid-cols-4">
@@ -145,7 +145,7 @@
                         <input type="text" name="pagibig_number" id="pagibig_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1234-5678-9101" maxlength="14" />
                     </div>
                 </div>
-                <div class="mb-4 mt-4 rounded bg-blue-100 p-1">
+                <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employment Information</h1>
                 </div>
                 <div class="grid gap-2 mb-2 md:grid-cols-4">
@@ -183,9 +183,8 @@
                         </div>
                     </div>
                 </div>
-                    <div>
-                        @livewire('employee-form')
-                    </div>
+                <div>
+                    @livewire('employee-form')
                 </div>
             </div>
             <div id="view-compensation" class="view-section hidden">
@@ -279,338 +278,145 @@
         </form>
     </div>
 
+        <script>
+            // Function to format input with dashes
+            function formatWithDashes(input, pattern) {
+                let value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                let formattedValue = '';
+                let index = 0;
 
-
-    <!-- JavaScript for Dynamic Input Fields -->
-    <script>
-        function addInputField(containerId) {
-            const container = document.getElementById(containerId);
-            const newField = document.createElement('div');
-            newField.className = 'grid gap-6 mb-6 md:grid-cols-4';
-
-            // Generate fields based on the container ID
-            if (containerId === 'education-input-container') {
-                newField.innerHTML = `
-                <div>
-                    <input type="text" name="education_level[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter level of education" />
-                </div>
-                <div>
-                    <input type="text" name="school[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter school name" />
-                </div>
-                <div>
-                    <input type="text" name="degree[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter degree" />
-                </div>
-                <div>
-                    <div class="flex gap-2">
-                        <input type="number" name="start_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="Start Year" min="1900" max="2099" />
-                        <input type="number" name="end_year[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]" placeholder="End Year" min="1900" max="2099" />
-                        <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('${containerId}')">+</button>
-                        <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
-                    </div>
-                </div>
-            `;
-            } else if (containerId === 'dependents-input-container') {
-                newField.innerHTML = `
-                <div>
-                    <input type="text" name="dependent_fullname[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Full name" />
-                </div>
-                <div>
-                    <input type="text" name="dependent_relationship[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Spouse, Son, Daughter, etc." />
-                </div>
-                <div>
-                    <input type="date" name="dependent_birth_date[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
-                </div>
-                <div class="flex gap-2 items-center">
-                    <input type="text" name="dependent_age[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" disabled />
-                    <button type="button" class="inline-flex items-center justify-center text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('${containerId}')">+</button>
-                    <button type="button" class="inline-flex items-center justify-center text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
-                </div>
-            `;
-            } else if (containerId === 'address-input-container') {
-                const index = container.querySelectorAll('.grid').length;
-                newField.innerHTML = `
-                <div>
-                    <label for="street_address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street Address</label>
-                    <input type="text" name="street_address[${index}]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter street address" />
-                </div>
-                <div>
-                    <label for="barangay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Barangay</label>
-                    <input type="text" name="barangay[${index}]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter barangay" />
-                </div>
-                <div>
-                    <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                    <input type="text" name="city[${index}]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter city" />
-                </div>
-                <div>
-                    <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                    <input type="text" name="province[${index}]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter province" />
-                </div>
-                <div>
-                    <label for="zip_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Zip Code</label>
-                    <input type="text" name="zip_code[${index}]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter zip code" />
-                </div>
-                <div>
-                    <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
-                    <input type="text" name="country[${index}]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter country" />
-                </div>
-                <div>
-                    <div class="flex items-center gap-2">
-                        <label for="is_current" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Current Address?</label>
-                        <!-- Hidden field forces '0' when checkbox is not checked -->
-                        <input type="hidden" name="is_current[${index}]" value="0">
-
-                        <!-- Checkbox overrides it with '1' if checked -->
-                        <input type="checkbox" name="is_current[${index}]" value="1" class="is-current-checkbox bg-gray-50 border border-gray-300 text-blue-600 focus:ring-blue-500 focus:border-blue-500 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-
-                        <span class="text-sm text-gray-900 dark:text-white">Yes</span>
-                    </div>
-                </div>
-                <div class="flex gap-2 items-center">
-                    <button type="button" class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" onclick="addInputField('${containerId}')">+</button>
-                    <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-10 h-10 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 remove-btn" onclick="removeInputField(this, '${containerId}')">-</button>
-                </div>
-            `;
-            }
-            container.appendChild(newField);
-            updateRemoveButtons(containerId); // Update remove button visibility
-        }
-
-        function removeInputField(button, containerId) {
-            const container = document.getElementById(containerId);
-            const rows = container.querySelectorAll('.grid');
-            if (rows.length > 1) {
-                const row = button.closest('.grid');
-                row.remove();
-            }
-            updateRemoveButtons(containerId); // Update remove button visibility
-        }
-
-        function updateRemoveButtons(containerId) {
-            const container = document.getElementById(containerId);
-            const rows = container.querySelectorAll('.grid');
-            const removeButtons = container.querySelectorAll('.remove-btn');
-
-            // Hide or disable remove buttons if only one row remains
-            if (rows.length === 1) {
-                removeButtons.forEach(button => {
-                    button.style.display = 'none'; // Hide the button
-                    button.disabled = true; // Optionally disable the button
-                });
-            } else {
-                removeButtons.forEach(button => {
-                    button.style.display = 'inline-block'; // Show the button
-                    button.disabled = false; // Enable the button
-                });
-            }
-        }
-
-        // Initial call to update remove button visibility
-        document.addEventListener('DOMContentLoaded', () => {
-            updateRemoveButtons('education-input-container');
-            updateRemoveButtons('dependents-input-container');
-            updateRemoveButtons('address-input-container');
-        });
-    </script>
-
-    <script>
-        // Function to format input with dashes
-        function formatWithDashes(input, pattern) {
-            let value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-            let formattedValue = '';
-            let index = 0;
-
-            for (let i = 0; i < pattern.length; i++) {
-                if (pattern[i] === '-') {
-                    formattedValue += '-';
-                } else {
-                    if (index < value.length) {
-                        formattedValue += value[index];
-                        index++;
+                for (let i = 0; i < pattern.length; i++) {
+                    if (pattern[i] === '-') {
+                        formattedValue += '-';
+                    } else {
+                        if (index < value.length) {
+                            formattedValue += value[index];
+                            index++;
+                        }
                     }
                 }
+
+                input.value = formattedValue;
             }
 
-            input.value = formattedValue;
-        }
-
-        // Add event listeners for each input field
-        document.getElementById('tin_number').addEventListener('input', function() {
-            formatWithDashes(this, '123-456-789-000');
-        });
-
-        document.getElementById('sss_number').addEventListener('input', function() {
-            formatWithDashes(this, '123-456-7890');
-        });
-
-        document.getElementById('philhealth_number').addEventListener('input', function() {
-            formatWithDashes(this, '00-123456789-0');
-        });
-
-        document.getElementById('pagibig_number').addEventListener('input', function() {
-            formatWithDashes(this, '1234-5678-9101');
-        });
-    </script>
-
-    <script>
-        function showView(viewId) {
-            // Hide all view sections
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.add('hidden');
+            // Add event listeners for each input field
+            document.getElementById('tin_number').addEventListener('input', function() {
+                formatWithDashes(this, '123-456-789-000');
             });
 
-            // Show the selected view section
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
-
-            // Remove active class from all tabs
-            document.querySelectorAll('ul > li > a').forEach(tab => {
-                tab.classList.remove('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+            document.getElementById('sss_number').addEventListener('input', function() {
+                formatWithDashes(this, '123-456-7890');
             });
 
-            // Add active class to the selected tab
-            document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
-        }
-    </script>
-
-    <!-- Age Calculation Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const birthDateInput = document.getElementById('birth_date');
-            const ageInput = document.getElementById('age');
-
-            birthDateInput.addEventListener('input', function() {
-                const birthDate = new Date(birthDateInput.value);
-                const today = new Date();
-
-                if (birthDateInput.value) {
-                    // Compute the age
-                    let age = today.getFullYear() - birthDate.getFullYear();
-                    const monthDiff = today.getMonth() - birthDate.getMonth();
-                    const dayDiff = today.getDate() - birthDate.getDate();
-
-                    // Adjust age if the birthdate hasn't occurred yet this year
-                    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                        age--;
-                    }
-
-                    // Display the computed age
-                    ageInput.value = age;
-                } else {
-                    ageInput.value = ''; // Clear the age input if no date is selected
-                }
+            document.getElementById('philhealth_number').addEventListener('input', function() {
+                formatWithDashes(this, '00-123456789-0');
             });
-        });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dependentsContainer = document.getElementById('dependents-input-container');
+            document.getElementById('pagibig_number').addEventListener('input', function() {
+                formatWithDashes(this, '1234-5678-9101');
+            });
+        </script>
 
-            dependentsContainer.addEventListener('input', function(event) {
-                if (event.target.name === 'dependent_birth_date[]') {
-                    const birthDateInput = event.target;
-                    const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
+        <script>
+            function showView(viewId) {
+                // Hide all view sections
+                document.querySelectorAll('.view-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Show the selected view section
+                document.getElementById(`view-${viewId}`).classList.remove('hidden');
+
+                // Remove active class from all tabs
+                document.querySelectorAll('ul > li > a').forEach(tab => {
+                    tab.classList.remove('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+                });
+
+                // Add active class to the selected tab
+                document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+            }
+        </script>
+
+        <!-- Age Calculation Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const birthDateInput = document.getElementById('birth_date');
+                const ageInput = document.getElementById('age');
+
+                birthDateInput.addEventListener('input', function() {
                     const birthDate = new Date(birthDateInput.value);
                     const today = new Date();
 
                     if (birthDateInput.value) {
+                        // Compute the age
                         let age = today.getFullYear() - birthDate.getFullYear();
                         const monthDiff = today.getMonth() - birthDate.getMonth();
                         const dayDiff = today.getDate() - birthDate.getDate();
 
+                        // Adjust age if the birthdate hasn't occurred yet this year
                         if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
                             age--;
                         }
 
+                        // Display the computed age
                         ageInput.value = age;
                     } else {
                         ageInput.value = ''; // Clear the age input if no date is selected
                     }
-                }
+                });
             });
-        });
-    </script>
+        </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const basicSalaryInput = document.getElementById('basic_salary');
-            const allowanceInput = document.getElementById('allowance');
-            const totalCompensationInput = document.getElementById('total_compensation');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const dependentsContainer = document.getElementById('dependents-input-container');
 
-            function calculateTotalCompensation() {
-                const basicSalary = parseFloat(basicSalaryInput.value) || 0;
-                const allowance = parseFloat(allowanceInput.value) || 0;
+                dependentsContainer.addEventListener('input', function(event) {
+                    if (event.target.name === 'dependent_birth_date[]') {
+                        const birthDateInput = event.target;
+                        const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
+                        const birthDate = new Date(birthDateInput.value);
+                        const today = new Date();
 
-                // Calculate total compensation
-                const totalCompensation = basicSalary + allowance;
+                        if (birthDateInput.value) {
+                            let age = today.getFullYear() - birthDate.getFullYear();
+                            const monthDiff = today.getMonth() - birthDate.getMonth();
+                            const dayDiff = today.getDate() - birthDate.getDate();
 
-                // Update the total compensation field
-                totalCompensationInput.value = totalCompensation.toFixed(2);
-            }
+                            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                                age--;
+                            }
 
-            // Add event listeners to recalculate total compensation when inputs change
-            basicSalaryInput.addEventListener('input', calculateTotalCompensation);
-            allowanceInput.addEventListener('input', calculateTotalCompensation);
-        });
-    </script>
-
-    <script>
-        // Select all checkboxes with the class "is-current-checkbox"
-        const checkboxes = document.querySelectorAll('.is-current-checkbox');
-
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    // Uncheck all other checkboxes
-                    checkboxes.forEach(cb => {
-                        if (cb !== this) {
-                            cb.checked = false;
+                            ageInput.value = age;
+                        } else {
+                            ageInput.value = ''; // Clear the age input if no date is selected
                         }
-                    });
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const basicSalaryInput = document.getElementById('basic_salary');
+                const allowanceInput = document.getElementById('allowance');
+                const totalCompensationInput = document.getElementById('total_compensation');
+
+                function calculateTotalCompensation() {
+                    const basicSalary = parseFloat(basicSalaryInput.value) || 0;
+                    const allowance = parseFloat(allowanceInput.value) || 0;
+
+                    // Calculate total compensation
+                    const totalCompensation = basicSalary + allowance;
+
+                    // Update the total compensation field
+                    totalCompensationInput.value = totalCompensation.toFixed(2);
                 }
+
+                // Add event listeners to recalculate total compensation when inputs change
+                basicSalaryInput.addEventListener('input', calculateTotalCompensation);
+                allowanceInput.addEventListener('input', calculateTotalCompensation);
             });
-        });
-    </script>
+        </script>
 
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const basicSalaryInput = document.getElementById('basic_salary');
-            const allowanceInput = document.getElementById('allowance');
-            const totalCompensationInput = document.getElementById('total_compensation');
-
-            // Function to format numbers as currency
-            function formatCurrency(value) {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                }).format(value);
-            }
-
-            // Function to calculate total compensation
-            function calculateTotalCompensation() {
-                const basicSalary = parseFloat(basicSalaryInput.value.replace(/,/g, '')) || 0;
-                const allowance = parseFloat(allowanceInput.value.replace(/,/g, '')) || 0;
-
-                // Calculate total compensation
-                const totalCompensation = basicSalary + allowance;
-
-                // Update the total compensation field
-                totalCompensationInput.value = formatCurrency(totalCompensation);
-            }
-
-            // Add event listeners to recalculate total compensation when inputs change
-            basicSalaryInput.addEventListener('input', function() {
-                // Format the input value as currency
-                const value = parseFloat(basicSalaryInput.value.replace(/,/g, '')) || 0;
-                basicSalaryInput.value = formatCurrency(value).replace('$', '');
-                calculateTotalCompensation();
-            });
-
-            allowanceInput.addEventListener('input', function() {
-                // Format the input value as currency
-                const value = parseFloat(allowanceInput.value.replace(/,/g, '')) || 0;
-                allowanceInput.value = formatCurrency(value).replace('$', '');
-                calculateTotalCompensation();
-            });
-        }); -->
-    </script>
 </x-layouts.app>

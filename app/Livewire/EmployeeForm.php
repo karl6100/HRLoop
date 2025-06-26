@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Carbon\Carbon;
 
 class EmployeeForm extends Component
 {
@@ -78,19 +79,18 @@ class EmployeeForm extends Component
     }
 
     public function updatedDependents($value, $key)
-{
-    // Example: $key = "2.birth_date"
-    if (str_ends_with($key, 'dependent_birth_date')) {
-        [$index, $field] = explode('.', $key);
-        $birthDate = $this->dependents[$index]['dependent_birth_date'];
-
-        if ($birthDate) {
-            $this->dependents[$index]['age'] = \Carbon\Carbon::parse($birthDate)->age;
-        } else {
-            $this->dependents[$index]['age'] = '';
+    {
+        if (str_ends_with($key, 'dependent_birth_date')) {
+            [$index, $field] = explode('.', $key);
+            $birthDate = $this->dependents[$index]['dependent_birth_date'] ?? null;
+    
+            if ($birthDate) {
+                $this->dependents[$index]['dependent_age'] = Carbon::parse($birthDate)->age;
+            } else {
+                $this->dependents[$index]['dependent_age'] = null;
+            }
         }
     }
-}
 
     public function removeAddress($index)
     {
