@@ -50,9 +50,6 @@ class EmployeeController extends Controller
     {
         DB::beginTransaction();
         try {
-            $educations = json_decode($request->educations_json, true);
-            $addresses = json_decode($request->addresses_json, true);
-            $dependents = json_decode($request->dependents_json, true);
 
             // dd($request->all());
             $validatedData = $request->validate([ //Fields from view
