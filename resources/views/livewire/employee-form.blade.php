@@ -8,6 +8,9 @@
         <div>
             <label for="employee_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee ID</label>
             <input type="text" wire:model="employees.employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="ID" required />
+            @error('employees.employee_id')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
         </div>
@@ -26,10 +29,16 @@
         <div>
             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
             <input type="text" wire:model="employees.first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+            @error('employees.first_name')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
             <input type="text" wire:model="employees.last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Doe" required />
+            @error('employees.last_name')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="middle_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
@@ -37,7 +46,7 @@
         </div>
         <div>
             <label for="suffix" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Suffix</label>
-            <select name="suffix"wire:model="employees.suffix" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select name="suffix" wire:model="employees.suffix" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 @foreach ($suffixOptions as $suffix)
                 <option value="{{ $suffix }}">{{ $suffix }}</option>
                 @endforeach
@@ -136,14 +145,23 @@
         <div>
             <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
             <input type="text" wire:model="employees.company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+            @error('employees.company')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
             <input type="text" wire:model="employees.department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+            @error('employees.department')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="position_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
             <input type="text" wire:model="employees.position_title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+            @error('employees.position_title')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Level</label>
@@ -151,6 +169,9 @@
                 @foreach ($jobLevelOptions as $jobLevel)
                 <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
                 @endforeach
+                @error('employees.job_level')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
             </select>
         </div>
     </div>
@@ -164,6 +185,9 @@
                     </svg>
                 </div>
                 <input datepicker wire:model="employees.hired_date" id="default-datepicker" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                @error('employees.hired_date')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
             </div>
         </div>
     </div>

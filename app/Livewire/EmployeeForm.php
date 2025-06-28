@@ -7,6 +7,7 @@ use Carbon\Carbon;
 
 class EmployeeForm extends Component
 {
+    // --- Dropdown Option Lists ---
     public $suffixOptions = ['', 'Jr.', 'Sr.', 'III', 'IV', 'V'];
     public $bloodOptions = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
     public $civilStatusOptions = ['', 'Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
@@ -15,76 +16,53 @@ class EmployeeForm extends Component
     public $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
     public $employeePayTypeOptions = ['', 'Monthly', 'Daily', 'Hourly'];
 
+    // --- Form Data Structures ---
     public $employees = [];
     public $addresses = [];
     public $educations = [];
     public $dependents = [];
 
+    /**
+     * Initialize the form data when the component is mounted.
+     */
     public function mount()
     {
+        // Initialize employee data with default empty values
         $this->employees = [
-            'employee_id' => '',
-            'first_name' => '',
-            'last_name' => '',
-            'middle_name' => '',
-            'suffix' => '',
-            'civil_status' => '',
-            'birth_date' => '',
-            'birth_place' => '',
-            'blood_type' => '',
-            'gender' => '',
-            'nationality' => '',
-            'religion' => '',
-            'telephone_number' => '',
-            'mobile_number' => '',
-            'email' => '',
-            'department' => '',
-            'company' => '',
-            'position_title' => '',
-            'job_level' => '',
-            'hired_date' => '',
-            'employment_status' => '',
-            'sss_number' => '',
-            'philhealth_number' => '',
-            'pagibig_number' => '',
-            'tin_number' => '',
+            'employee_id' => '', 'first_name' => '', 'last_name' => '', 'middle_name' => '',
+            'suffix' => '', 'civil_status' => '', 'birth_date' => '', 'birth_place' => '',
+            'blood_type' => '', 'gender' => '', 'nationality' => '', 'religion' => '',
+            'telephone_number' => '', 'mobile_number' => '', 'email' => '',
+            'department' => '', 'company' => '', 'position_title' => '', 'job_level' => '',
+            'hired_date' => '', 'employment_status' => '',
+            'sss_number' => '', 'philhealth_number' => '', 'pagibig_number' => '', 'tin_number' => ''
         ];
 
-        $this->addresses = [
-            [
-                'street' => '',
-                'barangay' => '',
-                'city' => '',
-                'province' => '',
-                'zip_code' => '',
-                'country' => '',
-                'is_current' => false,
-            ]
-        ];
+        // Initialize with one blank address
+        $this->addresses = [[
+            'street' => '', 'barangay' => '', 'city' => '', 'province' => '',
+            'zip_code' => '', 'country' => '', 'is_current' => false
+        ]];
 
-        $this->educations = [
-            [
-                'level_of_education' => '',
-                'school' => '',
-                'degree' => '',
-                'start_year' => '',
-                'end_year' => '',
-            ]
-        ];
+        // Initialize with one blank education
+        $this->educations = [[
+            'level_of_education' => '', 'school' => '', 'degree' => '',
+            'start_year' => '', 'end_year' => ''
+        ]];
 
-        $this->dependents = [
-            [
-                'fullname' => '',
-                'dependent_relationship' => '',
-                'dependent_birth_date' => '',
-            ]
-        ];
+        // Initialize with one blank dependent
+        $this->dependents = [[
+            'fullname' => '', 'dependent_relationship' => '', 'dependent_birth_date' => ''
+        ]];
     }
 
+    /**
+     * Define validation rules for each field.
+     */
     protected function rules()
     {
         return [
-            'employees.employee_id' => 'required|string',
+            'employees.employee_id' => 'required|string|unique:employees,employee_id',
             'employees.first_name' => 'required|string',
             'employees.last_name' => 'required|string',
             'employees.middle_name' => 'nullable|string',
@@ -109,100 +87,122 @@ class EmployeeForm extends Component
             'employees.philhealth_number' => 'nullable|string|unique:employees,philhealth_number',
             'employees.pagibig_number' => 'nullable|string|unique:employees,pagibig_number',
             'employees.tin_number' => 'nullable|string|unique:employees,tin_number',
+            'addresses.*.street' => 'nullable|string',
+            'addresses.*.barangay' => 'nullable|string',
+            'addresses.*.city' => 'nullable|string',
+            'addresses.*.province' => 'nullable|string',
+            'addresses.*.zip_code' => 'nullable|string',
+            'addresses.*.country' => 'nullable|string',
+            'addresses.*.is_current' => 'boolean',
+            'educations.*.level_of_education' => 'nullable|string',
+            'educations.*.school' => 'nullable|string',
+            'educations.*.degree' => 'nullable|string',
+            'educations.*.start_year' => 'nullable|date_format:Y',
+            'educations.*.end_year' => 'nullable|date_format:Y',
+            'dependents.*.fullname' => 'nullable|string',
+            'dependents.*.dependent_relationship' => 'nullable|string',
+            'dependents.*.dependent_birth_date' => 'nullable|date',
         ];
     }
+
+    /**
+     * Custom validation error messages.
+     */
+    protected function messages()
+    {
+        return [
+            'employees.employee_id.required' => 'Employee ID is required.',
+            'employees.employee_id.unique' => 'This Employee ID is already taken.',
+            'employees.first_name.required' => 'Please enter the first name.',
+            'employees.last_name.required' => 'Please enter the last name.',
+            'employees.email.email' => 'The email must be a valid email address.',
+            'employees.email.unique' => 'This email is already taken.',
+            'employees.department.required' => 'Department field is required.',
+            'employees.company.required' => 'Company field is required.',
+            'employees.position_title.required' => 'Position title is required.',
+            'employees.job_level.required' => 'Job level is required.',
+            'employees.hired_date.required' => 'Hired date is required.',
+        ];
+    }
+
+    // --- Dynamic Field Adders ---
 
     public function addAddress()
     {
         $this->addresses[] = [
-            'street' => '',
-            'barangay' => '',
-            'city' => '',
-            'province' => '',
-            'zip_code' => '',
-            'country' => '',
-            'is_current' => false,
+            'street' => '', 'barangay' => '', 'city' => '', 'province' => '',
+            'zip_code' => '', 'country' => '', 'is_current' => false
         ];
     }
 
     public function addEducation()
     {
         $this->educations[] = [
-            'level_of_education' => '',
-            'school' => '',
-            'degree' => '',
-            'start_year' => '',
-            'end_year' => '',
+            'level_of_education' => '', 'school' => '', 'degree' => '',
+            'start_year' => '', 'end_year' => ''
         ];
     }
 
     public function addDependent()
     {
         $this->dependents[] = [
-            'fullname' => '',
-            'dependent_relationship' => '',
-            'dependent_birth_date' => '',
+            'fullname' => '', 'dependent_relationship' => '', 'dependent_birth_date' => ''
         ];
     }
 
-    public function updatedDependents($value, $key)
-    {
-        if (str_ends_with($key, 'dependent_birth_date')) {
-            [$index, $field] = explode('.', $key);
-            $birthDate = $this->dependents[$index]['dependent_birth_date'] ?? null;
-
-            if ($birthDate) {
-                $this->dependents[$index]['dependent_age'] = Carbon::parse($birthDate)->age;
-            } else {
-                $this->dependents[$index]['dependent_age'] = null;
-            }
-        }
-    }
+    // --- Remove Item Functions (with reindexing) ---
 
     public function removeAddress($index)
     {
         unset($this->addresses[$index]);
-        $this->addresses = array_values($this->addresses); // reindex
+        $this->addresses = array_values($this->addresses);
     }
 
     public function removeEducation($index)
     {
         unset($this->educations[$index]);
-        $this->educations = array_values($this->educations); // reindex
+        $this->educations = array_values($this->educations);
     }
 
     public function removeDependent($index)
     {
         unset($this->dependents[$index]);
-        $this->dependents = array_values($this->dependents); // reindex
+        $this->dependents = array_values($this->dependents);
     }
 
+    /**
+     * Save validated data into the database
+     */
     public function save()
     {
-        // Example validation (adjust rules as needed)
+        // Validate form data
         $validated = $this->validate();
 
-        // Store employee
+        // Save employee main info
         $employee = \App\Models\Employee::create($this->employees);
 
-        // Store addresses
+        // Save employee's addresses
         foreach ($this->addresses as $address) {
             $employee->addresses()->create($address);
         }
 
-        // Store educations
+        // Save employee's educations
         foreach ($this->educations as $education) {
             $employee->educations()->create($education);
         }
 
-        // Store dependents
+        // Save employee's dependents
         foreach ($this->dependents as $dependent) {
             $employee->dependents()->create($dependent);
         }
 
+        // Display success message
         session()->flash('success', 'Employee saved successfully!');
     }
 
+    /**
+     * Render the Livewire view
+     */
     public function render()
     {
         logger('Rendering employee form');
