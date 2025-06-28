@@ -6,8 +6,6 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
-
 class EmployeeController extends Controller
 {
     /**
@@ -15,7 +13,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::paginate(20); // Fetch all employees
+        $employees = Employee::paginate(8); // Fetch all employees
 
         return view('employee.index', compact('employees'));
     }
@@ -52,7 +50,7 @@ class EmployeeController extends Controller
         try {
 
             // dd($request->all());
-            $validatedData = $request->validate([ //Fields from view
+            $request->validate([ //Fields from view
                 'employee_id' => 'required|string',
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
@@ -80,40 +78,9 @@ class EmployeeController extends Controller
                 'tin_number' => 'nullable|string|unique:employees,tin_number',
             ]);
 
-            foreach ($educations as $education) {
-                Validator::make($education, [
-                    'level_of_education' => 'nullable|string',
-                    'school' => 'nullable|string',
-                    'degree' => 'nullable|string',
-                    'start_year' => 'nullable|integer',
-                    'end_year' => 'nullable|integer',
-                ])->validate();
-            }
-
-            foreach ($dependents as $dependent) {
-                Validator::make($dependent, [
-                    'dependent_fullname' => 'nullable|string',
-                    'dependent_relationship' => 'nullable|string',
-                    'dependent_birth_date' => 'nullable|date',
-                ])->validate();
-            }
-
-            foreach ($addresses as $address) {
-                Validator::make($address, [
-                    'street' => 'nullable|string',
-                    'barangay' => 'nullable|string',
-                    'city' => 'nullable|string',
-                    'province' => 'nullable|string',
-                    'zip_code' => 'nullable|string',
-                    'country' => 'nullable|string',
-                    'is_current' => 'nullable|boolean',
-                ])->validate();
-            }
-
-            \Log::info('✅ Validated request', $validatedData);
 
             // Save the main employee data
-            $employee = Employee::create($validatedData);
+            $employee = Employee::create($request);
 
             \Log::info('✅ Employee created', ['employee_id' => $employee->employee_id]);
 

@@ -395,3 +395,4 @@
         <div class="text-green-600 font-medium">{{ session('success') }}</div>
         @endif
     </div>
+</div>

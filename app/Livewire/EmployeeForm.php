@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Carbon\Carbon;
+use App\Models\Employee;
 
 class EmployeeForm extends Component
 {
@@ -94,14 +94,14 @@ class EmployeeForm extends Component
             'addresses.*.zip_code' => 'nullable|string',
             'addresses.*.country' => 'nullable|string',
             'addresses.*.is_current' => 'boolean',
-            'educations.*.level_of_education' => 'nullable|string',
+            'educations.*.education_level' => 'nullable|string',
             'educations.*.school' => 'nullable|string',
             'educations.*.degree' => 'nullable|string',
             'educations.*.start_year' => 'nullable|date_format:Y',
             'educations.*.end_year' => 'nullable|date_format:Y',
             'dependents.*.fullname' => 'nullable|string',
-            'dependents.*.dependent_relationship' => 'nullable|string',
-            'dependents.*.dependent_birth_date' => 'nullable|date',
+            'dependents.*.relationship' => 'nullable|string',
+            'dependents.*.birth_date' => 'nullable|date',
         ];
     }
 
@@ -174,31 +174,32 @@ class EmployeeForm extends Component
      * Save validated data into the database
      */
     public function save()
-    {
-        // Validate form data
-        $validated = $this->validate();
+{
+    // Validate form data
+    $validated = $this->validate();
 
-        // Save employee main info
-        $employee = \App\Models\Employee::create($this->employees);
+    // Save employee main info using validated data
+    $employee = Employee::create($validated['$employees']);
 
-        // Save employee's addresses
-        foreach ($this->addresses as $address) {
-            $employee->addresses()->create($address);
-        }
-
-        // Save employee's educations
-        foreach ($this->educations as $education) {
-            $employee->educations()->create($education);
-        }
-
-        // Save employee's dependents
-        foreach ($this->dependents as $dependent) {
-            $employee->dependents()->create($dependent);
-        }
-
-        // Display success message
-        session()->flash('success', 'Employee saved successfully!');
+    // Save employee's addresses
+    foreach ($this->addresses as $address) {
+        $employee->addresses()->create($address);
     }
+
+    // Save employee's educations
+    foreach ($this->educations as $education) {
+        $employee->educations()->create($education);
+    }
+
+    // Save employee's dependents
+    foreach ($this->dependents as $dependent) {
+        $employee->dependents()->create($dependent);
+    }
+
+    // Flash a success message
+    session()->flash('success', 'Employee saved successfully!');
+}
+
 
     /**
      * Render the Livewire view
@@ -209,3 +210,4 @@ class EmployeeForm extends Component
         return view('livewire.employee-form');
     }
 }
+
