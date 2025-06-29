@@ -21,6 +21,7 @@ class EmployeeForm extends Component
     public $addresses = [];
     public $educations = [];
     public $dependents = [];
+    public $successMessage = '';
 
     /**
      * Initialize the form data when the component is mounted.
@@ -29,30 +30,58 @@ class EmployeeForm extends Component
     {
         // Initialize employee data with default empty values
         $this->employees = [
-            'employee_id' => '', 'first_name' => '', 'last_name' => '', 'middle_name' => '',
-            'suffix' => '', 'civil_status' => '', 'birth_date' => '', 'birth_place' => '',
-            'blood_type' => '', 'gender' => '', 'nationality' => '', 'religion' => '',
-            'telephone_number' => '', 'mobile_number' => '', 'email' => '',
-            'department' => '', 'company' => '', 'position_title' => '', 'job_level' => '',
-            'hired_date' => '', 'employment_status' => '',
-            'sss_number' => '', 'philhealth_number' => '', 'pagibig_number' => '', 'tin_number' => ''
+            'employee_id' => '',
+            'first_name' => '',
+            'last_name' => '',
+            'middle_name' => '',
+            'suffix' => '',
+            'civil_status' => '',
+            'birth_date' => '',
+            'birth_place' => '',
+            'blood_type' => '',
+            'gender' => '',
+            'nationality' => '',
+            'religion' => '',
+            'telephone_number' => '',
+            'mobile_number' => '',
+            'email' => '',
+            'department' => '',
+            'company' => '',
+            'position_title' => '',
+            'job_level' => '',
+            'hired_date' => '',
+            'employment_status' => '',
+            'sss_number' => '',
+            'philhealth_number' => '',
+            'pagibig_number' => '',
+            'tin_number' => ''
         ];
 
         // Initialize with one blank address
         $this->addresses = [[
-            'street' => '', 'barangay' => '', 'city' => '', 'province' => '',
-            'zip_code' => '', 'country' => '', 'is_current' => false
+            'street' => '',
+            'barangay' => '',
+            'city' => '',
+            'province' => '',
+            'zip_code' => '',
+            'country' => '',
+            'is_current' => false
         ]];
 
         // Initialize with one blank education
         $this->educations = [[
-            'level_of_education' => '', 'school' => '', 'degree' => '',
-            'start_year' => '', 'end_year' => ''
+            'level_of_education' => '',
+            'school' => '',
+            'degree' => '',
+            'start_year' => '',
+            'end_year' => ''
         ]];
 
         // Initialize with one blank dependent
         $this->dependents = [[
-            'fullname' => '', 'dependent_relationship' => '', 'dependent_birth_date' => ''
+            'fullname' => '',
+            'relationship' => '',
+            'birth_date' => ''
         ]];
     }
 
@@ -130,23 +159,33 @@ class EmployeeForm extends Component
     public function addAddress()
     {
         $this->addresses[] = [
-            'street' => '', 'barangay' => '', 'city' => '', 'province' => '',
-            'zip_code' => '', 'country' => '', 'is_current' => false
+            'street' => '',
+            'barangay' => '',
+            'city' => '',
+            'province' => '',
+            'zip_code' => '',
+            'country' => '',
+            'is_current' => false
         ];
     }
 
     public function addEducation()
     {
         $this->educations[] = [
-            'level_of_education' => '', 'school' => '', 'degree' => '',
-            'start_year' => '', 'end_year' => ''
+            'level_of_education' => '',
+            'school' => '',
+            'degree' => '',
+            'start_year' => '',
+            'end_year' => ''
         ];
     }
 
     public function addDependent()
     {
         $this->dependents[] = [
-            'fullname' => '', 'dependent_relationship' => '', 'dependent_birth_date' => ''
+            'fullname' => '',
+            'dependent_relationship' => '',
+            'dependent_birth_date' => ''
         ];
     }
 
@@ -174,31 +213,53 @@ class EmployeeForm extends Component
      * Save validated data into the database
      */
     public function save()
-{
-    // Validate form data
-    $validated = $this->validate();
+    {
+        logger()->debug('💾 Save method triggered');
 
-    // Save employee main info using validated data
-    $employee = Employee::create($validated['$employees']);
+        logger()->debug('📌 Validating data...');
+        
+        // 🧼 Sanitize empty strings to null before validation
+        foreach (['birth_date'] as $field) {
+            if (empty($this->employees[$field])) {
+                $this->employees[$field] = null;
+            }
+        }
+        
+        try {
+            $validated = $this->validate();
+            
+            // Save employee main info using validated data
+            $employeeData = $validated['employees'];
+            logger()->debug('✅ Validation passed.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            logger()->error('❌ Validation failed:', $e->errors());
+            throw $e; // You can remove this later
+        }
+        
+        
+        logger()->debug('💾 Saving employee...');
+        $employee = Employee::create($employeeData);
 
-    // Save employee's addresses
-    foreach ($this->addresses as $address) {
-        $employee->addresses()->create($address);
+        // Save employee's addresses
+        foreach ($this->addresses as $address) {
+            $employee->addresses()->create($address);
+        }
+
+        // Save employee's educations
+        foreach ($this->educations as $education) {
+            $employee->educations()->create($education);
+        }
+
+        // Save employee's dependents
+        foreach ($this->dependents as $dependent) {
+            $employee->dependents()->create($dependent);
+        }
+
+        // Flash a success message
+        session()->flash('success', 'Employee saved successfully!');
+
+        $this->successMessage = 'Saved successfully';
     }
-
-    // Save employee's educations
-    foreach ($this->educations as $education) {
-        $employee->educations()->create($education);
-    }
-
-    // Save employee's dependents
-    foreach ($this->dependents as $dependent) {
-        $employee->dependents()->create($dependent);
-    }
-
-    // Flash a success message
-    session()->flash('success', 'Employee saved successfully!');
-}
 
 
     /**
@@ -210,4 +271,3 @@ class EmployeeForm extends Component
         return view('livewire.employee-form');
     }
 }
-

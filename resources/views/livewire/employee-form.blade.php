@@ -18,10 +18,14 @@
         </div>
         <div>
             <label for="employment_status" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Employee Status</label>
-            <select name="employment_status" wire:model="employees.employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select name="employment_status" wire:model="employees.employment_status" ...>
+                <option value="">-- Select Employment Status --</option>
                 @foreach ($employmentStatusOptions as $employmentStatus)
                 <option value="{{ $employmentStatus }}">{{ $employmentStatus }}</option>
                 @endforeach
+                @error('employees.employment_status')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
             </select>
         </div>
     </div>
@@ -176,7 +180,8 @@
         </div>
         <div>
             <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Level</label>
-            <select name="job_level" wire:model="employees.job_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select name="job_level" wire:model="employees.job_level" ...>
+                <option value="">-- Select Job Level --</option>
                 @foreach ($jobLevelOptions as $jobLevel)
                 <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
                 @endforeach
@@ -283,7 +288,7 @@
 
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Relationship</label>
-                <input type="text" wire:model="dependents.{{ $index }}.dependent_relationship" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Relationship" />
+                <input type="text" wire:model="dependents.{{ $index }}.relationship" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Relationship" />
             </div>
 
             <div x-data="{ 
@@ -298,13 +303,13 @@
                 }">
                 <div class="grid gap-2 md:grid-cols-2">
                     <div>
-                        <label for="dependent_birth_date_{{ $index }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        <label for="birth_date_{{ $index }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Date of Birth
                         </label>
                         <input
                             id="dependent_birth_date_{{ $index }}"
                             type="date"
-                            wire:model="dependents.{{ $index }}.dependent_birth_date"
+                            wire:model="dependents.{{ $index }}.birth_date"
                             x-on:input="calculateAge"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Select date" />
@@ -318,18 +323,18 @@
                             id="dependent_age_{{ $index }}"
                             type="text"
                             x-ref="dependentAgeInput"
-                            wire:model="dependents.{{ $index }}.dependent_age"
+                            wire:model="dependents.{{ $index }}.age"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="0" disabled />
                     </div>
                 </div>
-            </div>            
             </div>
-            <div class="flex gap-2 items-center justify-end">
-                <button wire:click="removeDependent({{ $index }})" type="button"
-                    class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
-                    Remove
-                </button>
+        </div>
+        <div class="flex gap-2 items-center justify-end">
+            <button wire:click="removeDependent({{ $index }})" type="button"
+                class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
+                Remove
+            </button>
         </div>
     </div>
     @endforeach
@@ -412,8 +417,8 @@
             Save
         </button>
 
-        @if (session()->has('success'))
-        <div class="text-green-600 font-medium">{{ session('success') }}</div>
+        @if ($successMessage)
+        <div class="text-green-600 font-medium">{{ $successMessage }}</div>
         @endif
     </div>
 </div>
