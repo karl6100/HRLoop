@@ -48,7 +48,6 @@ class EmployeeController extends Controller
     {
         DB::beginTransaction();
         try {
-
             // dd($request->all());
             $request->validate([ //Fields from view
                 'employee_id' => 'required|string',

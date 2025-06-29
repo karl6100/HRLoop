@@ -60,12 +60,23 @@
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                     </svg>
                 </div>
-                <input datepicker wire:model="employees.birth_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                <input
+                    type="date"
+                    wire:model="employees.birth_date"
+                    x-data
+                    x-on:input="
+                        const birthDate = new Date($el.value);
+                        const today = new Date();
+                        let age = today.getFullYear() - birthDate.getFullYear();
+                        const m = today.getMonth() - birthDate.getMonth();
+                        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                        $refs.ageInput.value = age > 0 ? age : 0;
+                    " class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
             </div>
         </div>
         <div>
             <label for="age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
-            <input type="text" name="age" id="age" aria-label="disabled input" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value=0 disabled>
+            <input type="text" x-ref="ageInput" name="age" id="age" aria-label="disabled input" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value=0 disabled>
         </div>
         <div>
             <label for="birth_place" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Place of Birth</label>
@@ -247,6 +258,7 @@
     <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dependents</h1>
     </div>
+
     <div class="flex items-center justify-end mb-4">
         <button
             type="button"
@@ -260,55 +272,64 @@
             Add Dependent
         </button>
     </div>
+
     @foreach ($this->dependents as $index => $dependent)
     <div class="mt-2 border border-gray-300 dark:border-gray-600 rounded-lg p-1 space-y-4">
-        <div class="grid gap-2 mb-1 mt-1 md:grid-cols-4">
+        <div class="grid gap-2 mb-1 mt-1 md:grid-cols-3">
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
                 <input type="text" wire:model="dependents.{{ $index }}.fullname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Full Name" />
             </div>
+
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Relationship</label>
                 <input type="text" wire:model="dependents.{{ $index }}.dependent_relationship" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Relationship" />
             </div>
-            <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
-                <div class="relative max-w-sm">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                        </svg>
-                    </div>
-                    <input
-                        type="date"
-                        wire:model="dependents.{{ $index }}.dependent_birth_date"
-                        x-data
-                        x-on:input="
-                        const birthDate = new Date($el.value);
+
+            <div x-data="{ 
+                    calculateAge(e) {
+                        const birthDate = new Date(e.target.value);
                         const today = new Date();
                         let age = today.getFullYear() - birthDate.getFullYear();
                         const m = today.getMonth() - birthDate.getMonth();
                         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
-                        $refs.ageInput.value = age > 0 ? age : 0;
-                    " class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
-                </div>
-            </div>
-            <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
-                <div class="flex gap-2">
-                    <input
-                        type="text"
-                        x-ref="ageInput"
-                        wire:model="dependents.{{ $index }}.dependent_age" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" disabled />
+                        this.$refs.dependentAgeInput.value = age > 0 ? age : 0;
+                    } 
+                }">
+                <div class="grid gap-2 md:grid-cols-2">
+                    <div>
+                        <label for="dependent_birth_date_{{ $index }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Date of Birth
+                        </label>
+                        <input
+                            id="dependent_birth_date_{{ $index }}"
+                            type="date"
+                            wire:model="dependents.{{ $index }}.dependent_birth_date"
+                            x-on:input="calculateAge"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Select date" />
+                    </div>
 
-                    <div class="flex gap-2 items-center justify-end">
-                        <button wire:click="removeDependent({{ $index }})" type="button"
-                            class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
-                            Remove
-                        </button>
+                    <div>
+                        <label for="dependent_age_{{ $index }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Age
+                        </label>
+                        <input
+                            id="dependent_age_{{ $index }}"
+                            type="text"
+                            x-ref="dependentAgeInput"
+                            wire:model="dependents.{{ $index }}.dependent_age"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="0" disabled />
                     </div>
                 </div>
+            </div>            
             </div>
+            <div class="flex gap-2 items-center justify-end">
+                <button wire:click="removeDependent({{ $index }})" type="button"
+                    class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
+                    Remove
+                </button>
         </div>
     </div>
     @endforeach
