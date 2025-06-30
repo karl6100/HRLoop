@@ -21,7 +21,7 @@ class EmployeeDependentsFactory extends Factory
            'fkey_employee_id' => Employee::query()->inRandomOrder()->value('employee_id'),
             'fullname' => $this->faker->firstName() . ' ' . $this->faker->lastName(), // Generate a random last name
             'relationship' => $this->faker->randomElement(['Spouse', 'Son', 'Daughter']),
-            'birth_date' => $this->faker->dateTimeBetween('-30 years', '-1 year')->format('Y-m-d'),
+            'dependent_birth_date' => $this->faker->dateTimeBetween('-30 years', '-1 year')->format('Y-m-d'),
         ];
     }
 }

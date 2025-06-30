@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Employee;
 
+
 class EmployeeForm extends Component
 {
     // --- Dropdown Option Lists ---
@@ -35,7 +36,6 @@ class EmployeeForm extends Component
 
         if ($employee_id) {
             $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
-
             $this->employees = $employee->toArray();            
             $this->addresses = $employee->employeeAddresses->toArray();
             $this->educations = $employee->employeeEducations->toArray();
@@ -77,7 +77,7 @@ class EmployeeForm extends Component
                 'tin_number' => '',
                 'emergency_contact_name' => '',
                 'emergency_contact_relationship' => '',
-                'emergency_contact_number' => ''
+                'emergency_contact_phone' => ''
             ];
 
             $this->addresses = [[
@@ -154,7 +154,7 @@ class EmployeeForm extends Component
             'dependents.*.dependent_birth_date' => 'nullable|date',
             'employees.emergency_contact_name' => 'nullable|string',
             'employees.emergency_contact_relationship' => 'nullable|string',
-            'employees.emergency_contact_number' => 'nullable|string',
+            'employees.emergency_contact_phone' => 'nullable|string',
         ];
     }
 
@@ -275,6 +275,7 @@ class EmployeeForm extends Component
 
         // STEP 3: Save Employee main data
         $employeeData = $validated['employees'];
+        // dd($employeeData, $this->addresses, $this->educations, $this->dependents);
         logger()->debug('💾 Inserting employee record...');
         $employee = Employee::create($employeeData);
 
@@ -343,7 +344,7 @@ class EmployeeForm extends Component
             'tin_number' => $employee->tin_number,
             'emergency_contact_name' => $employee->emergency_contact_name,
             'emergency_contact_relationship' => $employee->emergency_contact_relationship,
-            'emergency_contact_number' => $employee->emergency_contact_number,
+            'emergency_contact_phone' => $employee->emergency_contact_phone,
         ];
 
         $this->addresses = $employee->employeeAddresses->map(function ($address) {

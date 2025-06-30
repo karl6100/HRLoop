@@ -14,7 +14,7 @@ class EmployeeDependents extends Model
         'fkey_employee_id', // Foreign key to the Employee table
         'fullname',
         'relationship',
-        'birth_date',
+        'dependent_birth_date',
     ];
 
     protected $casts = [

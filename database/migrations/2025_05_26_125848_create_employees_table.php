@@ -36,13 +36,10 @@ return new class extends Migration
             $table->string('job_level');
             $table->date('hired_date');
             $table->string('employment_status');
-            $table->string('sss_number')->nullable();
-            $table->string('philhealth_number')->nullable();
-            $table->string('pagibig_number')->nullable();
-            $table->string('tin_number')->nullable();
-            $table->string('emergency_contact_name')->nullable(true);
-            $table->string('emergency_contact_relationship')->nullable(true);
-            $table->string('emergency_contact_number')->nullable(true);
+            $table->string('sss_number')->unique()->nullable();
+            $table->string('philhealth_number')->unique()->nullable();
+            $table->string('pagibig_number')->unique()->nullable();
+            $table->string('tin_number')->unique()->nullable();
         });
     }
 

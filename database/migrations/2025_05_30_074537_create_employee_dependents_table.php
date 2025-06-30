@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('fullname')->nullable();
             $table->string('relationship')->nullable();
-            $table->date('birth_date')->nullable();
+            $table->date('dependent_birth_date')->nullable();
         });
     }
 

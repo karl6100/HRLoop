@@ -19,7 +19,7 @@ class EmployeeAddressFactory extends Factory
     {
         return [
             'fkey_employee_id' => Employee::query()->inRandomOrder()->value('employee_id'),
-            'street_address' => $this->faker->streetAddress,
+            'street' => $this->faker->streetAddress,
             'barangay' => $this->faker->word,
             'city' => $this->faker->city,
             'province' => $this->faker->word,

@@ -42,7 +42,7 @@ class Employee extends Model
         'tin_number',
         'emergency_contact_name',
         'emergency_contact_relationship',
-        'emergency_contact_number',
+        'emergency_contact_phone',
     ];
 
     protected $casts = [
