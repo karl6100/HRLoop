@@ -12,7 +12,7 @@ class EmployeeAddress extends Model
 
     protected $fillable = [
         'fkey_employee_id', // Foreign key to the Employee table
-        'street_address',
+        'street',
         'barangay',
         'city',
         'province',

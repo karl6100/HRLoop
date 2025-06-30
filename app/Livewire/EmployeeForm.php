@@ -17,6 +17,7 @@ class EmployeeForm extends Component
     public $employeePayTypeOptions = ['', 'Monthly', 'Daily', 'Hourly'];
 
     // --- Form Data Structures ---
+    public $employeeId;
     public $employees = [];
     public $addresses = [];
     public $educations = [];
@@ -26,63 +27,83 @@ class EmployeeForm extends Component
     /**
      * Initialize the form data when the component is mounted.
      */
-    public function mount()
+    public $mode = 'create';
+
+    public function mount($employee_id = null, $mode = 'create')
     {
-        // Initialize employee data with default empty values
-        $this->employees = [
-            'employee_id' => '',
-            'first_name' => '',
-            'last_name' => '',
-            'middle_name' => '',
-            'suffix' => '',
-            'civil_status' => '',
-            'birth_date' => '',
-            'birth_place' => '',
-            'blood_type' => '',
-            'gender' => '',
-            'nationality' => '',
-            'religion' => '',
-            'telephone_number' => '',
-            'mobile_number' => '',
-            'email' => '',
-            'department' => '',
-            'company' => '',
-            'position_title' => '',
-            'job_level' => '',
-            'hired_date' => '',
-            'employment_status' => '',
-            'sss_number' => '',
-            'philhealth_number' => '',
-            'pagibig_number' => '',
-            'tin_number' => ''
-        ];
+        $this->mode = $mode;
 
-        // Initialize with one blank address
-        $this->addresses = [[
-            'street' => '',
-            'barangay' => '',
-            'city' => '',
-            'province' => '',
-            'zip_code' => '',
-            'country' => '',
-            'is_current' => false
-        ]];
+        if ($employee_id) {
+            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
 
-        // Initialize with one blank education
-        $this->educations = [[
-            'level_of_education' => '',
-            'school' => '',
-            'degree' => '',
-            'start_year' => '',
-            'end_year' => ''
-        ]];
+            $this->employees = $employee->toArray();            
+            $this->addresses = $employee->employeeAddresses->toArray();
+            $this->educations = $employee->employeeEducations->toArray();
 
-        // Initialize with one blank dependent
-        $this->dependents = [[
-            'fullname' => '',
-            'relationship' => '',
-            'birth_date' => ''
-        ]];
+            $this->dependents = $employee->employeeDependents->map(function ($dep) {
+                return [
+                    'fullname' => $dep->fullname,
+                    'relationship' => $dep->relationship,
+                    'dependent_birth_date' => optional($dep->dependent_birth_date)->format('m/d/Y'),
+                ];
+            })->toArray();
+        } else {
+            // Keep your existing initialization for 'create' mode
+            $this->employees = [
+                'employee_id' => '',
+                'first_name' => '',
+                'last_name' => '',
+                'middle_name' => '',
+                'suffix' => '',
+                'civil_status' => '',
+                'birth_date' => '',
+                'birth_place' => '',
+                'blood_type' => '',
+                'gender' => '',
+                'nationality' => '',
+                'religion' => '',
+                'telephone_number' => '',
+                'mobile_number' => '',
+                'email' => '',
+                'department' => '',
+                'company' => '',
+                'position_title' => '',
+                'job_level' => '',
+                'hired_date' => '',
+                'employment_status' => '',
+                'sss_number' => '',
+                'philhealth_number' => '',
+                'pagibig_number' => '',
+                'tin_number' => '',
+                'emergency_contact_name' => '',
+                'emergency_contact_relationship' => '',
+                'emergency_contact_number' => ''
+            ];
+
+            $this->addresses = [[
+                'street' => '',
+                'barangay' => '',
+                'city' => '',
+                'province' => '',
+                'zip_code' => '',
+                'country' => '',
+                'is_current' => false
+            ]];
+
+            $this->educations = [[
+                'education_level' => '',
+                'school' => '',
+                'degree' => '',
+                'start_year' => '',
+                'end_year' => ''
+            ]];
+
+            $this->dependents = [[
+                'fullname' => '',
+                'relationship' => '',
+                'dependent_birth_date' => ''
+            ]];
+        }
     }
 
     /**
@@ -130,7 +151,10 @@ class EmployeeForm extends Component
             'educations.*.end_year' => 'nullable|date_format:Y',
             'dependents.*.fullname' => 'nullable|string',
             'dependents.*.relationship' => 'nullable|string',
-            'dependents.*.birth_date' => 'nullable|date',
+            'dependents.*.dependent_birth_date' => 'nullable|date',
+            'employees.emergency_contact_name' => 'nullable|string',
+            'employees.emergency_contact_relationship' => 'nullable|string',
+            'employees.emergency_contact_number' => 'nullable|string',
         ];
     }
 
@@ -151,6 +175,11 @@ class EmployeeForm extends Component
             'employees.position_title.required' => 'Position title is required.',
             'employees.job_level.required' => 'Job level is required.',
             'employees.hired_date.required' => 'Hired date is required.',
+            'employees.telephone_number' => 'Hired date must be a valid date.',
+            'employees.mobile_number.unique' => 'This mobile number is already taken.',
+            'employees.sss_number.unique' => 'This SSS number is already taken.',
+            'employees.philhealth_number.unique' => 'This PhilHealth number is already taken.',
+            'employees.pagibig_number.unique' => 'This Pag-IBIG number is already taken.',
         ];
     }
 
@@ -172,7 +201,7 @@ class EmployeeForm extends Component
     public function addEducation()
     {
         $this->educations[] = [
-            'level_of_education' => '',
+            'education_level' => '',
             'school' => '',
             'degree' => '',
             'start_year' => '',
@@ -184,7 +213,7 @@ class EmployeeForm extends Component
     {
         $this->dependents[] = [
             'fullname' => '',
-            'dependent_relationship' => '',
+            'relationship' => '',
             'dependent_birth_date' => ''
         ];
     }
@@ -216,51 +245,60 @@ class EmployeeForm extends Component
     {
         logger()->debug('💾 Save method triggered');
 
-        logger()->debug('📌 Validating data...');
-        
-        // 🧼 Sanitize empty strings to null before validation
-        foreach (['birth_date'] as $field) {
+        // STEP 1: Sanitize input data before validation
+        logger()->debug('📌 Sanitizing and validating data...');
+
+        // Convert empty strings to null for nullable employee fields
+        foreach (['birth_date', 'mobile_number', 'email', 'sss_number', 'philhealth_number', 'pagibig_number', 'tin_number'] as $field) {
             if (empty($this->employees[$field])) {
                 $this->employees[$field] = null;
             }
         }
-        
+
+        // Convert empty dependent birth_date to null to avoid SQL error
+        foreach ($this->dependents as &$dependent) {
+            if (empty($dependent['dependent_birth_date'])) {
+                $dependent['dependent_birth_date'] = null;
+            }
+        }
+        // Always unset reference variable when using foreach by reference to avoid unexpected bugs
+        unset($dependent);
+
+        // STEP 2: Validate all input data based on defined rules
         try {
             $validated = $this->validate();
-            
-            // Save employee main info using validated data
-            $employeeData = $validated['employees'];
             logger()->debug('✅ Validation passed.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             logger()->error('❌ Validation failed:', $e->errors());
-            throw $e; // You can remove this later
+            throw $e; // Rethrow to let Livewire handle the UI error display
         }
-        
-        
-        logger()->debug('💾 Saving employee...');
+
+        // STEP 3: Save Employee main data
+        $employeeData = $validated['employees'];
+        logger()->debug('💾 Inserting employee record...');
         $employee = Employee::create($employeeData);
 
-        // Save employee's addresses
+        // STEP 4: Save related records (addresses, education, dependents)
+        logger()->debug('📦 Inserting related records...');
+
         foreach ($this->addresses as $address) {
-            $employee->addresses()->create($address);
+            $employee->employeeAddresses()->create($address);
         }
 
-        // Save employee's educations
         foreach ($this->educations as $education) {
-            $employee->educations()->create($education);
+            $employee->employeeEducations()->create($education);
         }
 
-        // Save employee's dependents
         foreach ($this->dependents as $dependent) {
-            $employee->dependents()->create($dependent);
+            $employee->employeeDependents()->create($dependent);
         }
 
-        // Flash a success message
+        // STEP 5: Notify UI of success
+        logger()->debug('✅ All data saved successfully.');
         session()->flash('success', 'Employee saved successfully!');
-
         $this->successMessage = 'Saved successfully';
+        $this->mount(); // reset form
     }
-
 
     /**
      * Render the Livewire view
@@ -269,5 +307,73 @@ class EmployeeForm extends Component
     {
         logger('Rendering employee form');
         return view('livewire.employee-form');
+    }
+
+
+    public function show($employee_id)
+    {
+        $this->employeeId = $employee_id;
+        $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
+
+        $this->employees = [
+            'employee_id' => $employee->employee_id,
+            'first_name' => $employee->first_name,
+            'last_name' => $employee->last_name,
+            'middle_name' => $employee->middle_name,
+            'suffix' => $employee->suffix,
+            'civil_status' => $employee->civil_status,
+            'birth_date' => optional($employee->birth_date)->format('m/d/Y'),
+            'birth_place' => $employee->birth_place,
+            'blood_type' => $employee->blood_type,
+            'gender' => $employee->gender,
+            'nationality' => $employee->nationality,
+            'religion' => $employee->religion,
+            'telephone_number' => $employee->telephone_number,
+            'mobile_number' => $employee->mobile_number,
+            'email' => $employee->email,
+            'department' => $employee->department,
+            'company' => $employee->company,
+            'position_title' => $employee->position_title,
+            'job_level' => $employee->job_level,
+            'hired_date' => optional($employee->hired_date)->format('m/d/Y'),
+            'employment_status' => $employee->employment_status,
+            'sss_number' => $employee->sss_number,
+            'philhealth_number' => $employee->philhealth_number,
+            'pagibig_number' => $employee->pagibig_number,
+            'tin_number' => $employee->tin_number,
+            'emergency_contact_name' => $employee->emergency_contact_name,
+            'emergency_contact_relationship' => $employee->emergency_contact_relationship,
+            'emergency_contact_number' => $employee->emergency_contact_number,
+        ];
+
+        $this->addresses = $employee->employeeAddresses->map(function ($address) {
+            return [
+                'street' => $address->street,
+                'barangay' => $address->barangay,
+                'city' => $address->city,
+                'province' => $address->province,
+                'zip_code' => $address->zip_code,
+                'country' => $address->country,
+                'is_current' => $address->is_current,
+            ];
+        })->toArray();
+
+        $this->educations = $employee->employeeEducations->map(function ($edu) {
+            return [
+                'education_level' => $edu->education_level,
+                'school' => $edu->school,
+                'degree' => $edu->degree,
+                'start_year' => $edu->start_year,
+                'end_year' => $edu->end_year,
+            ];
+        })->toArray();
+
+        $this->dependents = $employee->employeeDependents->map(function ($dep) {
+            return [
+                'fullname' => $dep->fullname,
+                'relationship' => $dep->relationship,
+                'dependent_birth_date' => optional($dep->dependent_birth_date)->format('m/d/Y'),
+            ];
+        })->toArray();
     }
 }

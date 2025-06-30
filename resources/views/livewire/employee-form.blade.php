@@ -18,7 +18,7 @@
         </div>
         <div>
             <label for="employment_status" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Employee Status</label>
-            <select name="employment_status" wire:model="employees.employment_status" ...>
+            <select name="employment_status" wire:model="employees.employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="">-- Select Employment Status --</option>
                 @foreach ($employmentStatusOptions as $employmentStatus)
                 <option value="{{ $employmentStatus }}">{{ $employmentStatus }}</option>
@@ -68,14 +68,28 @@
                     type="date"
                     wire:model="employees.birth_date"
                     x-data
-                    x-on:input="
+                    x-ref="birthDateInput"
+                    x-init="
+                        if ($el.value) {
+                            const birthDate = new Date($el.value);
+                            const today = new Date();
+                            let age = today.getFullYear() - birthDate.getFullYear();
+                            const m = today.getMonth() - birthDate.getMonth();
+                            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                            $refs.ageInput.value = age > 0 ? age : 0;
+                        }
+                    "
+                                    x-on:input="
                         const birthDate = new Date($el.value);
                         const today = new Date();
                         let age = today.getFullYear() - birthDate.getFullYear();
                         const m = today.getMonth() - birthDate.getMonth();
                         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
                         $refs.ageInput.value = age > 0 ? age : 0;
-                    " class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                    "
+                    value="{{ \Carbon\Carbon::parse($employees['birth_date'] ?? '')->format('m/d/Y') }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Select date" />
             </div>
         </div>
         <div>
@@ -125,32 +139,53 @@
         <div>
             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
             <input type="email" wire:model="employees.email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" />
+            @error('employees.email')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Telephone Number</label>
             <input type="tel" wire:model="employees.telephone_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tel. Number" />
+            @error('employees.telephone_number')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="mobile" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mobile Number</label>
             <input type="tel" wire:model="employees.mobile_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="09**-***-****" />
+            @error('employees.mobile_number')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
     </div>
     <div class="grid gap-2 mb-2 md:grid-cols-4">
         <div>
             <label for="tin_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TIN Number</label>
             <input type="text" wire:model="employees.tin_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-456-789-000" maxlength="15" />
+            @error('employees.tin_number')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="sss_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SSS Number</label>
             <input type="text" wire:model="employees.sss_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-456-7890" maxlength="12" />
+            @error('employees.sss_number')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="philhealth_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PhilHealth Number</label>
             <input type="text" wire:model="employees.philhealth_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="00-123456789-0" maxlength="14" />
+            @error('employees.philhealth_number')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
         <div>
             <label for="pagibig_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pag-Ibig Number</label>
             <input type="text" wire:model="employees.pagibig_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1234-5678-9101" maxlength="14" />
+            @error('employees.pagibig_number')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
     </div>
     <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
@@ -180,7 +215,7 @@
         </div>
         <div>
             <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Level</label>
-            <select name="job_level" wire:model="employees.job_level" ...>
+            <select name="job_level" wire:model="employees.job_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="">-- Select Job Level --</option>
                 @foreach ($jobLevelOptions as $jobLevel)
                 <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
@@ -231,7 +266,7 @@
         <div class="grid gap-2 mb-1 mt-1 md:grid-cols-4">
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level of Education</label>
-                <input type="text" wire:model="educations.{{ $index }}.level_of_education" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Elementary, High School, College" />
+                <input type="text" wire:model="educations.{{ $index }}.education_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Elementary, High School, College" />
             </div>
             <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School</label>
@@ -247,7 +282,7 @@
                     <input type="text" wire:model="educations.{{ $index }}.start_year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Year" />
                     <input type="text" wire:model="educations.{{ $index }}.end_year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Year" />
                 </div>
-                <div class="flex gap-2 items-center mt-4 justify-end">
+                <div class="flex gap-2 items-center mt-2 justify-end">
                     <button wire:click="removeEducation({{ $index }})" type="button"
                         class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
                         Remove
@@ -309,7 +344,7 @@
                         <input
                             id="dependent_birth_date_{{ $index }}"
                             type="date"
-                            wire:model="dependents.{{ $index }}.birth_date"
+                            wire:model="dependents.{{ $index }}.dependent_birth_date"
                             x-on:input="calculateAge"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Select date" />
@@ -416,9 +451,41 @@
             class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded">
             Save
         </button>
-
-        @if ($successMessage)
-        <div class="text-green-600 font-medium">{{ $successMessage }}</div>
-        @endif
     </div>
+    {{-- Success Toast --}}
+    <div
+        x-data="{ show: @entangle('successMessage').defer }"
+        x-show="show"
+        x-init="if (show) setTimeout(() => show = false, 3000)"
+        x-transition
+        class="fixed bottom-4 right-4 z-50">
+        <div id="toast-success"
+            class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm dark:text-gray-400 dark:bg-gray-800"
+            role="alert">
+            <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                </svg>
+                <span class="sr-only">Check icon</span>
+            </div>
+            <div class="ms-3 text-sm font-normal" x-text="$wire.successMessage"></div>
+            <button
+                type="button"
+                @click="show = false"
+                class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 14 14">
+                    <path d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('toast-error', event => {
+            const msg = event.detail.message;
+            // Dynamically show toast using JS or Alpine logic
+            alert(msg); // Or insert into DOM
+        });
+    </script>
 </div>

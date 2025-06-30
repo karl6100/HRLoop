@@ -18,6 +18,9 @@
             @csrf
             @method('PUT')
             <div id="view-profile" class="view-section">
+                <div>
+                    @livewire('employee-form', ['employee_id' => $employee->employee_id, 'mode' => 'edit'])
+                </div>
                 <div class="mb-6">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
                     <hr class="mt-1 border-gray-300 dark:border-gray-600">
@@ -78,7 +81,7 @@
                                     name="birth_date"
                                     id="birth_date"
                                     type="date"
-                                    value="{{ \Carbon\Carbon::parse($employee->birth_date)->format('Y-m-d') }}" 
+                                    value="{{ \Carbon\Carbon::parse($employee->birth_date)->format('Y-m-d') }}"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Select date">
                             </div>

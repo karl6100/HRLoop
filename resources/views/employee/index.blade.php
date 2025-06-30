@@ -2,7 +2,7 @@
     <form action="{{ route('employee.create') }}" method="GET" class="mb-2">
         @csrf
         <!-- Header -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-1">
+        <div>
             <div class="py-4">
                 <div class="flex items-center justify-start space-x-4">
                     <div>

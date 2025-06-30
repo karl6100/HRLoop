@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('fkey_employee_id');
             $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
-            $table->string('street_address')->nullable(true);
+            $table->string('street')->nullable(true);
             $table->string('barangay')->nullable(true);
             $table->string('city')->nullable(true);
             $table->string('province')->nullable(true);

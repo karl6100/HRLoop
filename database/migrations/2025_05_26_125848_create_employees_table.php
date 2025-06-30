@@ -40,6 +40,9 @@ return new class extends Migration
             $table->string('philhealth_number')->nullable();
             $table->string('pagibig_number')->nullable();
             $table->string('tin_number')->nullable();
+            $table->string('emergency_contact_name')->nullable(true);
+            $table->string('emergency_contact_relationship')->nullable(true);
+            $table->string('emergency_contact_number')->nullable(true);
         });
     }
 

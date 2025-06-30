@@ -39,6 +39,9 @@
                 </li>
             </ul>
             <div id="view-profile" class="view-section">
+                <div>
+                    @livewire('employee-form', ['employee_id' => $employee->employee_id, 'mode' => 'view'])
+                </div>
                 <div class="mb-6">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
                     <hr class="mt-1 border-gray-300 dark:border-gray-600">

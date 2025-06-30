@@ -105,51 +105,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Submit Button -->
-            <div class="mt-6 flex justify-start">
-                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-            </div>
-        </form>
-    </div>
-
-    <script>
-        // Function to format input with dashes
-        function formatWithDashes(input, pattern) {
-            let value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-            let formattedValue = '';
-            let index = 0;
-
-            for (let i = 0; i < pattern.length; i++) {
-                if (pattern[i] === '-') {
-                    formattedValue += '-';
-                } else {
-                    if (index < value.length) {
-                        formattedValue += value[index];
-                        index++;
-                    }
-                }
-            }
-
-            input.value = formattedValue;
-        }
-
-        // Add event listeners for each input field
-        document.getElementById('tin_number').addEventListener('input', function() {
-            formatWithDashes(this, '123-456-789-000');
-        });
-
-        document.getElementById('sss_number').addEventListener('input', function() {
-            formatWithDashes(this, '123-456-7890');
-        });
-
-        document.getElementById('philhealth_number').addEventListener('input', function() {
-            formatWithDashes(this, '00-123456789-0');
-        });
-
-        document.getElementById('pagibig_number').addEventListener('input', function() {
-            formatWithDashes(this, '1234-5678-9101');
-        });
-    </script>
 
     <script>
         function showView(viewId) {
@@ -169,65 +124,6 @@
             // Add active class to the selected tab
             document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
         }
-    </script>
-
-    <!-- Age Calculation Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const birthDateInput = document.getElementById('birth_date');
-            const ageInput = document.getElementById('age');
-
-            birthDateInput.addEventListener('input', function() {
-                const birthDate = new Date(birthDateInput.value);
-                const today = new Date();
-
-                if (birthDateInput.value) {
-                    // Compute the age
-                    let age = today.getFullYear() - birthDate.getFullYear();
-                    const monthDiff = today.getMonth() - birthDate.getMonth();
-                    const dayDiff = today.getDate() - birthDate.getDate();
-
-                    // Adjust age if the birthdate hasn't occurred yet this year
-                    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                        age--;
-                    }
-
-                    // Display the computed age
-                    ageInput.value = age;
-                } else {
-                    ageInput.value = ''; // Clear the age input if no date is selected
-                }
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dependentsContainer = document.getElementById('dependents-input-container');
-
-            dependentsContainer.addEventListener('input', function(event) {
-                if (event.target.name === 'dependent_birth_date[]') {
-                    const birthDateInput = event.target;
-                    const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
-                    const birthDate = new Date(birthDateInput.value);
-                    const today = new Date();
-
-                    if (birthDateInput.value) {
-                        let age = today.getFullYear() - birthDate.getFullYear();
-                        const monthDiff = today.getMonth() - birthDate.getMonth();
-                        const dayDiff = today.getDate() - birthDate.getDate();
-
-                        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                            age--;
-                        }
-
-                        ageInput.value = age;
-                    } else {
-                        ageInput.value = ''; // Clear the age input if no date is selected
-                    }
-                }
-            });
-        });
     </script>
 
     <script>
