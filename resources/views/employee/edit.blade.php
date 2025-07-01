@@ -714,7 +714,7 @@
         }
     </script>
 
-    <!-- Age Calculation Script -->
+    <!-- Age Calculation Script
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const birthDateInput = document.getElementById('birth_date');
@@ -770,36 +770,7 @@
                 }
             });
         });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dependentsContainer = document.getElementById('dependents-input-container');
-
-            dependentsContainer.addEventListener('input', function(event) {
-                if (event.target.name === 'dependent_birth_date[]') {
-                    const birthDateInput = event.target;
-                    const ageInput = birthDateInput.parentElement.nextElementSibling.querySelector('input[name="dependent_age[]"]');
-                    const birthDate = new Date(birthDateInput.value);
-                    const today = new Date();
-
-                    if (birthDateInput.value) {
-                        let age = today.getFullYear() - birthDate.getFullYear();
-                        const monthDiff = today.getMonth() - birthDate.getMonth();
-                        const dayDiff = today.getDate() - birthDate.getDate();
-
-                        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                            age--;
-                        }
-
-                        ageInput.value = age;
-                    } else {
-                        ageInput.value = ''; // Clear the age input if no date is selected
-                    }
-                }
-            });
-        });
-    </script>
+    </script> -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -840,48 +811,5 @@
                 }
             });
         });
-    </script>
-
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const basicSalaryInput = document.getElementById('basic_salary');
-            const allowanceInput = document.getElementById('allowance');
-            const totalCompensationInput = document.getElementById('total_compensation');
-
-            // Function to format numbers as currency
-            function formatCurrency(value) {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                }).format(value);
-            }
-
-            // Function to calculate total compensation
-            function calculateTotalCompensation() {
-                const basicSalary = parseFloat(basicSalaryInput.value.replace(/,/g, '')) || 0;
-                const allowance = parseFloat(allowanceInput.value.replace(/,/g, '')) || 0;
-
-                // Calculate total compensation
-                const totalCompensation = basicSalary + allowance;
-
-                // Update the total compensation field
-                totalCompensationInput.value = formatCurrency(totalCompensation);
-            }
-
-            // Add event listeners to recalculate total compensation when inputs change
-            basicSalaryInput.addEventListener('input', function() {
-                // Format the input value as currency
-                const value = parseFloat(basicSalaryInput.value.replace(/,/g, '')) || 0;
-                basicSalaryInput.value = formatCurrency(value).replace('$', '');
-                calculateTotalCompensation();
-            });
-
-            allowanceInput.addEventListener('input', function() {
-                // Format the input value as currency
-                const value = parseFloat(allowanceInput.value.replace(/,/g, '')) || 0;
-                allowanceInput.value = formatCurrency(value).replace('$', '');
-                calculateTotalCompensation();
-            });
-        }); -->
     </script>
 </x-layouts.app>

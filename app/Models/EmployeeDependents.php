@@ -18,7 +18,7 @@ class EmployeeDependents extends Model
     ];
 
     protected $casts = [
-        'birth_date' => 'date',
+        'dependent_birth_date' => 'date',
     ];
 
     public function employee()

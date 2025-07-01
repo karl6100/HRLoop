@@ -30,13 +30,22 @@ class EmployeeForm extends Component
      */
     public $mode = 'create';
 
+    public function toggleEdit()
+    {
+        $this->mode = $this->mode === 'view' ? 'edit' : 'view';
+    }
+
     public function mount($employee_id = null, $mode = 'create')
     {
         $this->mode = $mode;
 
         if ($employee_id) {
             $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
-            $this->employees = $employee->toArray();            
+
+
+            $this->employees = $employee->toArray();
+            $this->employees['birth_date'] = optional($employee->birth_date)->format('Y-m-d');
+            $this->employees['hired_date'] = optional($employee->hired_date)->format('Y-m-d');
             $this->addresses = $employee->employeeAddresses->toArray();
             $this->educations = $employee->employeeEducations->toArray();
 
@@ -44,9 +53,12 @@ class EmployeeForm extends Component
                 return [
                     'fullname' => $dep->fullname,
                     'relationship' => $dep->relationship,
-                    'dependent_birth_date' => optional($dep->dependent_birth_date)->format('m/d/Y'),
+                    'dependent_birth_date' => optional($dep->dependent_birth_date)->format('Y-m-d'),
+                    'age' => $dep->dependent_birth_date ? \Carbon\Carbon::parse($dep->dependent_birth_date)->age : null,
                 ];
             })->toArray();
+
+            // dd($this->dependents);
         } else {
             // Keep your existing initialization for 'create' mode
             $this->employees = [
@@ -282,16 +294,42 @@ class EmployeeForm extends Component
         // STEP 4: Save related records (addresses, education, dependents)
         logger()->debug('📦 Inserting related records...');
 
+        // Save only non-empty addresses
         foreach ($this->addresses as $address) {
-            $employee->employeeAddresses()->create($address);
+            if (
+                !empty($address['street']) ||
+                !empty($address['barangay']) ||
+                !empty($address['city']) ||
+                !empty($address['province']) ||
+                !empty($address['zip_code']) ||
+                !empty($address['country'])
+            ) {
+                $employee->employeeAddresses()->create($address);
+            }
         }
 
+        // Save only non-empty education entries
         foreach ($this->educations as $education) {
-            $employee->employeeEducations()->create($education);
+            if (
+                !empty($education['education_level']) ||
+                !empty($education['school']) ||
+                !empty($education['degree']) ||
+                !empty($education['start_year']) ||
+                !empty($education['end_year'])
+            ) {
+                $employee->employeeEducations()->create($education);
+            }
         }
 
+        // Save only non-empty dependents
         foreach ($this->dependents as $dependent) {
-            $employee->employeeDependents()->create($dependent);
+            if (
+                !empty($dependent['fullname']) ||
+                !empty($dependent['relationship']) ||
+                !empty($dependent['dependent_birth_date'])
+            ) {
+                $employee->employeeDependents()->create($dependent);
+            }
         }
 
         // STEP 5: Notify UI of success
@@ -310,12 +348,11 @@ class EmployeeForm extends Component
         return view('livewire.employee-form');
     }
 
-
     public function show($employee_id)
     {
+
         $this->employeeId = $employee_id;
         $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
-
         $this->employees = [
             'employee_id' => $employee->employee_id,
             'first_name' => $employee->first_name,
@@ -323,7 +360,7 @@ class EmployeeForm extends Component
             'middle_name' => $employee->middle_name,
             'suffix' => $employee->suffix,
             'civil_status' => $employee->civil_status,
-            'birth_date' => optional($employee->birth_date)->format('m/d/Y'),
+            'birth_date' => optional($employee->birth_date),
             'birth_place' => $employee->birth_place,
             'blood_type' => $employee->blood_type,
             'gender' => $employee->gender,
@@ -336,7 +373,7 @@ class EmployeeForm extends Component
             'company' => $employee->company,
             'position_title' => $employee->position_title,
             'job_level' => $employee->job_level,
-            'hired_date' => optional($employee->hired_date)->format('m/d/Y'),
+            'hired_date' => optional($employee->hired_date),
             'employment_status' => $employee->employment_status,
             'sss_number' => $employee->sss_number,
             'philhealth_number' => $employee->philhealth_number,

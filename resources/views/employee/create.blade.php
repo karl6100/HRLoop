@@ -106,27 +106,40 @@
                 </div>
             </div>
 
-    <script>
-        function showView(viewId) {
-            // Hide all view sections
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.add('hidden');
+     <!-- Change input into currency layout -->
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currencyInputs = document.querySelectorAll('input.currency-format');
+
+            currencyInputs.forEach(input => {
+                // Format the input value on page load
+                if (input.value) {
+                    input.value = formatCurrency(input.value);
+                }
+
+                // Add event listener to format the value dynamically
+                input.addEventListener('input', function() {
+                    const value = input.value.replace(/,/g, ''); // Remove existing commas
+                    if (!isNaN(value) && value !== '') {
+                        input.value = formatCurrency(value);
+                    } else {
+                        input.value = ''; // Clear the input if invalid
+                    }
+                });
             });
 
-            // Show the selected view section
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
-
-            // Remove active class from all tabs
-            document.querySelectorAll('ul > li > a').forEach(tab => {
-                tab.classList.remove('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
-            });
-
-            // Add active class to the selected tab
-            document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
-        }
+            // Function to format a number as currency
+            function formatCurrency(value) {
+                return parseFloat(value).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'PHP',
+                    minimumFractionDigits: 2,
+                }).replace('$', ''); // Remove the dollar sign if not needed
+            }
+        });
     </script>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
             const basicSalaryInput = document.getElementById('basic_salary');
             const allowanceInput = document.getElementById('allowance');
@@ -147,6 +160,27 @@
             basicSalaryInput.addEventListener('input', calculateTotalCompensation);
             allowanceInput.addEventListener('input', calculateTotalCompensation);
         });
+    </script>
+
+
+    <script>
+        function showView(viewId) {
+            // Hide all view sections
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show the selected view section
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+
+            // Remove active class from all tabs
+            document.querySelectorAll('ul > li > a').forEach(tab => {
+                tab.classList.remove('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+            });
+
+            // Add active class to the selected tab
+            document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
+        }
     </script>
 
 </x-layouts.app>
