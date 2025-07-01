@@ -4,16 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Employee extends Model
 {
     /** @use HasFactory<\Database\Factories\EmployeeFactory> */
     use HasFactory;
-    
+
+    public function initials(): string
+    {
+        return Str::of("{$this->first_name} {$this->last_name}")
+            ->explode(' ')
+            ->map(fn($name) => Str::substr($name, 0, 1))
+            ->implode('');
+    }
+
     protected $primaryKey = 'employee_id';
     public $incrementing = false;      // employee_id comes from the UI, not AUTO_INCREMENT
     protected $keyType = 'string';     // or 'int' if it’s numeric
-    
+
     protected $fillable = [
         'employee_id',
         'first_name',

@@ -35,6 +35,15 @@ class EmployeeForm extends Component
         $this->mode = $this->mode === 'view' ? 'edit' : 'view';
     }
 
+    public function cancel()
+    {
+        if ($this->mode === 'create') {
+            return redirect()->route('employee.index');
+        } elseif ($this->mode === 'edit') {
+            $this->mode = 'view'; // Just go back to view mode
+        }
+    }
+
     public function mount($employee_id = null, $mode = 'create')
     {
         $this->mode = $mode;

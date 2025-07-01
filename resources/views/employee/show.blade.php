@@ -1,6 +1,4 @@
 <x-layouts.app :title="__('Employee')">
-
-
     <div class="relative h-full flex-1 p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 mt-1">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <!-- Header -->
@@ -8,9 +6,17 @@
                 <div class="py-8">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
-                            <img src="{{ $employee->avatar }}" alt="{{ $employee->name }}" class="w-16 h-16 rounded-full object-cover">
+                            @if($employee->avatar)
+                            <img src="{{ $employee->avatar }}" alt="{{ $employee->name ?? ($employee->first_name . ' ' . $employee->last_name) }}" class="w-16 h-16 rounded-full object-cover">
+                            @else
+                            <div class="w-16 h-16 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xl font-bold text-white uppercase">
+                                {{ $employee->initials() }}
+                            </div>
+                            @endif
+
                             <div>
-                                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $employee->first_name }} {{ $employee->last_name }}
+                                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+                                    {{ $employee->first_name }} {{ $employee->last_name }}
                                     @if ($employee->suffix !== 'N/A')
                                     {{ $employee->suffix }}
                                     @endif
@@ -22,6 +28,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Navigation -->
             <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
@@ -128,7 +135,7 @@
             </div>
             <form action="{{ route('employee.edit', ['employee_id' => $employee->employee_id]) }}" method="get">
                 @csrf
-                <!-- Submit Button -->
+                <!-- Edit Button -->
                 <div class="mt-6 flex justify-start">
                     <button type="edit" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">Edit</button>
                 </div>
@@ -170,7 +177,7 @@
         });
     </script>
 
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const basicSalaryInput = document.getElementById('basic_salary');
             const allowanceInput = document.getElementById('allowance');
@@ -213,7 +220,7 @@
             document.getElementById(`tab-${viewId}`).classList.add('text-blue-600', 'bg-gray-100', 'dark:bg-gray-800', 'dark:text-blue-500');
         }
     </script>
-    
+
 
 
 </x-layouts.app>

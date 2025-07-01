@@ -474,28 +474,37 @@
         <p class="text-sm text-gray-500">No address records found.</p>
         @endif
     </fieldset>
-    <!-- Toggle button for switching modes -->
-    <button type="button" wire:click="toggleEdit">
-        @if($mode === 'view')
-        Edit
-        @else
-        Cancel
-        @endif
-    </button>
 
-    <!-- Show save button only in edit/create mode -->
-    @if($mode !== 'view')
-    <button type="submit">Save</button>
-    @endif
-    <!-- Submit Button -->
-    <div class="mt-6 text-right flex items-center gap-4">
+    <!-- Toggle button for switching modes -->
+    <div class="mt-6 flex justify-start items-center gap-4">
+        @if($mode !== 'view')
+        <!-- Save Button -->
         <button
             type="button"
             wire:click="save"
-            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded">
+            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
             Save
         </button>
+
+        <!-- Cancel Button (redirects or switches mode) -->
+        <button
+            type="button"
+            wire:click="cancel"
+            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+            Cancel
+        </button>
+        @else
+        <!-- Edit Button -->
+        <button
+            type="button"
+            wire:click="toggleEdit"
+            class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+            Edit
+        </button>
+        @endif
     </div>
+
+
     {{-- Success Toast --}}
     <div
         x-data="{ show: @entangle('successMessage').defer }"
