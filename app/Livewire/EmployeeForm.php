@@ -23,6 +23,7 @@ class EmployeeForm extends Component
     public $addresses = [];
     public $educations = [];
     public $dependents = [];
+    public $emergency = [];
     public $successMessage = '';
 
     /**
@@ -49,14 +50,14 @@ class EmployeeForm extends Component
         $this->mode = $mode;
 
         if ($employee_id) {
-            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
-
+            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies'])->findOrFail($employee_id);
 
             $this->employees = $employee->toArray();
             $this->employees['birth_date'] = optional($employee->birth_date)->format('Y-m-d');
             $this->employees['hired_date'] = optional($employee->hired_date)->format('Y-m-d');
             $this->addresses = $employee->employeeAddresses->toArray();
             $this->educations = $employee->employeeEducations->toArray();
+            $this->emergency = $employee->employeeEmergencies->toArray();
 
             $this->dependents = $employee->employeeDependents->map(function ($dep) {
                 return [
@@ -96,9 +97,6 @@ class EmployeeForm extends Component
                 'philhealth_number' => '',
                 'pagibig_number' => '',
                 'tin_number' => '',
-                'emergency_contact_name' => '',
-                'emergency_contact_relationship' => '',
-                'emergency_contact_phone' => ''
             ];
 
             $this->addresses = [[
@@ -123,6 +121,12 @@ class EmployeeForm extends Component
                 'fullname' => '',
                 'relationship' => '',
                 'dependent_birth_date' => ''
+            ]];
+
+            $this->emergency = [[
+                'emergency_contact_name' => '',
+                'emergency_contact_relationship' => '',
+                'emergency_contact_phone' => ''
             ]];
         }
     }
@@ -173,9 +177,9 @@ class EmployeeForm extends Component
             'dependents.*.fullname' => 'nullable|string',
             'dependents.*.relationship' => 'nullable|string',
             'dependents.*.dependent_birth_date' => 'nullable|date',
-            'employees.emergency_contact_name' => 'nullable|string',
-            'employees.emergency_contact_relationship' => 'nullable|string',
-            'employees.emergency_contact_phone' => 'nullable|string',
+            'emergency.*.emergency_contact_name' => 'nullable|string',
+            'emergency.*.emergency_contact_relationship' => 'nullable|string',
+            'emergency.*.emergency_contact_phone' => 'nullable|string',
         ];
     }
 
@@ -239,6 +243,15 @@ class EmployeeForm extends Component
         ];
     }
 
+    public function addEmergencyContact()
+    {
+        $this->emergency[] = [
+            'emergency_contact_name' => '',
+            'emergency_contact_relationship' => '',
+            'emergency_contact_phone' => ''
+        ];
+    }
+
     // --- Remove Item Functions (with reindexing) ---
 
     public function removeAddress($index)
@@ -257,6 +270,12 @@ class EmployeeForm extends Component
     {
         unset($this->dependents[$index]);
         $this->dependents = array_values($this->dependents);
+    }
+
+    public function removeEmergencyContact($index)
+    {
+        unset($this->emergency[$index]);
+        $this->emergency = array_values($this->emergency);
     }
 
     /**
@@ -341,6 +360,17 @@ class EmployeeForm extends Component
             }
         }
 
+        // Save emergency contacts if provided
+        foreach ($this->emergency as $contact) {
+            if (
+                !empty($this->$contact['emergency_contact_name']) ||
+                !empty($this->$contact['emergency_contact_relationship']) ||
+                !empty($this->$contact['emergency_contact_phone'])
+            ) {
+                $employee->employeeEmergencies()->create($contact);
+            }
+        }
+
         // STEP 5: Notify UI of success
         logger()->debug('✅ All data saved successfully.');
         session()->flash('success', 'Employee saved successfully!');
@@ -388,9 +418,6 @@ class EmployeeForm extends Component
             'philhealth_number' => $employee->philhealth_number,
             'pagibig_number' => $employee->pagibig_number,
             'tin_number' => $employee->tin_number,
-            'emergency_contact_name' => $employee->emergency_contact_name,
-            'emergency_contact_relationship' => $employee->emergency_contact_relationship,
-            'emergency_contact_phone' => $employee->emergency_contact_phone,
         ];
 
         $this->addresses = $employee->employeeAddresses->map(function ($address) {
@@ -420,6 +447,14 @@ class EmployeeForm extends Component
                 'fullname' => $dep->fullname,
                 'relationship' => $dep->relationship,
                 'dependent_birth_date' => optional($dep->dependent_birth_date)->format('m/d/Y'),
+            ];
+        })->toArray();
+
+        $this->emergency = $employee->emergency->map(function ($emer) {
+            return [
+                'emergency_contact_name' => $emer->emergency_contact_name,
+                'emergency_contact_relationship' => $emer->emergency_contact_relationship,
+                'emergency_contact_phone' => $emer->emergency_contact_phone,
             ];
         })->toArray();
     }

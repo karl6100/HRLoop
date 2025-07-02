@@ -49,9 +49,6 @@ class Employee extends Model
         'philhealth_number',
         'pagibig_number',
         'tin_number',
-        'emergency_contact_name',
-        'emergency_contact_relationship',
-        'emergency_contact_phone',
     ];
 
     protected $casts = [
@@ -77,5 +74,10 @@ class Employee extends Model
     public function employeeSalaries()
     {
         return $this->hasMany(EmployeeSalary::class, 'fkey_employee_id', 'employee_id');
+    }
+
+    public function employeeEmergencies()
+    {
+        return $this->hasMany(EmployeeEmergency::class, 'fkey_employee_id', 'employee_id');
     }
 }

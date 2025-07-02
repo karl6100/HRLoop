@@ -1,9 +1,8 @@
 <div>
     <fieldset @if($mode==='view' ) disabled @endif>
-        <!-- Personal Information -->
-        {{-- Personal Form --}}
+
         <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
-            <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employment Information</h1>
         </div>
         <div class="grid gap-2 mb-2 md:grid-cols-4">
             <div>
@@ -14,11 +13,7 @@
                 @enderror
             </div>
             <div>
-            </div>
-            <div>
-            </div>
-            <div>
-                <label for="employment_status" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Employee Status</label>
+                <label for="employment_status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Status</label>
                 <select name="employment_status" wire:model="employees.employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="">-- Select Employment Status --</option>
                     @foreach ($employmentStatusOptions as $employmentStatus)
@@ -29,6 +24,61 @@
                     @enderror
                 </select>
             </div>
+            <div>
+                <label for="hired_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Hired</label>
+                <div class="relative max-w-sm">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                        </svg>
+                    </div>
+                    <input wire:model="employees.hired_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                    @error('employees.hired_date')
+                    <span class="text-red-600 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+        <div class="grid gap-6 mb-6 md:grid-cols-4">
+            <div>
+                <label for="position_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+                <input type="text" wire:model="employees.position_title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+                @error('employees.position_title')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+            <div>
+                <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Level</label>
+                <select name="job_level" wire:model="employees.job_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="">-- Select Job Level --</option>
+                    @foreach ($jobLevelOptions as $jobLevel)
+                    <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
+                    @endforeach
+                    @error('employees.job_level')
+                    <span class="text-red-600 text-sm">{{ $message }}</span>
+                    @enderror
+                </select>
+            </div>
+            <div>
+                <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
+                <input type="text" wire:model="employees.company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+                @error('employees.company')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+            <div>
+                <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
+                <input type="text" wire:model="employees.department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+                @error('employees.department')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+
+        <!-- Personal Information -->
+        {{-- Personal Form --}}
+        <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
+            <h class="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h>
         </div>
         <div class="grid gap-2 mb-2 md:grid-cols-4">
             <div>
@@ -188,60 +238,57 @@
                 @enderror
             </div>
         </div>
+
+        <!-- Emergency Contact Information -->
+        {{-- Emergency Form --}}
         <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employment Information</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Emergency Contact Information</h1>
         </div>
-        <div class="grid gap-2 mb-2 md:grid-cols-4">
-            <div>
-                <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
-                <input type="text" wire:model="employees.company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
-                @error('employees.company')
-                <span class="text-red-600 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-            <div>
-                <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
-                <input type="text" wire:model="employees.department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
-                @error('employees.department')
-                <span class="text-red-600 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-            <div>
-                <label for="position_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
-                <input type="text" wire:model="employees.position_title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
-                @error('employees.position_title')
-                <span class="text-red-600 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-            <div>
-                <label for="job_level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Level</label>
-                <select name="job_level" wire:model="employees.job_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="">-- Select Job Level --</option>
-                    @foreach ($jobLevelOptions as $jobLevel)
-                    <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
-                    @endforeach
-                    @error('employees.job_level')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
-                </select>
-            </div>
+        <div class="flex items-center justify-end mb-4">
+            @if($mode !== 'view')
+            <button
+                type="button"
+                wire:click="addEmergencyContact"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4v16m8-8H4" />
+                </svg>
+                Add Contact Person
+            </button>
+            @endif
         </div>
-        <div class="grid gap-6 mb-6 md:grid-cols-4">
-            <div>
-                <label for="hired_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Hired</label>
-                <div class="relative max-w-sm">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                        </svg>
-                    </div>
-                    <input wire:model="employees.hired_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
-                    @error('employees.hired_date')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
+        @if (count($this->emergency) > 0)
+        @foreach ($this->emergency as $index => $emerge)
+        <div class="mt-2 border border-gray-300 dark:border-gray-600 rounded-lg p-1 space-y-4">
+            <div class="grid gap-2 mb-2 md:grid-cols-3">
+                <div>
+                    <label for="emergency_contact_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Person</label>
+                    <input type="text" wire:model="emergency.{{ $index }}.emergency_contact_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                </div>
+                <div>
+                    <label for="emergency_contact_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Relationship</label>
+                    <input type="text" wire:model="emergency.{{ $index }}.emergency_contact_relationship" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
+                </div>
+                <div>
+                    <label for="emergency_contact_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Number</label>
+                    <input type="text" wire:model="emergency.{{ $index }}.emergency_contact_phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" />
                 </div>
             </div>
+            <div class="flex gap-2 items-center justify-end">
+                @if($mode !== 'view')
+                <button wire:click="removeEmergencyContact({{ $index }})" type="button"
+                    class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
+                    Remove
+                </button>
+                @endif
+            </div>
         </div>
+        @endforeach
+        @else
+        <p class="text-sm text-gray-500">No Emergency Contact records found.</p>
+        @endif
 
         <!-- Education Information -->
         {{-- Education Form --}}
@@ -285,7 +332,7 @@
                         <input type="text" wire:model="educations.{{ $index }}.start_year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start Year" />
                         <input type="text" wire:model="educations.{{ $index }}.end_year" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="End Year" />
                     </div>
-                    <div class="flex gap-2 items-center mt-2 justify-end">
+                    <div class="flex gap-2 items-center mt-1 justify-end">
                         @if($mode !== 'view')
                         <button wire:click="removeEducation({{ $index }})" type="button"
                             class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
@@ -303,7 +350,7 @@
         <!-- Dependent Information -->
         {{-- Dependent Form --}}
         <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dependents</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dependents Information</h1>
         </div>
 
         <div class="flex items-center justify-end mb-4">
@@ -380,7 +427,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="flex gap-2 items-center justify-end">
                 @if($mode !== 'view')
@@ -421,7 +467,7 @@
         @if (count($this->addresses) > 0)
         @foreach ($this->addresses as $index => $address)
         <div class="mt-2 border border-gray-300 dark:border-gray-600 rounded-lg p-1 space-y-4">
-            <div class="grid gap-2 mb-2 mt-1 md:grid-cols-4">
+            <div class="grid gap-2 mb-2 mt-1 md:grid-cols-3">
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street Address</label>
                     <input type="text" wire:model="addresses.{{ $index }}.street"
@@ -437,6 +483,8 @@
                     <input type="text" wire:model="addresses.{{ $index }}.city"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="City" />
                 </div>
+            </div>
+            <div class="grid gap-2 mb-2 mt-1 md:grid-cols-4">
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Province</label>
                     <input type="text" wire:model="addresses.{{ $index }}.province"
@@ -452,21 +500,23 @@
                     <input type="text" wire:model="addresses.{{ $index }}.zip_code"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Zip Code" />
                 </div>
-                <div class="flex items-center gap-2 mt-4">
-                    <label class="flex items-center text-sm text-gray-700 dark:text-white">
-                        <input type="checkbox" wire:model="addresses.{{ $index }}.is_current"
-                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                        <span class="ml-2">Primary Address</span>
-                    </label>
+                <div>
+                    <div class="flex items-center gap-45 mt-10 justify-start">
+                        <label class="flex items-center text-sm text-gray-700 dark:text-white">
+                            <input type="checkbox" wire:model="addresses.{{ $index }}.is_current"
+                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                            <span class="ml-2">Primary Address</span>
+                        </label>
+                    </div>
                 </div>
-                <div class="flex gap-2 items-center mt-8 justify-end">
-                    @if($mode !== 'view')
-                    <button wire:click="removeAddress({{ $index }})" type="button"
-                        class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
-                        Remove
-                    </button>
-                    @endif
-                </div>
+            </div>
+            <div class="flex gap-2 items-center justify-end">
+                @if($mode !== 'view')
+                <button wire:click="removeAddress({{ $index }})" type="button"
+                    class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md px-3 py-2">
+                    Remove
+                </button>
+                @endif
             </div>
         </div>
         @endforeach

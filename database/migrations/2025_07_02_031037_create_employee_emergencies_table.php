@@ -11,7 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
+        Schema::create('employee_emergencies', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('fkey_employee_id');
+            $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('emergency_contact_name')->nullable();
             $table->string('emergency_contact_phone')->nullable();
             $table->string('emergency_contact_relationship')->nullable();
@@ -23,10 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->dropColumn('emergency_contact_name');
-            $table->dropColumn('emergency_contact_phone');
-            $table->dropColumn('emergency_contact_relationship');
-        });
+        Schema::dropIfExists('employee_emergencies');
     }
 };
