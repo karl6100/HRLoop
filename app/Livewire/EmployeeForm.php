@@ -30,10 +30,16 @@ class EmployeeForm extends Component
      * Initialize the form data when the component is mounted.
      */
     public $mode = 'create';
+    public $activeTab = 'profile'; // default tab
 
     public function toggleEdit()
     {
         $this->mode = $this->mode === 'view' ? 'edit' : 'view';
+    }
+
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
     }
 
     public function cancel()
@@ -363,9 +369,9 @@ class EmployeeForm extends Component
         // Save emergency contacts if provided
         foreach ($this->emergency as $contact) {
             if (
-                !empty($this->$contact['emergency_contact_name']) ||
-                !empty($this->$contact['emergency_contact_relationship']) ||
-                !empty($this->$contact['emergency_contact_phone'])
+                !empty($contact['emergency_contact_name']) ||
+                !empty($contact['emergency_contact_relationship']) ||
+                !empty($contact['emergency_contact_phone'])
             ) {
                 $employee->employeeEmergencies()->create($contact);
             }

@@ -1,6 +1,7 @@
 <div>
     <fieldset @if($mode==='view' ) disabled @endif>
-
+        
+        {{-- Employment Form --}}
         <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employment Information</h1>
         </div>

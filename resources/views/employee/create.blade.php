@@ -14,14 +14,11 @@
                 <a href="#" id="tab-writeups" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300" onclick="showView('contacts')">Other Information</a>
             </li>
         </ul>
-        <form action="{{ route('employee.store') }}" method="POST">
-            @csrf
             <div id="view-profile" class="view-section">
                 <div>
                     @livewire('employee-form')
                 </div>
             </div>
-
             <div id="view-compensation" class="view-section hidden">
                 <div class="mb-6">
                     <h class="text-2xl font-bold text-gray-900 dark:text-white">Compensation Details</h>
