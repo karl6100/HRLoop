@@ -22,11 +22,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $employeePayTypeOptions = ['', 'Monthly', 'Daily', 'Hourly'];
-
-        return view('employee.create', compact(
-            'employeePayTypeOptions'
-        ));
+        return view('employee.create');
     }
 
     /**
@@ -134,6 +130,7 @@ class EmployeeController extends Controller
             'employeeAddresses',
             'employeeDependents',
             'employeeSalaries',
+            'employeeEmergencies'
         ])->findOrFail($employee_id);
 
 
@@ -160,14 +157,6 @@ class EmployeeController extends Controller
     public function edit($employee_id)
     {
         // Retrieve the employee record along with related data
-        $suffixOptions = ['', 'Jr.', 'Sr.', 'III', 'IV', 'V'];
-        $bloodOptions = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-        $civilStatusOptions = ['', 'Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
-        $genderOptions = ['', 'Male', 'Female'];
-        $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
-        $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
-        $employeePayTypeOptions = ['', 'Monthly', 'Daily', 'Hourly'];
-
         $employee = Employee::with([
             'employeeEducations',
             'employeeAddresses',
@@ -175,32 +164,8 @@ class EmployeeController extends Controller
             'employeeSalaries',
         ])->findOrFail($employee_id);
 
-        $employee->birth_date = $employee->birth_date
-            ? Carbon::parse($employee->birth_date)->format('m/d/Y')
-            : null;
-
-        $employee->hired_date = $employee->hired_date
-            ? Carbon::parse($employee->hired_date)->format('m/d/Y')
-            : null;
-
-        $employee->employeeDependents->each(function ($dependent) {
-            $dependent->dependent_birth_date = $dependent->dependent_birth_date
-                ? Carbon::parse($dependent->dependent_birth_date)->format('m/d/Y')
-                : null;
-        });
-
-
         // Pass the employee data to the view
-        return view('employee.edit', compact(
-            'employee',
-            'suffixOptions',
-            'bloodOptions',
-            'civilStatusOptions',
-            'genderOptions',
-            'jobLevelOptions',
-            'employmentStatusOptions',
-            'employeePayTypeOptions'
-        ));
+        return view('employee.edit', compact('employee'));
     }
 
     /**

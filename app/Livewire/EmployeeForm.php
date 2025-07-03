@@ -29,11 +29,14 @@ class EmployeeForm extends Component
     /**
      * Initialize the form data when the component is mounted.
      */
+    public $employee_id;
+    public $employee;
     public $mode = 'create';
     public $activeTab = 'profile'; // default tab
 
     public function toggleEdit()
     {
+        logger('toggleEdit clicked');
         $this->mode = $this->mode === 'view' ? 'edit' : 'view';
     }
 
@@ -393,75 +396,132 @@ class EmployeeForm extends Component
         return view('livewire.employee-form');
     }
 
-    public function show($employee_id)
-    {
+    // public function show($employee_id)
+    // {
 
-        $this->employeeId = $employee_id;
-        $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents'])->findOrFail($employee_id);
-        $this->employees = [
-            'employee_id' => $employee->employee_id,
-            'first_name' => $employee->first_name,
-            'last_name' => $employee->last_name,
-            'middle_name' => $employee->middle_name,
-            'suffix' => $employee->suffix,
-            'civil_status' => $employee->civil_status,
-            'birth_date' => optional($employee->birth_date),
-            'birth_place' => $employee->birth_place,
-            'blood_type' => $employee->blood_type,
-            'gender' => $employee->gender,
-            'nationality' => $employee->nationality,
-            'religion' => $employee->religion,
-            'telephone_number' => $employee->telephone_number,
-            'mobile_number' => $employee->mobile_number,
-            'email' => $employee->email,
-            'department' => $employee->department,
-            'company' => $employee->company,
-            'position_title' => $employee->position_title,
-            'job_level' => $employee->job_level,
-            'hired_date' => optional($employee->hired_date),
-            'employment_status' => $employee->employment_status,
-            'sss_number' => $employee->sss_number,
-            'philhealth_number' => $employee->philhealth_number,
-            'pagibig_number' => $employee->pagibig_number,
-            'tin_number' => $employee->tin_number,
-        ];
+    //     $this->employeeId = $employee_id;
+    //     $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents','employeeEmergencies'])->findOrFail($employee_id);
+    //     $this->employees = [
+    //         'employee_id' => $employee->employee_id,
+    //         'first_name' => $employee->first_name,
+    //         'last_name' => $employee->last_name,
+    //         'middle_name' => $employee->middle_name,
+    //         'suffix' => $employee->suffix,
+    //         'civil_status' => $employee->civil_status,
+    //         'birth_date' => optional($employee->birth_date),
+    //         'birth_place' => $employee->birth_place,
+    //         'blood_type' => $employee->blood_type,
+    //         'gender' => $employee->gender,
+    //         'nationality' => $employee->nationality,
+    //         'religion' => $employee->religion,
+    //         'telephone_number' => $employee->telephone_number,
+    //         'mobile_number' => $employee->mobile_number,
+    //         'email' => $employee->email,
+    //         'department' => $employee->department,
+    //         'company' => $employee->company,
+    //         'position_title' => $employee->position_title,
+    //         'job_level' => $employee->job_level,
+    //         'hired_date' => optional($employee->hired_date),
+    //         'employment_status' => $employee->employment_status,
+    //         'sss_number' => $employee->sss_number,
+    //         'philhealth_number' => $employee->philhealth_number,
+    //         'pagibig_number' => $employee->pagibig_number,
+    //         'tin_number' => $employee->tin_number,
+    //     ];
 
-        $this->addresses = $employee->employeeAddresses->map(function ($address) {
-            return [
-                'street' => $address->street,
-                'barangay' => $address->barangay,
-                'city' => $address->city,
-                'province' => $address->province,
-                'zip_code' => $address->zip_code,
-                'country' => $address->country,
-                'is_current' => $address->is_current,
-            ];
-        })->toArray();
+    //     $this->addresses = $employee->employeeAddresses->map(function ($address) {
+    //         return [
+    //             'street' => $address->street,
+    //             'barangay' => $address->barangay,
+    //             'city' => $address->city,
+    //             'province' => $address->province,
+    //             'zip_code' => $address->zip_code,
+    //             'country' => $address->country,
+    //             'is_current' => $address->is_current,
+    //         ];
+    //     })->toArray();
 
-        $this->educations = $employee->employeeEducations->map(function ($edu) {
-            return [
-                'education_level' => $edu->education_level,
-                'school' => $edu->school,
-                'degree' => $edu->degree,
-                'start_year' => $edu->start_year,
-                'end_year' => $edu->end_year,
-            ];
-        })->toArray();
+    //     $this->educations = $employee->employeeEducations->map(function ($edu) {
+    //         return [
+    //             'education_level' => $edu->education_level,
+    //             'school' => $edu->school,
+    //             'degree' => $edu->degree,
+    //             'start_year' => $edu->start_year,
+    //             'end_year' => $edu->end_year,
+    //         ];
+    //     })->toArray();
 
-        $this->dependents = $employee->employeeDependents->map(function ($dep) {
-            return [
-                'fullname' => $dep->fullname,
-                'relationship' => $dep->relationship,
-                'dependent_birth_date' => optional($dep->dependent_birth_date)->format('m/d/Y'),
-            ];
-        })->toArray();
+    //     $this->dependents = $employee->employeeDependents->map(function ($dep) {
+    //         return [
+    //             'fullname' => $dep->fullname,
+    //             'relationship' => $dep->relationship,
+    //             'dependent_birth_date' => optional($dep->dependent_birth_date)->format('m/d/Y'),
+    //         ];
+    //     })->toArray();
 
-        $this->emergency = $employee->emergency->map(function ($emer) {
-            return [
-                'emergency_contact_name' => $emer->emergency_contact_name,
-                'emergency_contact_relationship' => $emer->emergency_contact_relationship,
-                'emergency_contact_phone' => $emer->emergency_contact_phone,
-            ];
-        })->toArray();
-    }
+    //     $this->emergency = $employee->emergency->map(function ($emer) {
+    //         return [
+    //             'emergency_contact_name' => $emer->emergency_contact_name,
+    //             'emergency_contact_relationship' => $emer->emergency_contact_relationship,
+    //             'emergency_contact_phone' => $emer->emergency_contact_phone,
+    //         ];
+    //     })->toArray();
+    // }
+
+    // public function edit($employee_id)
+    // {
+    //     $this->mode = 'edit';
+    //     $this->employeeId = $employee_id;
+
+    //     $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents','employeeEmergencies'])->findOrFail($employee_id);
+
+    //     $this->employees = [
+    //         'employee_id' => $employee->employee_id,
+    //         'first_name' => $employee->first_name,
+    //         'last_name' => $employee->last_name,
+    //         'middle_name' => $employee->middle_name,
+    //         'suffix' => $employee->suffix,
+    //         'civil_status' => $employee->civil_status,
+    //         'birth_date' => optional($employee->birth_date)->format('Y-m-d'),
+    //         'birth_place' => $employee->birth_place,
+    //         'blood_type' => $employee->blood_type,
+    //         'gender' => $employee->gender,
+    //         'nationality' => $employee->nationality,
+    //         'religion' => $employee->religion,
+    //         'telephone_number' => $employee->telephone_number,
+    //         'mobile_number' => $employee->mobile_number,
+    //         'email' => $employee->email,
+    //         'department' => $employee->department,
+    //         'company' => $employee->company,
+    //         'position_title' => $employee->position_title,
+    //         'job_level' => $employee->job_level,
+    //         'hired_date' => optional($employee->hired_date)->format('Y-m-d'),
+    //         'employment_status' => $employee->employment_status,
+    //         'sss_number' => $employee->sss_number,
+    //         'philhealth_number' => $employee->philhealth_number,
+    //         'pagibig_number' => $employee->pagibig_number,
+    //         'tin_number' => $employee->tin_number,
+    //     ];
+
+    //     $this->addresses = $employee->employeeAddresses->toArray();
+
+    //     $this->educations = $employee->employeeEducations->toArray();
+
+    //     $this->dependents = $employee->employeeDependents->map(function ($dep) {
+    //         return [
+    //             'fullname' => $dep->fullname,
+    //             'relationship' => $dep->relationship,
+    //             'dependent_birth_date' => optional($dep->dependent_birth_date)->format('Y-m-d'),
+    //             'age' => $dep->dependent_birth_date ? \Carbon\Carbon::parse($dep->dependent_birth_date)->age : null,
+    //         ];
+    //     })->toArray();
+
+    //     $this->emergency = $employee->employeeEmergencies->map(function ($emer) {
+    //         return [
+    //             'emergency_contact_name' => $emer->emergency_contact_name,
+    //             'emergency_contact_relationship' => $emer->emergency_contact_relationship,
+    //             'emergency_contact_phone' => $emer->emergency_contact_phone,
+    //         ];
+    //     })->toArray();
+    // }
 }
