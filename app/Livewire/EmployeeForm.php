@@ -14,7 +14,7 @@ class EmployeeForm extends Component
     public $civilStatusOptions = ['', 'Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
     public $genderOptions = ['', 'Male', 'Female'];
     public $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
-    public $employmentStatusOptions = ['Probationary', 'Regular', 'Contractual', 'Casual', 'Job Order'];
+    public $employmentStatusOptions = ['Probationary', 'Regular', 'Temporary', 'Extra Helper','OJT'];
     public $employeePayTypeOptions = ['', 'Monthly', 'Daily', 'Hourly'];
 
     // --- Form Data Structures ---
