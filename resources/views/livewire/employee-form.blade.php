@@ -1,21 +1,21 @@
 <div>
-{{-- Tab Navigation --}}
+    {{-- Tab Navigation --}}
     <ul class="flex border-b text-sm font-medium text-center text-gray-500 dark:text-gray-400">
         <li class="mr-2">
-            <a href="#" wire:click.prevent="setActiveTab('profile')" 
-               class="inline-block p-4 rounded-t-lg {{ $activeTab === 'profile' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+            <a href="#" wire:click.prevent="setActiveTab('profile')"
+                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'profile' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
                 Profile
             </a>
         </li>
         <li class="mr-2">
-            <a href="#" wire:click.prevent="setActiveTab('compensation')" 
-               class="inline-block p-4 rounded-t-lg {{ $activeTab === 'compensation' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+            <a href="#" wire:click.prevent="setActiveTab('compensation')"
+                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'compensation' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
                 Compensation
             </a>
         </li>
         <li class="mr-2">
-            <a href="#" wire:click.prevent="setActiveTab('credits')" 
-               class="inline-block p-4 rounded-t-lg {{ $activeTab === 'credits' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+            <a href="#" wire:click.prevent="setActiveTab('credits')"
+                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'credits' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
                 Leave Credits
             </a>
         </li>
@@ -23,42 +23,53 @@
     {{-- Tab Content --}}
     <div class="mt-4">
         @if ($activeTab === 'profile')
-            @include('livewire.employee-tabs.profile')
+        @include('livewire.employee-tabs.profile')
         @elseif ($activeTab === 'compensation')
-            @include('livewire.employee-tabs.compensation')
+        @include('livewire.employee-tabs.compensation')
         @elseif ($activeTab === 'credits')
-            @include('livewire.employee-tabs.credits')
+        @include('livewire.employee-tabs.credits')
         @endif
     </div>
 
     <!-- Toggle button for switching modes -->
     <div class="mt-6 flex justify-start items-center gap-4">
-                @if($mode !== 'view')
-                <!-- Save Button -->
-                <button
-                    type="button"
-                    wire:click="save"
-                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                    Save
-                </button>
+        @if($mode === 'create')
+        <!-- Save Button (visible only in create mode) -->
+        <button
+            type="button"
+            wire:click="save"
+            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            Save
+        </button>
+        @elseif($mode === 'edit')
+        <!-- Update Button (visible only in edit mode) -->
+        <button
+            type="button"
+            wire:click="update"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Update
+        </button>
+        @else
+        <!-- Edit Button (shown only in view mode) -->
+        <button
+            type="button"
+            wire:click="toggleEdit"
+            class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+            Edit
+        </button>
+        @endif
 
-                <!-- Cancel Button (redirects or switches mode) -->
-                <button
-                    type="button"
-                    wire:click="cancel"
-                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                    Cancel
-                </button>
-                @else
-                <!-- Edit Button -->
-                <button
-                    type="button"
-                    wire:click="toggleEdit"
-                    class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
-                    Edit
-                </button>
-                @endif
-            </div>    
+        <!-- Cancel Button (shown only in create or edit mode) -->
+        @if($mode !== 'view')
+        <button
+            type="button"
+            wire:click="cancel"
+            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+            Cancel
+        </button>
+        @endif
+    </div>
+
     </fieldset>
 
     {{-- Success Toast --}}

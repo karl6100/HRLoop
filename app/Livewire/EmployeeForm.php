@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Employee;
+use Illuminate\Validation\Rule;
 
 
 class EmployeeForm extends Component
@@ -14,11 +15,10 @@ class EmployeeForm extends Component
     public $civilStatusOptions = ['', 'Single', 'Married', 'Widowed', 'Separated', 'Divorced'];
     public $genderOptions = ['', 'Male', 'Female'];
     public $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
-    public $employmentStatusOptions = ['Probationary', 'Regular', 'Temporary', 'Extra Helper','OJT'];
+    public $employmentStatusOptions = ['Probationary', 'Regular', 'Temporary', 'Extra Helper', 'OJT'];
     public $employeePayTypeOptions = ['', 'Monthly', 'Daily', 'Hourly'];
 
     // --- Form Data Structures ---
-    public $employeeId;
     public $employees = [];
     public $addresses = [];
     public $educations = [];
@@ -145,8 +145,14 @@ class EmployeeForm extends Component
      */
     protected function rules()
     {
+        $employee_id = $this->employee_id ?? null;
+
         return [
-            'employees.employee_id' => 'required|string|unique:employees,employee_id',
+            'employees.employee_id' => [
+                'required',
+                'string',
+                Rule::unique('employees', 'employee_id')->ignore($employee_id, 'employee_id'),
+            ],
             'employees.first_name' => 'required|string',
             'employees.last_name' => 'required|string',
             'employees.middle_name' => 'nullable|string',
@@ -158,19 +164,48 @@ class EmployeeForm extends Component
             'employees.gender' => 'nullable|string',
             'employees.nationality' => 'nullable|string',
             'employees.religion' => 'nullable|string',
-            'employees.telephone_number' => 'nullable|string',
-            'employees.mobile_number' => 'nullable|string|unique:employees,mobile_number',
-            'employees.email' => 'nullable|string|email|unique:employees,email',
+            'employees.telephone_number' => [
+                'nullable',
+                'string',
+                Rule::unique('employees', 'telephone_number')->ignore($this->employee_id, 'employee_id'),
+            ],
+            'employee.mobile_number' => [
+                'nullable',
+                'string',
+                Rule::unique('employees', 'mobile_number')->ignore($this->employee_id, 'employee_id'),
+            ],
+            'employees.email' => [
+                'nullable',
+                'string',
+                'email',
+                Rule::unique('employees', 'email')->ignore($this->employee_id, 'employee_id'),
+            ],
             'employees.department' => 'required|string',
             'employees.company' => 'required|string',
             'employees.position_title' => 'required|string',
             'employees.job_level' => 'required|string',
             'employees.hired_date' => 'required|date',
             'employees.employment_status' => 'required|string',
-            'employees.sss_number' => 'nullable|string|unique:employees,sss_number',
-            'employees.philhealth_number' => 'nullable|string|unique:employees,philhealth_number',
-            'employees.pagibig_number' => 'nullable|string|unique:employees,pagibig_number',
-            'employees.tin_number' => 'nullable|string|unique:employees,tin_number',
+            'employees.sss_number' => [
+                'nullable',
+                'string',
+                Rule::unique('employees', 'sss_number')->ignore($this->employee_id, 'employee_id'),
+            ],
+            'employees.philhealth_number' => [
+                'nullable',
+                'string',
+                Rule::unique('employees', 'philhealth_number')->ignore($this->employee_id, 'employee_id'),
+            ],
+            'employees.pagibig_number' => [
+                'nullable',
+                'string',
+                Rule::unique('employees', 'pagibig_number')->ignore($this->employee_id, 'employee_id'),
+            ],
+            'employees.tin_number' => [
+                'nullable',
+                'string',
+                Rule::unique('employees', 'tin_number')->ignore($this->employee_id, 'employee_id'),
+            ],
             'addresses.*.street' => 'nullable|string',
             'addresses.*.barangay' => 'nullable|string',
             'addresses.*.city' => 'nullable|string',
@@ -384,7 +419,10 @@ class EmployeeForm extends Component
         logger()->debug('✅ All data saved successfully.');
         session()->flash('success', 'Employee saved successfully!');
         $this->successMessage = 'Saved successfully';
-        $this->mount(); // reset form
+
+        $this->employee_id = $employee->employee_id; // Set ID for viewing
+        $this->mode = 'view'; // Switch to view mode
+        $this->mount($employee->employee_id, 'view'); // Reload data for newly saved employee
     }
 
     /**
@@ -395,6 +433,106 @@ class EmployeeForm extends Component
         logger('Rendering employee form');
         return view('livewire.employee-form');
     }
+
+    public function update()
+    {
+        logger()->debug('✏️ Update method triggered');
+
+        // STEP 1: Sanitize input data before validation
+        logger()->debug('📌 Sanitizing and validating data...');
+
+        foreach (['birth_date', 'mobile_number', 'email', 'sss_number', 'philhealth_number', 'pagibig_number', 'tin_number'] as $field) {
+            if (empty($this->employees[$field])) {
+                $this->employees[$field] = null;
+            }
+        }
+
+        foreach ($this->dependents as &$dependent) {
+            if (empty($dependent['dependent_birth_date'])) {
+                $dependent['dependent_birth_date'] = null;
+            }
+        }
+        unset($dependent);
+
+        // STEP 2: Validate
+        try {
+            $validated = $this->validate();
+            logger()->debug('✅ Validation passed.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            logger()->error('❌ Validation failed:', $e->errors());
+            throw $e;
+        }
+
+        // STEP 3: Update main employee record
+        $employee = Employee::findOrFail($this->employee_id);
+        $employee->update($validated['employees']);
+        logger()->debug('✏️ Employee main data updated.');
+
+        // STEP 4: Sync related data
+        logger()->debug('🔄 Syncing related data...');
+
+        // Addresses
+        $employee->employeeAddresses()->delete();
+        foreach ($this->addresses as $address) {
+            if (
+                !empty($address['street']) ||
+                !empty($address['barangay']) ||
+                !empty($address['city']) ||
+                !empty($address['province']) ||
+                !empty($address['zip_code']) ||
+                !empty($address['country'])
+            ) {
+                $employee->employeeAddresses()->create($address);
+            }
+        }
+
+        // Educations
+        $employee->employeeEducations()->delete();
+        foreach ($this->educations as $education) {
+            if (
+                !empty($education['education_level']) ||
+                !empty($education['school']) ||
+                !empty($education['degree']) ||
+                !empty($education['start_year']) ||
+                !empty($education['end_year'])
+            ) {
+                $employee->employeeEducations()->create($education);
+            }
+        }
+
+        // Dependents
+        $employee->employeeDependents()->delete();
+        foreach ($this->dependents as $dependent) {
+            if (
+                !empty($dependent['fullname']) ||
+                !empty($dependent['relationship']) ||
+                !empty($dependent['dependent_birth_date'])
+            ) {
+                $employee->employeeDependents()->create($dependent);
+            }
+        }
+
+        // Emergency Contacts
+        $employee->employeeEmergencies()->delete();
+        foreach ($this->emergency as $contact) {
+            if (
+                !empty($contact['emergency_contact_name']) ||
+                !empty($contact['emergency_contact_relationship']) ||
+                !empty($contact['emergency_contact_phone'])
+            ) {
+                $employee->employeeEmergencies()->create($contact);
+            }
+        }
+
+        // STEP 5: Success Feedback
+        logger()->debug('✅ Update complete.');
+        session()->flash('success', 'Employee updated successfully!');
+        $this->successMessage = 'Updated successfully';
+
+        $this->mode = 'view'; // Switch to view mode
+        $this->mount($this->employee_id, 'view'); // Reload data from DB
+    }
+
 
     // public function show($employee_id)
     // {
