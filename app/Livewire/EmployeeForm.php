@@ -24,6 +24,7 @@ class EmployeeForm extends Component
     public $educations = [];
     public $dependents = [];
     public $emergency = [];
+    public $compensation = [];
     public $successMessage = '';
 
     /**
@@ -59,7 +60,7 @@ class EmployeeForm extends Component
         $this->mode = $mode;
 
         if ($employee_id) {
-            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies'])->findOrFail($employee_id);
+            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations'])->findOrFail($employee_id);
 
             $this->employees = $employee->toArray();
             $this->employees['birth_date'] = optional($employee->birth_date)->format('Y-m-d');
@@ -67,7 +68,6 @@ class EmployeeForm extends Component
             $this->addresses = $employee->employeeAddresses->toArray();
             $this->educations = $employee->employeeEducations->toArray();
             $this->emergency = $employee->employeeEmergencies->toArray();
-
             $this->dependents = $employee->employeeDependents->map(function ($dep) {
                 return [
                     'fullname' => $dep->fullname,
@@ -76,6 +76,7 @@ class EmployeeForm extends Component
                     'age' => $dep->dependent_birth_date ? \Carbon\Carbon::parse($dep->dependent_birth_date)->age : null,
                 ];
             })->toArray();
+            $this->compensation = $employee->employeeCompensations->toArray();
 
             // dd($this->dependents);
         } else {
@@ -135,7 +136,24 @@ class EmployeeForm extends Component
             $this->emergency = [[
                 'emergency_contact_name' => '',
                 'emergency_contact_relationship' => '',
-                'emergency_contact_phone' => ''
+                'emergency_contact_phone' => '',
+                'emergency_street' => '',
+                'emergency_barangay' => '',
+                'emergency_city' => '',
+                'emergency_province' => '',
+                'emergency_zip_code' => '',
+                'emergency_country' => ''
+            ]];
+
+            $this->compensation = [[
+                'fkey_employee_id' => '',
+                'pay_type' => '',
+                'basic_salary' => '',
+                'allowance' => '',
+                'monthly_rate' => '',
+                'effective_date' => '',
+                'remarks' => '',
+                'is_current' => false
             ]];
         }
     }
@@ -224,6 +242,12 @@ class EmployeeForm extends Component
             'emergency.*.emergency_contact_name' => 'nullable|string',
             'emergency.*.emergency_contact_relationship' => 'nullable|string',
             'emergency.*.emergency_contact_phone' => 'nullable|string',
+            'emergency.*.emergency_street' => 'nullable|string',
+            'emergency.*.emergency_barangay' => 'nullable|string',
+            'emergency.*.emergency_city' => 'nullable|string',
+            'emergency.*.emergency_province' => 'nullable|string',
+            'emergency.*.emergency_zip_code' => 'nullable|string',
+            'emergency.*.emergency_country' => 'nullable|string',
         ];
     }
 
@@ -292,7 +316,13 @@ class EmployeeForm extends Component
         $this->emergency[] = [
             'emergency_contact_name' => '',
             'emergency_contact_relationship' => '',
-            'emergency_contact_phone' => ''
+            'emergency_contact_phone' => '',
+            'emergency_street' => '',
+            'emergency_barangay' => '',
+            'emergency_city' => '',
+            'emergency_province' => '',
+            'emergency_zip_code' => '',
+            'emergency_country' => ''
         ];
     }
 
@@ -409,7 +439,13 @@ class EmployeeForm extends Component
             if (
                 !empty($contact['emergency_contact_name']) ||
                 !empty($contact['emergency_contact_relationship']) ||
-                !empty($contact['emergency_contact_phone'])
+                !empty($contact['emergency_contact_phone']) ||
+                !empty($contact['emergency_street']) ||
+                !empty($contact['emergency_barangay']) ||
+                !empty($contact['emergency_city']) ||
+                !empty($contact['emergency_province']) ||
+                !empty($contact['emergency_zip_code']) ||
+                !empty($contact['emergency_country'])
             ) {
                 $employee->employeeEmergencies()->create($contact);
             }
@@ -518,7 +554,13 @@ class EmployeeForm extends Component
             if (
                 !empty($contact['emergency_contact_name']) ||
                 !empty($contact['emergency_contact_relationship']) ||
-                !empty($contact['emergency_contact_phone'])
+                !empty($contact['emergency_contact_phone']) ||
+                !empty($contact['emergency_street']) ||
+                !empty($contact['emergency_barangay']) ||
+                !empty($contact['emergency_city']) ||
+                !empty($contact['emergency_province']) ||
+                !empty($contact['emergency_zip_code']) ||
+                !empty($contact['emergency_country'])
             ) {
                 $employee->employeeEmergencies()->create($contact);
             }
@@ -531,6 +573,29 @@ class EmployeeForm extends Component
 
         $this->mode = 'view'; // Switch to view mode
         $this->mount($this->employee_id, 'view'); // Reload data from DB
+    }
+
+    public function saveCompensation()
+    {
+        logger()->debug('💵 Saving employee compensation...');
+
+        $validated = $this->validateOnly('compensation');
+
+        logger()->debug('✅ Compensation validation passed.');
+
+        // Sanitize nulls if necessary
+        foreach (['pay_type', 'effective_date'] as $field) {
+            if (empty($this->employeeCompensations[$field])) {
+                $this->employeeCompensations[$field] = null;
+            }
+        }
+
+        $employee = Employee::findOrFail($this->employee_id);
+
+        $employee->employeeCompensations()->create($this->employeeCompensations);
+
+        session()->flash('success', 'Employee salary saved successfully.');
+        $this->successMessage = 'Salary saved successfully';
     }
 
 

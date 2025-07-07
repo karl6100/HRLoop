@@ -22,6 +22,12 @@ class EmployeeEmergencyFactory extends Factory
             'emergency_contact_name' => $this->faker->firstName() . ' ' . $this->faker->lastName(), // Generate a random last name
             'emergency_contact_relationship' => $this->faker->randomElement(['Parent', 'Sibling', 'Spouse', 'Friend']),
             'emergency_contact_phone' => $this->faker->phoneNumber(),
+            'emergency_street' => $this->faker->streetAddress(),
+            'emergency_barangay' => $this->faker->word(),
+            'emergency_city' => $this->faker->city(),
+            'emergency_province' => $this->faker->state(),
+            'emergency_zip_code' => $this->faker->postcode(),
+            'emergency_country' => $this->faker->country(),
         ];
     }
 }

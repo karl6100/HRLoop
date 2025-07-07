@@ -15,6 +15,12 @@ class EmployeeEmergency extends Model
         'emergency_contact_name',
         'emergency_contact_relationship',
         'emergency_contact_phone',
+        'emergency_street',
+        'emergency_barangay',
+        'emergency_city',
+        'emergency_province',
+        'emergency_zip_code',
+        'emergency_country',
     ];
 
     public function employee()

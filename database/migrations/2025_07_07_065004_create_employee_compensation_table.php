@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_salaries', function (Blueprint $table) {
+        Schema::create('employee_compensation', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('fkey_employee_id');
@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('pay_type')->nullable(true);
             $table->decimal('basic_salary', 10, 2)->nullable(true);
             $table->decimal('allowance', 10, 2)->nullable()->nullable(true);
+            $table->decimal('monthly_rate', 10, 2)->nullable();
             $table->date('effective_date')->nullable(true);
             $table->string('remarks')->nullable();
             $table->boolean('is_current')->default(false);
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee_salaries');
+        Schema::dropIfExists('employee_compensation');
     }
 };

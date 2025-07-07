@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Employee;
+use App\Models\EmployeeCompensation;
 use App\Models\EmployeeEducation;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
             EmployeeAddressSeeder::class,
             EmployeeDependentsSeeder::class,
             EmployeeEducationSeeder::class,
-            EmployeeSalarySeeder::class,
+            EmployeeCompensationSeeder::class,
             EmployeeEmergencySeeder::class,
 
             // Add other seeders here as needed

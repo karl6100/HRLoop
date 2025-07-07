@@ -71,9 +71,9 @@ class Employee extends Model
         return $this->hasMany(EmployeeDependents::class, 'fkey_employee_id', 'employee_id');
     }
 
-    public function employeeSalaries()
+    public function employeeCompensations()
     {
-        return $this->hasMany(EmployeeSalary::class, 'fkey_employee_id', 'employee_id');
+        return $this->hasMany(EmployeeCompensation::class, 'fkey_employee_id', 'employee_id');
     }
 
     public function employeeEmergencies()
