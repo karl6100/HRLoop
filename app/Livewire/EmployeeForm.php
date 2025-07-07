@@ -251,6 +251,19 @@ class EmployeeForm extends Component
         ];
     }
 
+    protected function rulesCompensation()
+    {
+        return [
+            'compensation.pay_type' => 'nullable|string',
+            'compensation.basic_salary' => 'nullable|numeric',
+            'compensation.allowance' => 'nullable|numeric',
+            'compensation.monthly_rate' => 'nullable|numeric',
+            'compensation.effective_date' => 'nullable|date',
+            'compensation.remarks' => 'nullable|string',
+            'compensation.is_current' => 'boolean',
+        ];
+    }
+
     /**
      * Custom validation error messages.
      */
@@ -577,26 +590,27 @@ class EmployeeForm extends Component
 
     public function saveCompensation()
     {
-        logger()->debug('💵 Saving employee compensation...');
+        logger()->debug('💵 Saving single employee compensation...');
 
-        $validated = $this->validateOnly('compensation');
-
-        logger()->debug('✅ Compensation validation passed.');
-
-        // Sanitize nulls if necessary
-        foreach (['pay_type', 'effective_date'] as $field) {
-            if (empty($this->employeeCompensations[$field])) {
-                $this->employeeCompensations[$field] = null;
-            }
+        try {
+            $validated = $this->validate($this->rulesCompensation());
+            logger()->debug('✅ Compensation validation passed.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            logger()->error('❌ Compensation validation failed:', $e->errors());
+            throw $e;
         }
 
         $employee = Employee::findOrFail($this->employee_id);
 
-        $employee->employeeCompensations()->create($this->employeeCompensations);
+        $employee->employeeCompensations()->create($this->compensation);
 
-        session()->flash('success', 'Employee salary saved successfully.');
+        session()->flash('success', 'Employee compensation saved successfully.');
         $this->successMessage = 'Salary saved successfully';
+
+        // Optionally reload the view with latest data
+        $this->mount($employee->employee_id, 'view');
     }
+
 
 
     // public function show($employee_id)
