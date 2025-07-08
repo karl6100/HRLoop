@@ -18,18 +18,6 @@
             @enderror
         </div>
         <div>
-            <label for="employment_status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Status</label>
-            <select name="employment_status" wire:model="employees.employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">-- Select Employment Status --</option>
-                @foreach ($employmentStatusOptions as $employmentStatus)
-                <option value="{{ $employmentStatus }}">{{ $employmentStatus }}</option>
-                @endforeach
-                @error('employees.employment_status')
-                <span class="text-red-600 text-sm">{{ $message }}</span>
-                @enderror
-            </select>
-        </div>
-        <div>
             <label for="hired_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Hired</label>
             <div class="relative max-w-sm">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -42,6 +30,18 @@
                 <span class="text-red-600 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+        </div>
+        <div>
+            <label for="employment_status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Status</label>
+            <select name="employment_status" wire:model="employees.employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="">-- Select Employment Status --</option>
+                @foreach ($employmentStatusOptions as $employmentStatus)
+                <option value="{{ $employmentStatus }}">{{ $employmentStatus }}</option>
+                @endforeach
+                @error('employees.employment_status')
+                <span class="text-red-600 text-sm">{{ $message }}</span>
+                @enderror
+            </select>
         </div>
     </div>
     <div class="grid gap-6 mb-6 md:grid-cols-4">

@@ -52,13 +52,15 @@
                     </div>
                     <label for="compensation_remarks" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Remarks</label>
                     <textarea id="compensation_remarks" name="compensation_remarks" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                </div>
-                <button
+                    <div class="mt-4 flex justify-start">
+                    <button
                     type="button"
                     wire:click="saveCompensation"
                     class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                     Add
                 </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -86,6 +88,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                @foreach ($employees as $employee)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-4"></td>
                         <td class="px-6 py-4"></td>

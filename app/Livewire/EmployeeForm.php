@@ -24,7 +24,7 @@ class EmployeeForm extends Component
     public $educations = [];
     public $dependents = [];
     public $emergency = [];
-    public $compensation = [];
+    public $compensations = [];
     public $successMessage = '';
 
     /**
@@ -76,7 +76,7 @@ class EmployeeForm extends Component
                     'age' => $dep->dependent_birth_date ? \Carbon\Carbon::parse($dep->dependent_birth_date)->age : null,
                 ];
             })->toArray();
-            $this->compensation = $employee->employeeCompensations->toArray();
+            $this->compensations = $employee->employeeCompensations->toArray();
 
             // dd($this->dependents);
         } else {
@@ -145,7 +145,7 @@ class EmployeeForm extends Component
                 'emergency_country' => ''
             ]];
 
-            $this->compensation = [[
+            $this->compensations = [[
                 'fkey_employee_id' => '',
                 'pay_type' => '',
                 'basic_salary' => '',
@@ -254,13 +254,13 @@ class EmployeeForm extends Component
     protected function rulesCompensation()
     {
         return [
-            'compensation.pay_type' => 'nullable|string',
-            'compensation.basic_salary' => 'nullable|numeric',
-            'compensation.allowance' => 'nullable|numeric',
-            'compensation.monthly_rate' => 'nullable|numeric',
-            'compensation.effective_date' => 'nullable|date',
-            'compensation.remarks' => 'nullable|string',
-            'compensation.is_current' => 'boolean',
+            'compensations.pay_type' => 'nullable|string',
+            'compensations.basic_salary' => 'nullable|numeric',
+            'compensations.allowance' => 'nullable|numeric',
+            'compensations.monthly_rate' => 'nullable|numeric',
+            'compensations.effective_date' => 'nullable|date',
+            'compensations.remarks' => 'nullable|string',
+            'compensations.is_current' => 'boolean',
         ];
     }
 
@@ -602,7 +602,7 @@ class EmployeeForm extends Component
 
         $employee = Employee::findOrFail($this->employee_id);
 
-        $employee->employeeCompensations()->create($this->compensation);
+        $employee->employeeCompensations()->create($this->compensations);
 
         session()->flash('success', 'Employee compensation saved successfully.');
         $this->successMessage = 'Salary saved successfully';
