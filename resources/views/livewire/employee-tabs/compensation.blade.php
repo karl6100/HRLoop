@@ -53,12 +53,12 @@
                     <label for="compensation_remarks" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Remarks</label>
                     <textarea id="compensation_remarks" name="compensation_remarks" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                     <div class="mt-4 flex justify-start">
-                    <button
-                    type="button"
-                    wire:click="saveCompensation"
-                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                    Add
-                </button>
+                        <button
+                            type="button"
+                            wire:click="saveCompensation"
+                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                            Add
+                        </button>
                     </div>
                 </div>
             </div>
@@ -88,14 +88,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($employees as $employee)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="px-6 py-4"></td>
-                        <td class="px-6 py-4"></td>
-                        <td class="px-6 py-4"></td>
-                        <td class="px-6 py-4"></td>
-                        <td class="px-6 py-4"></td>
+                    @foreach ($compensations as $compensation)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($compensation['effective_date'])->format('Y-m-d') }}</td>
+                        <td class="px-6 py-4">{{ number_format(floatval($compensation['basic_salary']), 2) }}</td>
+                        <td class="px-6 py-4">{{ number_format(floatval($compensation['allowance']), 2) }}</td>
+                        <td class="px-6 py-4">{{ number_format(floatval($compensation['monthly_rate']), 2) }}</td>
+                        <td class="px-6 py-4">{{ $compensation['remarks'] }}</td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
             <!-- Pagination Links -->
@@ -104,64 +105,3 @@
         </div>
     </div>
 </div>
-</div>
-
-
-
-
-
-<!-- Change input into currency layout -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const currencyInputs = document.querySelectorAll('input.currency-format');
-
-        currencyInputs.forEach(input => {
-            // Format the input value on page load
-            if (input.value) {
-                input.value = formatCurrency(input.value);
-            }
-
-            // Add event listener to format the value dynamically
-            input.addEventListener('input', function() {
-                const value = input.value.replace(/,/g, ''); // Remove existing commas
-                if (!isNaN(value) && value !== '') {
-                    input.value = formatCurrency(value);
-                } else {
-                    input.value = ''; // Clear the input if invalid
-                }
-            });
-        });
-
-        // Function to format a number as currency
-        function formatCurrency(value) {
-            return parseFloat(value).toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'PHP',
-                minimumFractionDigits: 2,
-            }).replace('$', ''); // Remove the dollar sign if not needed
-        }
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const basicSalaryInput = document.getElementById('basic_salary');
-        const allowanceInput = document.getElementById('allowance');
-        const totalCompensationInput = document.getElementById('total_compensation');
-
-        function calculateTotalCompensation() {
-            const basicSalary = parseFloat(basicSalaryInput.value) || 0;
-            const allowance = parseFloat(allowanceInput.value) || 0;
-
-            // Calculate total compensation
-            const totalCompensation = basicSalary + allowance;
-
-            // Update the total compensation field
-            totalCompensationInput.value = totalCompensation.toFixed(2);
-        }
-
-        // Add event listeners to recalculate total compensation when inputs change
-        basicSalaryInput.addEventListener('input', calculateTotalCompensation);
-        allowanceInput.addEventListener('input', calculateTotalCompensation);
-    });
-</script>
