@@ -90,7 +90,7 @@
                 <tbody>
                     @foreach ($compensations as $compensation)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($compensation['effective_date'])->format('Y-m-d') }}</td>
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($compensation['effective_date'])->format('m-d-Y') }}</td>
                         <td class="px-6 py-4">{{ number_format(floatval($compensation['basic_salary']), 2) }}</td>
                         <td class="px-6 py-4">{{ number_format(floatval($compensation['allowance']), 2) }}</td>
                         <td class="px-6 py-4">{{ number_format(floatval($compensation['monthly_rate']), 2) }}</td>
