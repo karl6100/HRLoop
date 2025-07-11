@@ -250,20 +250,6 @@ class EmployeeForm extends Component
             'emergency.*.emergency_country' => 'nullable|string',
         ];
     }
-
-    protected function rulesCompensation()
-    {
-        return [
-            'compensations.pay_type' => 'nullable|string',
-            'compensations.basic_salary' => 'nullable|numeric',
-            'compensations.allowance' => 'nullable|numeric',
-            'compensations.monthly_rate' => 'nullable|numeric',
-            'compensations.effective_date' => 'nullable|date',
-            'compensations.remarks' => 'nullable|string',
-            'compensations.is_current' => 'boolean',
-        ];
-    }
-
     /**
      * Custom validation error messages.
      */
@@ -588,6 +574,19 @@ class EmployeeForm extends Component
         $this->mount($this->employee_id, 'view'); // Reload data from DB
     }
 
+    protected function rulesCompensation()
+    {
+        return [
+            'compensations.pay_type' => 'nullable|string',
+            'compensations.basic_salary' => 'nullable|numeric',
+            'compensations.allowance' => 'nullable|numeric',
+            'compensations.monthly_rate' => 'nullable|numeric',
+            'compensations.effective_date' => 'nullable|date',
+            'compensations.remarks' => 'nullable|string',
+            'compensations.is_current' => 'boolean',
+        ];
+    }
+
     public function saveCompensation()
     {
         logger()->debug('💵 Saving single employee compensation...');
@@ -601,6 +600,10 @@ class EmployeeForm extends Component
         }
 
         $employee = Employee::findOrFail($this->employee_id);
+
+        // Compute monthly_rate if not present
+        $this->compensations['monthly_rate'] = floatval($this->compensations['basic_salary']) + floatval($this->compensations['allowance']);
+
 
         $employee->employeeCompensations()->create($this->compensations);
 

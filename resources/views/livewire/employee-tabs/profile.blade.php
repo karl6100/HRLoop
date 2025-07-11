@@ -562,3 +562,4 @@
     @else
     <p class="text-sm text-gray-500">No address records found.</p>
     @endif
+</fieldset>
