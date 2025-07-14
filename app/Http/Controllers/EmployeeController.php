@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -71,8 +72,34 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy($employee_id)
     {
-        //
+        $employee = Employee::findOrFail($employee_id);
+        $employee->delete();
+
+        return redirect()->route('employee.index')->with('success', 'Employee deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->get('search');
+
+        $employees = Employee::query()
+            ->when($search, function ($query, $search) {
+                $query->where('employee_id', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('department', 'like', "%{$search}%")
+                    ->orWhere('position_title', 'like', "%{$search}%")
+                    ->orWhere('company', 'like', "%{$search}%");
+            })
+            ->orderBy('employee_id')
+            ->get();
+
+        if ($request->ajax()) {
+            return view('employee.partials.employee-table', compact('employees'));
+        }
+
+        return redirect()->route('employee.index');
     }
 }

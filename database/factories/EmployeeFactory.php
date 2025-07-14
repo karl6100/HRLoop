@@ -42,9 +42,7 @@ class EmployeeFactory extends Factory
             'sss_number' => $this->faker->unique()->numerify('SSS-#####'),
             'philhealth_number' => $this->faker->unique()->numerify('PH-#####'),
             'pagibig_number' => $this->faker->unique()->numerify('HDMF-#####'),
-            'emergency_contact_name' => $this->faker->name(),
-            'emergency_contact_relationship' => $this->faker->randomElement(['Parent', 'Sibling', 'Spouse', 'Child', 'Friend']),
-            'emergency_contact_phone' => $this->faker->phoneNumber(),
+
         ];
     }
 }

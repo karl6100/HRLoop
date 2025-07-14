@@ -32,7 +32,7 @@
     </div>
 
     <!-- Toggle button for switching modes -->
-    <div class="mt-6 flex justify-start items-center gap-4">
+    <div class="mt-6 mb-2 flex items-center gap-4">
         @if($mode === 'create')
         <!-- Save Button (visible only in create mode) -->
         <button
@@ -50,13 +50,27 @@
             Update
         </button>
         @else
-        <!-- Edit Button (shown only in view mode) -->
-        <button
-            type="button"
-            wire:click="toggleEdit"
-            class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
-            Edit
-        </button>
+        <!-- View Mode: Edit + Delete aligned at far ends -->
+        <div class="flex w-full items-center justify-between">
+            <!-- Edit Button (left-aligned) -->
+            <button
+                type="button"
+                wire:click="toggleEdit"
+                class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+                Edit
+            </button>
+
+            <!-- Delete Button (right-aligned) -->
+            <div x-data>
+                <button
+                    @click="if (confirm('Are you sure you want to delete this employee?')) { $wire.deleteEmployee() }"
+                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                    type="button">
+                    Delete Employee
+                </button>
+            </div>
+
+        </div>
         @endif
 
         <!-- Cancel Button (shown only in create or edit mode) -->
@@ -69,6 +83,7 @@
         </button>
         @endif
     </div>
+
 
     </fieldset>
 
