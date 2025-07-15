@@ -12,9 +12,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::paginate(8); // Fetch all employees
-
-        return view('employee.index', compact('employees'));
+        return view('employee.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -78,28 +76,5 @@ class EmployeeController extends Controller
         $employee->delete();
 
         return redirect()->route('employee.index')->with('success', 'Employee deleted successfully.');
-    }
-
-    public function search(Request $request)
-    {
-        $search = $request->get('search');
-
-        $employees = Employee::query()
-            ->when($search, function ($query, $search) {
-                $query->where('employee_id', 'like', "%{$search}%")
-                    ->orWhere('first_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('department', 'like', "%{$search}%")
-                    ->orWhere('position_title', 'like', "%{$search}%")
-                    ->orWhere('company', 'like', "%{$search}%");
-            })
-            ->orderBy('employee_id')
-            ->get();
-
-        if ($request->ajax()) {
-            return view('employee.partials.employee-table', compact('employees'));
-        }
-
-        return redirect()->route('employee.index');
     }
 }

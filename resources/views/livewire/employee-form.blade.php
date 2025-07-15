@@ -2,14 +2,35 @@
     {{-- Tab Navigation --}}
     <ul class="flex border-b text-sm font-medium text-center text-gray-500 dark:text-gray-400">
         <li class="mr-2">
+            <a href="#" wire:click.prevent="setActiveTab('employment-info')"
+                class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'employment-info' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.75 3a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V5.25A2.25 2.25 0 0017.25 3H6.75zm1.5 6.75h7.5m-7.5 3h7.5m-7.5 3h5.25" />
+                </svg>
+                Overview
+            </a>
+        </li>
+        <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('profile')"
-                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'profile' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'profile' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0" />
+                </svg>
                 Profile
             </a>
         </li>
         <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('compensation')"
-                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'compensation' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'compensation' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8c-1.657 0-3 .843-3 1.882 0 .56.27 1.065.713 1.418l3.338 2.627a1.5 1.5 0 01-1.051 2.664h-.5m.5 0H12m0 0h.5m-.5 0h-.5M21 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z" />
+                </svg>
                 Compensation
             </a>
         </li>
@@ -22,7 +43,9 @@
     </ul>
     {{-- Tab Content --}}
     <div class="mt-4">
-        @if ($activeTab === 'profile')
+        @if ($activeTab === 'employment-info')
+        @include('livewire.employee-tabs.employment-info')
+        @elseif ($activeTab === 'profile')
         @include('livewire.employee-tabs.profile')
         @elseif ($activeTab === 'compensation')
         @include('livewire.employee-tabs.compensation')

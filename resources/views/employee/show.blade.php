@@ -1,8 +1,17 @@
 <x-layouts.app :title="__('Employee')">
     <div class="relative h-full flex-1 p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 mt-1">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <!-- Back Link -->
+            <a href="{{ route('employee.index') }}"
+                class="flex items-center space-x-2 dark:text-white text-gray-600 hover:text-gray-900 transition-colors mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Back to Directory</span>
+            </a>
             <!-- Header -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="w-full px-4 sm:px-6 lg:px-8">
+
                 <div class="py-8">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
