@@ -2,17 +2,6 @@
     {{-- Tab Navigation --}}
     <ul class="flex border-b text-sm font-medium text-center text-gray-500 dark:text-gray-400">
         <li class="mr-2">
-            <a href="#" wire:click.prevent="setActiveTab('employment-info')"
-                class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'employment-info' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6.75 3a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25V5.25A2.25 2.25 0 0017.25 3H6.75zm1.5 6.75h7.5m-7.5 3h7.5m-7.5 3h5.25" />
-                </svg>
-                Overview
-            </a>
-        </li>
-        <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('profile')"
                 class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'profile' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -43,9 +32,7 @@
     </ul>
     {{-- Tab Content --}}
     <div class="mt-4">
-        @if ($activeTab === 'employment-info')
-        @include('livewire.employee-tabs.employment-info')
-        @elseif ($activeTab === 'profile')
+        @if ($activeTab === 'profile')
         @include('livewire.employee-tabs.profile')
         @elseif ($activeTab === 'compensation')
         @include('livewire.employee-tabs.compensation')

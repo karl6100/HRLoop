@@ -33,7 +33,7 @@ class EmployeeForm extends Component
     public $employee_id;
     public $employee;
     public $mode = 'create';
-    public $activeTab = 'employment-info'; // default tab
+    public $activeTab = 'profile'; // default tab
 
     public function toggleEdit()
     {
