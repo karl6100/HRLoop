@@ -20,6 +20,8 @@ class EmployeeForm extends Component
 
     // --- Form Data Structures ---
     public $employees = [];
+    public $status = [];
+    public $position = [];
     public $addresses = [];
     public $educations = [];
     public $dependents = [];
@@ -60,11 +62,28 @@ class EmployeeForm extends Component
         $this->mode = $mode;
 
         if ($employee_id) {
-            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations'])->findOrFail($employee_id);
+            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations', 'employeeStatus', 'employeePositions'])->findOrFail($employee_id);
 
             $this->employees = $employee->toArray();
             $this->employees['birth_date'] = optional($employee->birth_date)->format('Y-m-d');
             $this->employees['hired_date'] = optional($employee->hired_date)->format('Y-m-d');
+            $this->status = $employee->employeeStatus->map(function ($stat) {
+                return [
+                    'employment_status' => $stat->employment_status,
+                    'effective_date' => optional($stat->effective_date)->format('Y-m-d'),
+                    'remarks' => $stat->remarks,
+                ];
+            })->toArray();
+            $this->position = $employee->employeePositions->map(function ($pos) {
+                return [
+                    'position_title' => $pos->position_title,
+                    'job_level' => $pos->job_level,
+                    'department' => $pos->department,
+                    'company' => $pos->company,
+                    'effective_date' => optional($pos->effective_date)->format('Y-m-d'),
+                    'remarks' => $pos->remarks,
+                ];
+            })->toArray();
             $this->addresses = $employee->employeeAddresses->toArray();
             $this->educations = $employee->employeeEducations->toArray();
             $this->emergency = $employee->employeeEmergencies->toArray();
@@ -155,6 +174,21 @@ class EmployeeForm extends Component
                 'remarks' => '',
                 'is_current' => false
             ]];
+
+            $this->status = [[
+                'employment_status' => '',
+                'effective_date' => '',
+                'remarks' => '',
+            ]];
+
+            $this->position = [[
+                'position_title' => '',
+                'job_level' => '',
+                'department' => '',
+                'company' => '',
+                'effective_date' => '',
+                'remarks' => '',
+            ]];
         }
     }
 
@@ -224,6 +258,15 @@ class EmployeeForm extends Component
                 'string',
                 Rule::unique('employees', 'tin_number')->ignore($this->employee_id, 'employee_id'),
             ],
+            'status.employment_status' => 'nullable|string',
+            'status.effective_date' => 'nullable|date',
+            'status.remarks' => 'nullable|string',
+            'position.position_title' => 'nullable|string',
+            'position.job_level' => 'nullable|string',
+            'position.department' => 'nullable|string',
+            'position.company' => 'nullable|string',
+            'position.effective_date' => 'nullable|date',
+            'position.remarks' => 'nullable|string',
             'addresses.*.street' => 'nullable|string',
             'addresses.*.barangay' => 'nullable|string',
             'addresses.*.city' => 'nullable|string',
@@ -392,6 +435,21 @@ class EmployeeForm extends Component
         logger()->debug('💾 Inserting employee record...');
         $employee = Employee::create($employeeData);
 
+        // STEP 4: Create initial status/position record
+        logger()->debug('🔄 Inserting employee status and position records...');
+        $employee->employeeStatus()->create([
+            'employment_status' => $employeeData['employment_status'],
+            'remarks'           => 'Initial employment record',
+        ]);
+
+        $employee->employeePositions()->create([
+            'position_title' => $employeeData['position_title'],
+            'job_level'      => $employeeData['job_level'],
+            'department'     => $employeeData['department'],
+            'company'        => $employeeData['company'],
+            'remarks'        => 'Initial position record',
+        ]);
+
         // STEP 4: Save related records (addresses, education, dependents)
         logger()->debug('📦 Inserting related records...');
 
@@ -456,8 +514,10 @@ class EmployeeForm extends Component
         $this->successMessage = 'Saved successfully';
 
         $this->employee_id = $employee->employee_id; // Set ID for viewing
-        $this->mode = 'view'; // Switch to view mode
-        $this->mount($employee->employee_id, 'view'); // Reload data for newly saved employee
+
+        return redirect()->route('employee.show', ['employee_id' => $this->employee_id]);
+        // $this->mode = 'view'; // Switch to view mode
+        // $this->mount($employee->employee_id, 'view'); // Reload data for newly saved employee
     }
 
     /**

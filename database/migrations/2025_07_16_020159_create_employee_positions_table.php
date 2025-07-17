@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_position', function (Blueprint $table) {
+        Schema::create('employee_positions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('fkey_employee_id');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('position_title');
             $table->string('department');
             $table->string('company');
-            $table->date('effective_date');
+            $table->date('effective_date')->nullable();
             $table->string('remarks')->nullable();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee_position');
+        Schema::dropIfExists('employee_positions');
     }
 };

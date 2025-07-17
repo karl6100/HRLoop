@@ -24,11 +24,12 @@
             </a>
         </li>
         <li class="mr-2">
-            <a href="#" wire:click.prevent="setActiveTab('credits')"
-                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'credits' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
-                Leave Credits
+            <a href="#" wire:click.prevent="setActiveTab('employment-info')"
+                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'employment-info' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                Employment Information
             </a>
         </li>
+
     </ul>
     {{-- Tab Content --}}
     <div class="mt-4">
@@ -36,8 +37,8 @@
         @include('livewire.employee-tabs.profile')
         @elseif ($activeTab === 'compensation')
         @include('livewire.employee-tabs.compensation')
-        @elseif ($activeTab === 'credits')
-        @include('livewire.employee-tabs.credits')
+        @elseif ($activeTab === 'employment-info')
+        @include('livewire.employee-tabs.employment-info')
         @endif
     </div>
 

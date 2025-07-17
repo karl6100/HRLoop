@@ -1,7 +1,8 @@
 <fieldset @if($mode==='view' ) disabled @endif>
     <div class="mb-6">
-        <h class="text-2xl font-bold text-gray-900 dark:text-white">Compensation Details</h>
-        <hr class="mt-1 border-gray-300 dark:border-gray-600">
+        <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Compensation Details</h1>
+        </div>
         <div class="grid gap-6 mb-6 md:grid-cols-2">
             <div class="relative w-full h-full mt-1  p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <div class="grid gap-6 mb-6 md:grid-cols-2">

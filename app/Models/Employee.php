@@ -80,4 +80,14 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeEmergency::class, 'fkey_employee_id', 'employee_id');
     }
+
+    public function employeePositions()
+    {
+        return $this->hasMany(EmployeePosition::class, 'fkey_employee_id', 'employee_id');
+    }
+
+    public function employeeStatus()
+    {
+        return $this->hasMany(EmployeeStatus::class, 'fkey_employee_id', 'employee_id');
+    }
 }

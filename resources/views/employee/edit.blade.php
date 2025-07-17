@@ -31,17 +31,14 @@
                                     @endif
                                 </h1>
                                 <p class="text-lg text-gray-600">{{ $employee->position_title }} • {{ $employee->department }}</p>
+                                <p class="text-lg text-gray-600">{{ $employee->company }}</p>
                                 <p class="text-sm text-gray-500">Employee ID: {{ $employee->employee_id }}</p>
                             </div>
                         </div>
 
                         {{-- Right section: Button aligned to end --}}
                         <div>
-                            <button
-                                type="button"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
-                                Update Status
-                            </button>
+                            
                         </div>
                     </div>
                 </div>

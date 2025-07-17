@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_status', function (Blueprint $table) {
+        Schema::create('employee_statuses', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('fkey_employee_id');
             $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('employment_status');
-            $table->date('effective_date');
+            $table->date('effective_date')->nullable();
             $table->string('remarks')->nullable();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee_status');
+        Schema::dropIfExists('employee_statuses');
     }
 };
