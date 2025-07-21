@@ -4,20 +4,21 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Employee;
-use App\Models\EmployeeStatus;
+use App\Models\EmployeePosition;
 
-class EmployeeStatusForm extends Component
+class EmployeePositionForm extends Component
 {
     // --- Dropdown Option Lists ---
-    public $employmentStatusOptions = ['Probationary', 'Regular', 'Temporary', 'Extra Helper', 'OJT'];
+    public $jobLevelOptions = ['Rank-and-File/Staff', 'Supervisor', 'Department Manager', 'Division Manager', 'Executive', 'None'];
 
     public $employee;
     public $employment_status;
     public $position_title;
+    public $job_level;
     public $remarks;
     public $effective_date;
 
-    public $showStatusModal = false;
+    public $showPositionModal = false;
 
     protected $rules = [
         'employment_status' => 'required|string',
@@ -36,14 +37,14 @@ class EmployeeStatusForm extends Component
         $this->position_title = $employee->position_title;
     }
 
-    public function openStatusModal()
+    public function openPositionModal()
     {
-        $this->showStatusModal = true;
+        $this->showPositionModal = true;
     }
 
-    public function closeStatusModal()
+    public function closePositionModal()
     {
-        $this->showStatusModal = false;
+        $this->showPositionModal = false;
     }
 
     public function save()
@@ -72,7 +73,6 @@ class EmployeeStatusForm extends Component
 
     public function render()
     {
-        return view('livewire.employee-status-form');
+        return view('livewire.employee-position-form');
     }
 }
-

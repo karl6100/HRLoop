@@ -33,6 +33,7 @@
                                 <p class="text-lg text-gray-600">{{ $employee->position_title }} • {{ $employee->department }}</p>
                                 <p class="text-lg text-gray-600">{{ $employee->company }}</p>
                                 <p class="text-sm text-gray-500">Employee ID: {{ $employee->employee_id }}</p>
+                                <p class="text-sm text-gray-500">Employment Status: {{ $employee->employment_status }}</p>
                             </div>
                         </div>
                     </div>

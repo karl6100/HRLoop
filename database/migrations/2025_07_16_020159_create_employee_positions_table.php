@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('fkey_employee_id');
             $table->foreign('fkey_employee_id')->references('employee_id')->on('employees')->onDelete('cascade');
             $table->string('position_title');
+            $table->string('job_level');
             $table->string('department');
             $table->string('company');
             $table->date('effective_date')->nullable();

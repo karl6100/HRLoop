@@ -1,28 +1,39 @@
 <div>
     <!-- Button to open modal -->
-    <button wire:click="openStatusModal"
+    <button wire:click="openPositionModal"
         class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
-        Update Status
+        Update Position Title
     </button>
 
     <!-- Modal -->
-    @if($showStatusModal)
+    @if($showPositionModal)
     <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
         <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md shadow-lg">
-            <h2 class="text-lg font-semibold mb-4">Update Employee Status</h2>
+            <h2 class="text-lg font-semibold mb-4">Update Position Title</h2>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium">Employee Status</label>
-                    <select wire:model="employment_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="">-- Select Employment Status --</option>
-                        @foreach ($employmentStatusOptions as $employmentStatus)
-                        <option value="{{ $employmentStatus }}">{{ $employmentStatus }}</option>
+                    <label class="block text-sm font-medium">Position Title</label>
+                    <input type="text" wire:model="position_title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Job Level</label>
+                    <select wire:model="job_level" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="">-- Select Job Level --</option>
+                        @foreach ($jobLevelOptions as $jobLevel)
+                        <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
                         @endforeach
                     </select>
                     @error('employment_status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
-
+                <div>
+                    <label class="block text-sm font-medium">Company</label>
+                    <input type="text" wire:model="company" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Department</label>
+                    <input type="text" wire:model="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
+                </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Effectivity Date</label>
                     <div class="relative">
@@ -48,7 +59,7 @@
 
             <div class="mt-6 flex justify-end space-x-2">
                 <button wire:click="save" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
-                <button wire:click="closeStatusModal" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Cancel</button>
+                <button wire:click="closePositionModal" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Cancel</button>
             </div>
         </div>
     </div>

@@ -12,6 +12,7 @@ class EmployeePosition extends Model
     protected $fillable = [
         'fkey_employee_id', // Foreign key to the Employee table
         'position_title',
+        'job_level',
         'department',
         'company',
         'remarks',

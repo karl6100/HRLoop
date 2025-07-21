@@ -50,7 +50,7 @@
     </div>
     <div class="grid gap-6 mb-6 md:grid-cols-4">
         <div>
-            <label for="position_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+            <label for="position_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position Title</label>
             <input type="text" wire:model="employees.position_title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Position" required />
             @error('employees.position_title')
             <span class="text-red-600 text-sm">{{ $message }}</span>
