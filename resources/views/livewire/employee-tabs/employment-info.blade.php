@@ -1,18 +1,18 @@
 <fieldset @if($mode==='view' ) disabled @endif>
     {{-- Employment Form --}}
-    <pre>{{ var_dump($position) }}</pre>
     <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
         <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employment Information</h1>
+
     </div>
     <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
             @if($mode === 'edit')
-            @livewire('employee-position-form')
+            <livewire:employee-position-form :employee="$employee" />
             @endif
         </div>
         <div>
             @if($mode === 'edit')
-            @livewire('employee-status-form')
+            <livewire:employee-status-form :employee="$employee" />
             @endif
         </div>
     </div>
@@ -24,18 +24,15 @@
                         <div class="flex items-center space-x-4">
                             <div>
                                 <div class="space-y-1">
-                                    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    <p class="text-lg font-semibold text-gray-900 dark:text-white">       
                                         {{ $position['position_title'] ?? $position->position_title ?? 'N/A' }}
                                     </p>
-
                                     <p class="text-sm text-gray-700 dark:text-gray-300">
                                         {{ $position['department'] ?? $position->department ?? 'N/A' }}
                                     </p>
-
                                     <p class="text-sm text-gray-700 dark:text-gray-300">
                                         {{ $position['company'] ?? $position->company ?? 'N/A' }}
                                     </p>
-
                                     <p class="text-sm text-gray-600 dark:text-gray-400">
                                         {{ \Carbon\Carbon::parse($position['effective_date'] ?? $position->effective_date ?? now())->format('F d, Y') }}
                                     </p>
@@ -43,7 +40,6 @@
                                         {{ $position['remarks'] ?? $position->remarks ?? 'N/A' }}
                                     </p>
                                 </div>
-
                             </div>
                         </div>
                     </div>

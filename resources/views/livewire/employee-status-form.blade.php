@@ -4,7 +4,6 @@
         class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md">
         Update Status
     </button>
-
     <!-- Modal -->
     @if($showStatusModal)
     <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

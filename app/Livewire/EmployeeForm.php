@@ -64,6 +64,7 @@ class EmployeeForm extends Component
         if ($employee_id) {
             $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations', 'employeeStatus', 'employeePositions'])->findOrFail($employee_id);
 
+            $this->employee = $employee;
             $this->employees = $employee->toArray();
             $this->employees['birth_date'] = optional($employee->birth_date)->format('Y-m-d');
             $this->employees['hired_date'] = optional($employee->hired_date)->format('Y-m-d');
