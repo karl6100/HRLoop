@@ -24,7 +24,7 @@
                         <option value="{{ $jobLevel }}">{{ $jobLevel }}</option>
                         @endforeach
                     </select>
-                    @error('employment_status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('job_level') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium">Company</label>

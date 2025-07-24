@@ -65,6 +65,7 @@ class EmployeeForm extends Component
             $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations', 'employeeStatus', 'employeePositions'])->findOrFail($employee_id);
 
             $this->employee = $employee;
+
             $this->employees = $employee->toArray();
             $this->employees['birth_date'] = optional($employee->birth_date)->format('Y-m-d');
             $this->employees['hired_date'] = optional($employee->hired_date)->format('Y-m-d');
@@ -96,6 +97,11 @@ class EmployeeForm extends Component
                     'age' => $dep->dependent_birth_date ? \Carbon\Carbon::parse($dep->dependent_birth_date)->age : null,
                 ];
             })->toArray();
+
+            // Load latest position and status history descending by effective_date
+            $this->position = $employee->employeePositions()->orderByDesc('effective_date')->get();
+            $this->status = $employee->employeeStatus()->orderByDesc('effective_date')->get();
+
             $this->compensations = $employee->employeeCompensations->toArray();
 
             // dd($this->dependents);
@@ -440,6 +446,7 @@ class EmployeeForm extends Component
         logger()->debug('🔄 Inserting employee status and position records...');
         $employee->employeeStatus()->create([
             'employment_status' => $employeeData['employment_status'],
+            'effective_date' => $employeeData['hired_date'],
             'remarks'           => 'Initial employment record',
         ]);
 
@@ -448,6 +455,7 @@ class EmployeeForm extends Component
             'job_level'      => $employeeData['job_level'],
             'department'     => $employeeData['department'],
             'company'        => $employeeData['company'],
+            'effective_date' => $employeeData['hired_date'],
             'remarks'        => 'Initial position record',
         ]);
 
@@ -635,6 +643,21 @@ class EmployeeForm extends Component
         $this->mount($this->employee_id, 'view'); // Reload data from DB
     }
 
+    public function deleteEmployee()
+    {
+        $employee = Employee::findOrFail($this->employee_id);
+
+        $employee->delete();
+
+        session()->flash('success', 'Employee deleted successfully.');
+
+        // Optionally refresh the employee list
+        $this->employees = Employee::all();
+
+        // Redirect to index
+        return redirect()->route('employee.index');
+    }
+
     protected function rulesCompensation()
     {
         return [
@@ -669,24 +692,27 @@ class EmployeeForm extends Component
         $employee->employeeCompensations()->create($this->compensations);
 
         session()->flash('success', 'Employee compensation saved successfully.');
-        $this->successMessage = 'Salary saved successfully';
+        $this->successMessage = 'Compensation saved successfully';
 
         // Optionally reload the view with latest data
-        $this->mount($employee->employee_id, 'view');
+        $this->mount($employee->employee_id, 'edit');
     }
 
-    public function deleteEmployee()
+    public function deleteCompensation($compensationId)
     {
         $employee = Employee::findOrFail($this->employee_id);
 
-        $employee->delete();
+        $compensation = $employee->employeeCompensations()->find($compensationId);
 
-        session()->flash('success', 'Employee deleted successfully.');
+        if ($compensation) {
+            $compensation->delete();
+            session()->flash('success', 'Compensation deleted successfully.');
+        } else {
+            session()->flash('error', 'Compensation not found.');
+        }
 
-        // Optionally refresh the employee list
-        $this->employees = Employee::all();
-
-        // Redirect to index
-        return redirect()->route('employee.index');
+        // Re-fetch the latest compensations
+        $this->compensations = $employee->employeeCompensations()->orderByDesc('effective_date')->get();
+        $this->successMessage = 'Compensation deleted successfully.';
     }
 }

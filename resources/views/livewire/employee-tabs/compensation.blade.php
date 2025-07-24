@@ -43,7 +43,7 @@
                     </div>
                     <div>
                         <div>
-                            <label for="effective_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Effectivity Date</label>
+                            <label for="effective_date" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Effectivity Date</label>
                             <div class="relative max-w-sm">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -93,10 +93,13 @@
                             <th scope="col" class="px-6 py-3">
                                 Remarks
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($compensations as $compensation)
+                        @forelse ($compensations as $compensation)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($compensation['effective_date'])->format('m-d-Y') }}</td>
                             <td class="px-6 py-4">{{ $compensation['pay_type'] }}</td>
@@ -104,8 +107,39 @@
                             <td class="px-6 py-4">₱ {{ number_format(floatval($compensation['allowance']), 2) }}</td>
                             <td class="px-6 py-4">₱ {{ number_format(floatval($compensation['monthly_rate']), 2) }}</td>
                             <td class="px-6 py-4">{{ $compensation['remarks'] }}</td>
+                            <td>
+                                @if($mode !== 'view')
+                                <div x-data>
+                                    <button type="submit" @click="if (confirm('Are you sure you want to delete this compensation?')) { $wire.deleteCompensation({{ $compensation['id'] ?? 'N/A' }}) }"
+                                        class="hover:bg-red-100 dark:hover:bg-red-900 text-white text-sm font-medium rounded-md px-1 py-1 cursor-pointer">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="32"
+                                            height="32"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#ff3b30"
+                                            stroke-width="1"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M4 7l16 0" />
+                                            <path d="M10 11l0 6" />
+                                            <path d="M14 11l0 6" />
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                @endif
+                            </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                No records found.
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <!-- Pagination Links -->

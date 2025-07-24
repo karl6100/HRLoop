@@ -78,7 +78,6 @@ class EmployeeStatusForm extends Component
 
             $this->employee->update([
                 'employment_status' => $this->employment_status,
-                'position_title' => $this->position_title ?? null, // Note: This might be undefined
             ]);
             Log::debug('Employee record updated');
 
