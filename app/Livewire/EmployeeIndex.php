@@ -9,6 +9,8 @@ class EmployeeIndex extends Component
 {
     public $search = '';
     public $searchQuery = '';
+    public $viewMode = 'list'; // default to list view
+
 
     public function performSearch()
     {

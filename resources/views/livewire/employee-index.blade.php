@@ -39,10 +39,52 @@
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Search
             </button>
+
+            <!-- Toggle View Button -->
+            <div class="inline-flex rounded-md shadow-xs" role="group">
+                <button wire:click="$set('viewMode', 'list')" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#9e9e9e"
+                        stroke-width="1"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M9 6l11 0" />
+                        <path d="M9 12l11 0" />
+                        <path d="M9 18l11 0" />
+                        <path d="M5 6l0 .01" />
+                        <path d="M5 12l0 .01" />
+                        <path d="M5 18l0 .01" />
+                    </svg>
+                </button>
+                <button wire:click="$set('viewMode', 'tile')" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#9e9e9e"
+                        stroke-width="1"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                        <path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                        <path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                        <path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+                    </svg>
+                </button>
+            </div>
         </div>
+
+
     </div>
 
-
+    @if ($viewMode === 'list')
     <div class="relative flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -155,11 +197,44 @@
                 </tbody>
             </table>
         </div>
-        <!-- Pagination Links -->
-        <div class="mt-4">
-            {{ $employees->links() }}
-        </div>
     </div>
+    @endif
+
+    @if ($viewMode === 'tile')
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        @forelse ($employees as $employee)
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow p-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                {{ $employee->first_name }} {{ $employee->last_name }}
+            </h3>
+            <p class="text-gray-500 dark:text-gray-400">
+                {{ $employee->position_title }} at {{ $employee->company }}
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-300">Department: {{ $employee->department }}</p>
+            <div class="mt-3 flex items-center gap-2">
+                <a href="{{ route('employee.show', $employee->employee_id) }}"
+                    class="text-sm text-green-600 hover:underline">View</a>
+                <a href="{{ route('employee.edit', $employee->employee_id) }}"
+                    class="text-sm text-yellow-600 hover:underline">Edit</a>
+                <form action="{{ route('employee.destroy', $employee->employee_id) }}" method="POST"
+                    onsubmit="return confirm('Are you sure?');" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                        class="text-sm text-red-600 hover:underline">Delete</button>
+                </form>
+            </div>
+        </div>
+        @empty
+        <p class="text-center text-gray-500 dark:text-gray-400 col-span-full">No records found.</p>
+        @endforelse
+    </div>
+    <!-- Pagination Links -->
+    <div class="mt-4">
+        {{ $employees->links() }}
+    </div>
+    @endif
+
     <div class="mt-4">
         <button onclick="window.location='{{ route('employee.create') }}'" method="GET"
             type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add Employee</button>
