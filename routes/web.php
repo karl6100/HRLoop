@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
@@ -12,12 +14,17 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth',/* 'verified'*/])
     ->name('dashboard');
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
     Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');
     Route::get('/employee/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
     Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
 });
 
 // Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
