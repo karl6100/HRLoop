@@ -14,7 +14,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth',/* 'verified'*/])
     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
     Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');
