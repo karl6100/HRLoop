@@ -4,7 +4,7 @@
             <label for="employee">Select Employee</label>
             <select wire:model="employee_id" id="employee">
                 <option value="">-- Select --</option>
-                @foreach($employee as $employees)
+                @foreach($employees as $employee)
                     <option value="{{ $employee->employee_id }}">{{ $employees->first_name }} {{ $employees->last_name }}</option>
                 @endforeach
             </select>

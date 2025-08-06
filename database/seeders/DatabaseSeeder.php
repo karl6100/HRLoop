@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             EmployeeEducationSeeder::class,
             EmployeeCompensationSeeder::class,
             EmployeeEmergencySeeder::class,
+            RolesAndPermissionsSeeder::class,
 
             // Add other seeders here as needed
         ]);
