@@ -12,12 +12,12 @@ class RegisterEmployeeUser extends Component
     public $email;
     public $password;
 
-    public $employee;
+    public $employees;
 
     public function mount()
     {
         // Only employees who are not yet users
-        $this->employee = Employee::doesntHave('user')->get();
+        $this->employees = Employee::doesntHave('user')->get();
     }
 
     public function register()
