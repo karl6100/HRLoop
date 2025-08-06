@@ -30,6 +30,12 @@
                 Employment Information
             </a>
         </li>
+        <li class="mr-2">
+            <a href="#" wire:click.prevent="setActiveTab('user-account')"
+                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'user-account' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                Account Information
+            </a>
+        </li>
         @endif
 
     </ul>
@@ -41,6 +47,8 @@
         @include('livewire.employee-tabs.compensation')
         @elseif ($activeTab === 'employment-info')
         @include('livewire.employee-tabs.employment-info')
+        @elseif ($activeTab === 'user-account')
+        @include('livewire.employee-tabs.user-account')
         @endif
     </div>
 

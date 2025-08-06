@@ -90,4 +90,9 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeStatus::class, 'fkey_employee_id', 'employee_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

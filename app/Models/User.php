@@ -59,13 +59,9 @@ class User extends Authenticatable
             ->implode('');
     }
 
-    // public function roles()
-    // {
-    //     return $this->belongsToMany(Role::class);
-    // }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 
-    // public function hasRole($role)
-    // {
-    //     return $this->roles()->where('name', $role)->exists();
-    // }
 }
