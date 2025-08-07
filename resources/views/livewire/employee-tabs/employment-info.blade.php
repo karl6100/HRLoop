@@ -59,10 +59,10 @@
                         <p class="text-lg font-semibold text-gray-900 dark:text-white">
                             {{ $statuses['employment_status'] ?? $statuses->employment_status ?? 'N/A' }}
                         </p>
-                        <p class="text-sm text-gray-900 dark:text-white">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
                             {{ \Carbon\Carbon::parse($statuses['effective_date'] ?? $statuses->effective_date ?? now())->format('F d, Y') }}
                         </p>
-                        <p class="text-sm text-gray-900 dark:text-white">
+                        <p class="text-sm italic text-gray-500 dark:text-gray-400">
                             {{ $statuses['remarks'] ?? $statuses->remarks ?? 'N/A' }}
                         </p>
                     </div>

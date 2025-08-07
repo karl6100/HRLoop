@@ -43,7 +43,7 @@ class EmployeePositionForm extends Component
 
     public function mount(Employee $employee)
     {
-        Log::debug('Mounting component with employee', ['employee_id' => $employee->id]);
+        // Log::debug('Mounting component with employee', ['employee_id' => $employee->id]);
 
         $this->employee = $employee;
         $this->position_title = $employee->position_title;
@@ -53,7 +53,7 @@ class EmployeePositionForm extends Component
         $this->remarks = $employee->remarks ?? '';
 
         $latestPosition = $employee->employeePositions()->latest()->first();
-        Log::debug('Latest position title record', ['latest_position' => $latestPosition]);
+        // Log::debug('Latest position title record', ['latest_position' => $latestPosition]);
 
         $this->effective_date = $latestPosition->effective_date ?? now();
     }
@@ -70,18 +70,18 @@ class EmployeePositionForm extends Component
 
     public function save()
     {
-        Log::debug('Save triggered', [
-            'position_title' => $this->position_title,
-            'job_level' => $this->job_level,
-            'company' => $this->company,
-            'department' => $this->department,
-            'remarks' => $this->remarks,
-            'effective_date' => $this->effective_date,
-        ]);
+        // Log::debug('Save triggered', [
+        //     'position_title' => $this->position_title,
+        //     'job_level' => $this->job_level,
+        //     'company' => $this->company,
+        //     'department' => $this->department,
+        //     'remarks' => $this->remarks,
+        //     'effective_date' => $this->effective_date,
+        // ]);
         try {
             $this->validate();
-            Log::debug('Validation passed');
-            Log::debug('Employee model in save()', ['employee' => $this->employee]);
+            // Log::debug('Validation passed');
+            // Log::debug('Employee model in save()', ['employee' => $this->employee]);
             // Save to status table
             $this->employee->employeePositions()->create([
                 'position_title' => $this->position_title,
@@ -91,7 +91,7 @@ class EmployeePositionForm extends Component
                 'remarks' => $this->remarks ?? 'Updated via modal',
                 'effective_date' => $this->effective_date ?? now(),
             ]);
-            Log::debug('Position title record created');
+            // Log::debug('Position title record created');
 
             // Update employee’s main record if needed
             $this->employee->update([
@@ -100,14 +100,14 @@ class EmployeePositionForm extends Component
                 'company' => $this->company,
                 'department' => $this->department,
             ]);
-            Log::debug('Employee record updated');
+            // Log::debug('Employee record updated');
 
             session()->flash('success', 'Position title updated.');
-            Log::debug('Flash message set');
+            // Log::debug('Flash message set');
 
             $this->closePositionModal();
             $this->dispatch('position-updated'); // optional
-            Log::debug('Modal closed and event dispatched');
+            // Log::debug('Modal closed and event dispatched');
 
         } catch (\Exception $e) {
             Log::error('Error saving employee position title', [
@@ -119,7 +119,7 @@ class EmployeePositionForm extends Component
     }
     public function render()
     {
-        Log::debug('Rendering employee-position-form');
+        // Log::debug('Rendering employee-position-form');
         return view('livewire.employee-position-form');
     }
 }

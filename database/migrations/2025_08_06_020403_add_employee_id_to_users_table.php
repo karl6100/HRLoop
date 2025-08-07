@@ -12,10 +12,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('employee_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('employee_id')->nullable()->unique()->constrained()->nullOnDelete();
         });
     }
-
 
     /**
      * Reverse the migrations.
