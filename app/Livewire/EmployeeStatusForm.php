@@ -95,6 +95,7 @@ class EmployeeStatusForm extends Component
             ]);
             session()->flash('error', 'Something went wrong while saving the status.');
         }
+        
     }
 
     public function render()

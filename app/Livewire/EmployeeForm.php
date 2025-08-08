@@ -4,6 +4,10 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Employee;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rule;
 
 
@@ -33,6 +37,8 @@ class EmployeeForm extends Component
      * Initialize the form data when the component is mounted.
      */
     public $employee_id;
+    public $email;
+    public $password;
     public $employee;
     public $mode = 'create';
     public $activeTab = 'profile'; // default tab
@@ -234,7 +240,7 @@ class EmployeeForm extends Component
                 Rule::unique('employees', 'mobile_number')->ignore($this->employee_id, 'employee_id'),
             ],
             'employees.email' => [
-                'nullable',
+                'required',
                 'string',
                 'email',
                 Rule::unique('employees', 'email')->ignore($this->employee_id, 'employee_id'),
@@ -310,6 +316,7 @@ class EmployeeForm extends Component
             'employees.employee_id.unique' => 'This Employee ID is already taken.',
             'employees.first_name.required' => 'Please enter the first name.',
             'employees.last_name.required' => 'Please enter the last name.',
+            'employees.email.required' => 'Email field is required.',
             'employees.email.email' => 'The email must be a valid email address.',
             'employees.email.unique' => 'This email is already taken.',
             'employees.department.required' => 'Department field is required.',
@@ -517,7 +524,26 @@ class EmployeeForm extends Component
             }
         }
 
-        // STEP 5: Notify UI of success
+        /// STEP 5: Create linked User account
+        logger()->debug('👤 Creating user account...');
+        try {
+            $user = User::create([
+                'name' => $employeeData['first_name'] . ' ' . $employeeData['last_name'],
+                'email' => $employeeData['email'],
+                'password' => Hash::make('password123'),
+                'employee_id' => $employeeData['employee_id'],
+            ]);
+
+            if ($user && $user->exists) {
+                logger()->debug('✅ User account created and saved to database:', $user->toArray());
+            } else {
+                logger()->warning('⚠️ User instance created but not saved to database.');
+            }
+        } catch (\Exception $e) {
+            logger()->error('❌ Failed to create user account:', ['error' => $e->getMessage()]);
+            session()->flash('error', 'Employee created but user account failed to create.');
+        }
+        // STEP 6: Notify UI of success
         logger()->debug('✅ All data saved successfully.');
         session()->flash('success', 'Employee saved successfully!');
         $this->successMessage = 'Saved successfully';

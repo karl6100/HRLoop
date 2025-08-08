@@ -19,6 +19,12 @@ class RegisterEmployeeUser extends Component
 
     public string $mode;
 
+    public function toggleMode()
+    {
+        $this->mode = $this->mode === 'view' ? 'edit' : 'view';
+        Log::debug("Mode is now: " . $this->mode);
+    }
+
     public function mount($mode)
     {
         Log::info("RegisterEmployeeUser mounted with mode: {$this->mode}");
@@ -64,7 +70,6 @@ class RegisterEmployeeUser extends Component
 
             session()->flash('success', 'Employee registered successfully.');
             return redirect()->route('login');
-
         } catch (\Exception $e) {
             Log::error('Error in register(): ' . $e->getMessage());
             session()->flash('error', 'Something went wrong. Check logs.');

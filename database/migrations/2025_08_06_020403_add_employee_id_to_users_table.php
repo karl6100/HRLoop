@@ -12,7 +12,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('employee_id')->nullable()->unique()->constrained()->nullOnDelete();
+            $table->string('employee_id')->nullable()->unique();
+
+            // Optionally add a foreign key constraint (if `employees.employee_id` is unique)
+            $table->foreign('employee_id')
+                  ->references('employee_id')
+                  ->on('employees')
+                  ->nullOnDelete(); // or ->cascadeOnDelete(), depending on your use case
         });
     }
 
