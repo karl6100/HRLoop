@@ -18,7 +18,8 @@
                     <flux:navlist.item icon="users" :href="route('employee.index')" :current="request()->routeIs('employee.index')" wire:navigate>{{ __('Employee Directory') }}</flux:navlist.item>
                     <!-- <flux:navlist.item icon="briefcase" :href="route('employee.index')" :current="request()->routeIs('employee.index')" wire:navigate>{{ __('Company') }}</flux:navlist.item>
                     <flux:navlist.item icon="layout-grid" :href="route('employee.index')" :current="request()->routeIs('employee.index')" wire:navigate>{{ __('Departments') }}</flux:navlist.item> -->
-                    <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Users Directory') }}</flux:navlist.item>
+                    <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Manage Users') }}</flux:navlist.item>
+                    <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Roles and Permissions') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

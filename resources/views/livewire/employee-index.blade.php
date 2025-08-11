@@ -4,7 +4,7 @@
             <div class="flex items-center justify-start space-x-4">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Employee Management</h1>
-                    <p class="text-lg text-gray-600">Manage your team members and their information.</p>
+                    <p class="text-lg text-gray-600 dark:text-gray-400">Manage your team members and their information.</p>
                 </div>
             </div>
         </div>
@@ -45,8 +45,8 @@
                 <button wire:click="$set('viewMode', 'list')" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="25"
-                        height="25"
+                        width="20"
+                        height="20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="#9e9e9e"
@@ -64,8 +64,8 @@
                 <button wire:click="$set('viewMode', 'tile')" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="25"
-                        height="25"
+                        width="20"
+                        height="20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="#9e9e9e"
@@ -130,8 +130,8 @@
                                     class="hover:bg-green-100 dark:hover:bg-green-900 text-white text-sm font-medium rounded-md px-1 py-1 cursor-pointer">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        width="32"
-                                        height="32"
+                                        width="28"
+                                        height="28"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="#009688"
@@ -147,8 +147,8 @@
                                     class="hover:bg-yellow-100 dark:hover:bg-yellow-600 text-white text-sm font-medium rounded-md px-1 py-1 cursor-pointer">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        width="32"
-                                        height="32"
+                                        width="28"
+                                        height="28"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="#ffcc00"
@@ -168,8 +168,8 @@
                                         class="hover:bg-red-100 dark:hover:bg-red-900 text-white text-sm font-medium rounded-md px-1 py-1 cursor-pointer">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            width="32"
-                                            height="32"
+                                            width="28"
+                                            height="28"
                                             viewBox="0 0 24 24"
                                             fill="none"
                                             stroke="#ff3b30"

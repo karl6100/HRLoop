@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Livewire\UserIndex;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
@@ -21,12 +22,6 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/employee/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
     Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 });
-
-
-// Route::middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/register-employee', RegisterEmployeeUser::class)->name('register-employee');
-// });
-
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RoleController::class);
