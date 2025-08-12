@@ -1,27 +1,74 @@
-<div class="row mb-3">
-    <div class="col-lg-12 d-flex justify-content-between align-items-center">
-        <h2>Show User</h2>
-        <a class="btn btn-primary btn-sm" href="{{ route('users.index') }}">Back</a>
-    </div>
-</div>
+<fieldset @if($mode==='view' ) disabled @endif>
+    <div class="mb-6">
+        <!-- Header -->
+        <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Manage Roles & Permissions
+            </h1>
+        </div>
 
-<div class="row">
-    <div class="col-12 mb-3">
-        <strong>Name:</strong>
-        <p>{{ $user->name }}</p>
+        <!-- User Info Card -->
+        <div class="grid gap-6 mb-6">
+            <div class="relative w-full h-full mt-1 p-4 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Full Name</label>
+                <input type="text" value="{{ $user->name }}" readonly
+                    class="block w-full p-2.5 text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+
+                <label class="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                <input type="email" value="{{ $user->email }}" readonly
+                    class="block w-full p-2.5 text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+
+                <!-- Role Selection -->
+                <label class="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                <select id="role" wire:model="selectedRole"
+                    class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="">-- Select Role --</option>
+                    @foreach($roles as $role)
+                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Permissions -->
+            <div class="relative w-full h-full mt-1 p-4 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Permissions</h2>
+                <div class="grid grid-cols-1 gap-1">
+                    @foreach($permissions as $permission)
+                    <label class="flex items-center p-2 bg-gray-50 rounded-lg dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                        <input type="checkbox" wire:model="selectedPermissions"
+                            value="{{ $permission->name }}"
+                            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-900 dark:text-gray-300">{{ ucfirst($permission->name) }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+
+        <div class="mt-4 flex justify-start items-center gap-4">
+            @if($mode !== 'view')
+            <button type="button" wire:click="save"
+                class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                Save Changes
+            </button>
+
+            <!-- Cancel Button (shown only in edit mode) -->
+            <button
+                type="button"
+                wire:click="cancel"
+                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                Cancel
+            </button>
+            @elseif
+            <button
+                type="button"
+                wire:click="toggleEdit"
+                class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+                Edit
+            </button>
+            @endif
+        </div>
     </div>
-    <div class="col-12 mb-3">
-        <strong>Email:</strong>
-        <p>{{ $user->email }}</p>
-    </div>
-    <div class="col-12">
-        <strong>Roles:</strong><br>
-        @if($user->getRoleNames()->isNotEmpty())
-            @foreach ($user->getRoleNames() as $role)
-                <span class="badge badge-success">{{ $role }}</span>
-            @endforeach
-        @else
-            <p>No Roles Assigned</p>
-        @endif
-    </div>
-</div>
+</fieldset>

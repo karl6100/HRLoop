@@ -13,7 +13,7 @@ use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function index(Request $request): View
+    public function index()
     {
         return view('users.index');
     }
@@ -24,37 +24,21 @@ class UserController extends Controller
         return view('users.create', compact('roles'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store()
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
-        ]);
-
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
-
-        return redirect()->route('users.index')
-            ->with('success', 'User created successfully');
+        
     }
 
-    public function show($id): View
+    public function show($user)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($user);
         return view('users.show', compact('user'));
     }
 
-    public function edit($id): View
+    public function edit($user): View
     {
-        $user = User::find($id);
-        $roles = Role::pluck('name', 'name')->all();
-        $userRole = $user->roles->pluck('name', 'name')->all();
-        return view('users.edit', compact('user', 'roles', 'userRole'));
+        $user = User::findOrFail($user);
+        return view('users.edit', compact('user'));
     }
 
     public function update(Request $request, $id): RedirectResponse

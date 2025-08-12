@@ -1,3 +1,3 @@
 <x-layouts.app :title="__('Users')">
-    @livewire('user-form', ['id' => $user->id])
+    @livewire('user-form', ['user' => $user])
 </x-layouts.app>
