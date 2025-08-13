@@ -27,8 +27,7 @@
                     type="text"
                     wire:model.defer="searchQuery"
                     placeholder="Search users..."
-                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
+                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
 
             <button wire:click="performSearch"
@@ -110,14 +109,23 @@
                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-900" title="Delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M4 7h16" />
-                                            <path d="M10 11v6" />
-                                            <path d="M14 11v6" />
-                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12" />
-                                            <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
+                                    <button type="submit" class="p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-900" title="Deactivate">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="28"
+                                            height="28"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#ff3b30"
+                                            stroke-width="1"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" />
+                                            <path d="M19 19m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                            <path d="M17 21l4 -4" />
                                         </svg>
+
                                     </button>
                                 </form>
                             </div>
@@ -149,7 +157,7 @@
                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="text-sm text-red-600 hover:underline">Delete</button>
+                    <button type="submit" class="text-sm text-red-600 hover:underline">Deactivate</button>
                 </form>
             </div>
         </div>

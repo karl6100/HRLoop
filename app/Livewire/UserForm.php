@@ -18,6 +18,18 @@ class UserForm extends Component
 
     public $mode = 'view';
 
+    public function updatedUserDeactivate($value)
+    {
+        // Ensure boolean, then persist
+        $this->user->deactivate = (bool) $value;
+        $this->user->save();
+
+        session()->flash(
+            'message',
+            $this->user->deactivate ? 'User deactivated successfully.' : 'User activated successfully.'
+        );
+    }
+
     public function toggleEdit()
     {
         logger('toggleEdit clicked');
@@ -26,7 +38,7 @@ class UserForm extends Component
 
     public function cancel()
     {
-        if ($this->mode === 'create') {
+        if ($this->mode === 'view') {
             return redirect()->route('users.index');
         } elseif ($this->mode === 'edit') {
             $this->mode = 'view'; // Just go back to view mode
@@ -56,9 +68,12 @@ class UserForm extends Component
 
     public function save()
     {
+        $this->user->save(); // saves name, email, is_active, etc.
         $this->user->syncRoles([$this->selectedRole]);
         $this->user->syncPermissions($this->selectedPermissions);
+
         session()->flash('message', 'Roles and permissions updated successfully.');
+        $this->mode = 'view';
     }
 
     public function render()
