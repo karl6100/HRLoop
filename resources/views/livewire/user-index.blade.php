@@ -104,30 +104,8 @@
                                         <path d="M16 5l3 3" />
                                     </svg>
                                 </a>
-
                                 <!-- delete -->
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-900" title="Deactivate">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="28"
-                                            height="28"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="#ff3b30"
-                                            stroke-width="1"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5" />
-                                            <path d="M19 19m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                            <path d="M17 21l4 -4" />
-                                        </svg>
-
-                                    </button>
-                                </form>
+                                <livewire:toggle-deactivate :user="$user" view="list" />
                             </div>
                         </td>
                     </tr>
@@ -154,11 +132,7 @@
             <div class="mt-3 flex items-center gap-3">
                 <a href="{{ route('users.show', $user->id) }}" class="text-sm text-green-600 hover:underline">View</a>
                 <a href="{{ route('users.edit', $user->id) }}" class="text-sm text-yellow-600 hover:underline">Edit</a>
-                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-sm text-red-600 hover:underline">Deactivate</button>
-                </form>
+                <livewire:toggle-deactivate :user="$user" view="tile" />
             </div>
         </div>
         @empty
