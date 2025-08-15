@@ -2,18 +2,16 @@
 
 namespace App\Livewire;
 
-use App\Models\User;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 use Livewire\WithPagination;
 
-class UserIndex extends Component
+class RolesAndPermissionsIndex extends Component
 {
     use WithPagination;
 
     public $search = '';
     public $searchQuery = '';
-    public $viewMode = 'list'; // default to list view
-
 
     public function performSearch()
     {
@@ -38,16 +36,15 @@ class UserIndex extends Component
 
     public function render()
     {
-        $users = User::query()
+        $roles = Role::query()
             ->when($this->search, fn($q) =>
                 $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('email', 'like', "%{$this->search}%")
             )
             ->orderBy('name')
             ->paginate($this->perPage);
 
-        return view('livewire.user-index', [
-            'users' => $users
+        return view('livewire.roles-and-permissions-index', [
+            'roles' => $roles
         ]);
     }
 }
