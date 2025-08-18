@@ -55,7 +55,7 @@
                 <tbody>
                     @forelse ($roles as $role)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td class="px-6 py-3">{{ $roles->firstItem() + $loop->index }}</td>
+                        <td class="px-6 py-3">{{ $roles->firstItem() + $loop->index }}</td>
                         <td class="px-6 py-3">{{ $role->name }}</td>
                         <td class="px-6 py-3 text-center">
                             <div class="flex items-center justify-center gap-3">
@@ -76,7 +76,21 @@
                                     </svg>
                                 </a>
                                 <!-- delete -->
-
+                                <a href="{{ route('roles.delete', $role->id) }}"
+                                    class="p-1 rounded-md hover:bg-green-100 dark:hover:bg-green-900"
+                                    title="View">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="w-7 h-7"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="#009688"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M10 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0" />
+                                        <path d="M21 12c-2.4 4-5.4 6-9 6s-6.6-2-9-6c2.4-4 5.4-6 9-6s6.6 2 9 6" />
+                                    </svg>
+                                </a>
                             </div>
                         </td>
                     </tr>

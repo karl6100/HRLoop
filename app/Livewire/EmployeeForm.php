@@ -40,7 +40,7 @@ class EmployeeForm extends Component
     public $email;
     public $password;
     public $employee;
-    public $mode = 'create';
+    public $mode;
     public $activeTab = 'profile'; // default tab
 
     public function toggleEdit()
