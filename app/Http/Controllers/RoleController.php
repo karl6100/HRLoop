@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class RoleController extends Controller
 {
@@ -30,33 +26,29 @@ class RoleController extends Controller
         return view('roles.create', compact('permission'));
     }
 
-    public function store()
-    {
-
-    }
+    public function store() {}
 
     public function show($id)
     {
         $role = Role::findOrFail($id);
-    
+
         return view('roles.show', compact('role'));
     }
-    
+
     public function edit($id)
     {
         $role = Role::findOrFail($id);
-    
+
         return view('roles.edit', compact('role'));
     }
 
-    public function update()
-    {
-    }
+    public function update() {}
 
     public function destroy($id)
     {
-        DB::table("roles")->where('id', $id)->delete();
-        return redirect()->route('roles.index')
-            ->with('success', 'Role deleted successfully');
+        $role = Role::findOrFail($id);
+        $role->delete();
+
+        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
     }
 }

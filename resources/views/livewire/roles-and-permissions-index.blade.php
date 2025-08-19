@@ -11,13 +11,7 @@
 
     <!-- Controls: Search + Toggle View -->
     <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-4 space-y-4 sm:space-y-0 w-full">
-        <div><!-- Left: Add Employee -->
-            <button onclick="window.location='{{ route('roles.create') }}'" method="GET"
-                type="submit"
-                class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                Add Roles
-            </button>
-        </div>
+         
 
         <!-- Right: Search Input and Button + Toggle -->
         <div class="flex items-center justify-end space-x-2 w-full sm:w-auto">
@@ -76,21 +70,19 @@
                                     </svg>
                                 </a>
                                 <!-- delete -->
-                                <a href="{{ route('roles.delete', $role->id) }}"
-                                    class="p-1 rounded-md hover:bg-green-100 dark:hover:bg-green-900"
-                                    title="View">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="w-7 h-7"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="#009688"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M10 12a2 2 0 1 0 4 0 2 2 0 0 0-4 0" />
-                                        <path d="M21 12c-2.4 4-5.4 6-9 6s-6.6-2-9-6c2.4-4 5.4-6 9-6s6.6 2 9 6" />
-                                    </svg>
-                                </a>
+                                <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this role?');"
+                                    class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-600" title="Delete">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                                            viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="1"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4h6v3" />
+                                        </svg>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
