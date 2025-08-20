@@ -15,11 +15,15 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    @hasanyrole('admin|hr')
                     <flux:navlist.item icon="users" :href="route('employee.index')" :current="request()->routeIs('employee.index')" wire:navigate>{{ __('Employee Directory') }}</flux:navlist.item>
+                    @endhasanyrole
                     <!-- <flux:navlist.item icon="briefcase" :href="route('employee.index')" :current="request()->routeIs('employee.index')" wire:navigate>{{ __('Company') }}</flux:navlist.item>
                     <flux:navlist.item icon="layout-grid" :href="route('employee.index')" :current="request()->routeIs('employee.index')" wire:navigate>{{ __('Departments') }}</flux:navlist.item> -->
+                    @hasrole('admin')
                     <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Manage Users') }}</flux:navlist.item>
                     <flux:navlist.item icon="users" :href="route('roles.index')" :current="request()->routeIs('roles.index')" wire:navigate>{{ __('Roles and Permissions') }}</flux:navlist.item>
+                    @endhasrole
                 </flux:navlist.group>
             </flux:navlist>
 

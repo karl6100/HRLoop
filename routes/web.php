@@ -7,14 +7,14 @@ use App\Http\Controllers\UserController;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
-    return view('portal');
+    return view('welcome');
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth',/* 'verified'*/])
     ->name('dashboard');
 
-Route::middleware(['auth','role:admin'])->group(function () {
+Route::middleware(['auth','role:admin|hr'])->group(function () {
     Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
     Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');

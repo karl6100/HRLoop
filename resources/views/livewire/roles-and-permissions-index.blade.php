@@ -11,7 +11,13 @@
 
     <!-- Controls: Search + Toggle View -->
     <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-4 space-y-4 sm:space-y-0 w-full">
-         
+        <div><!-- Left: Add Employee -->
+            <button onclick="window.location='{{ route('roles.create') }}'" method="GET"
+                type="submit"
+                class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                Add Roles
+            </button>
+        </div>
 
         <!-- Right: Search Input and Button + Toggle -->
         <div class="flex items-center justify-end space-x-2 w-full sm:w-auto">
@@ -50,7 +56,7 @@
                     @forelse ($roles as $role)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-3">{{ $roles->firstItem() + $loop->index }}</td>
-                        <td class="px-6 py-3">{{ $role->name }}</td>
+                        <td class="px-6 py-3">{{ ucfirst($role->name) }}</td>
                         <td class="px-6 py-3 text-center">
                             <div class="flex items-center justify-center gap-3">
                                 <!-- view -->

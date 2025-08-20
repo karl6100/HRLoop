@@ -28,9 +28,9 @@ class RolesAndPermissionsForm extends Component
 
     public function initializeForEdit(Role $role)
     {
+        $this->name = $role->name; // <-- this populates the input field
         $this->selectedPermissions = $role->permissions->pluck('name')->toArray();
     }
-
     public function toggleEdit()
     {
         $this->mode = $this->mode === 'view' ? 'edit' : 'view';
@@ -43,7 +43,6 @@ class RolesAndPermissionsForm extends Component
         }
         if ($this->mode === 'edit') {
             $this->mode = 'view';
-            $this->selectedPermissions = $this->role->permissions->pluck('id')->toArray(); // reset to DB values
         }
     }
 
@@ -95,11 +94,28 @@ class RolesAndPermissionsForm extends Component
 
     public function update()
     {
-        $this->role->syncPermissions($this->selectedPermissions);
-        $this->mode = 'view';
+        logger('Update method called', [
+            'name' => $this->name,
+            'selectedPermissions' => $this->selectedPermissions,
+            'roleId' => $this->role->id ?? null,
+        ]);
 
-        session()->flash('success', 'Role permissions updated successfully.');
+        $validated = $this->validate();
+        logger('Validation passed in update', $validated);
+
+        $this->role->update(['name' => $this->name]);
+        logger('Role updated', ['id' => $this->role->id, 'name' => $this->role->name]);
+
+        $this->role->syncPermissions($this->selectedPermissions);
+        logger('Permissions synced in update', [
+            'roleId' => $this->role->id,
+            'permissions' => $this->selectedPermissions
+        ]);
+
+        $this->mode = 'view';
+        session()->flash('success', 'Role updated successfully.');
     }
+
 
     public function delete()
     {
