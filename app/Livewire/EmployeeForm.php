@@ -329,6 +329,12 @@ class EmployeeForm extends Component
             'employees.sss_number.unique' => 'This SSS number is already taken.',
             'employees.philhealth_number.unique' => 'This PhilHealth number is already taken.',
             'employees.pagibig_number.unique' => 'This Pag-IBIG number is already taken.',
+            'compensations.basic_salary.required' => 'The basic salary is required.',
+            'compensations.basic_salary.numeric' => 'The basic salary must be a number.',
+            'compensations.pay_type.required' => 'Please select a pay type.',
+            'compensations.monthly_rate.required' => 'The monthly rate is required.',
+            'compensations.effective_date.required' => 'The effective date is required.',
+            'compensations.remarks.required' => 'Please provide remarks.',
         ];
     }
 
@@ -687,13 +693,13 @@ class EmployeeForm extends Component
     protected function rulesCompensation()
     {
         return [
-            'compensations.pay_type' => 'nullable|string',
-            'compensations.basic_salary' => 'nullable|numeric',
-            'compensations.allowance' => 'nullable|numeric',
-            'compensations.monthly_rate' => 'nullable|numeric',
-            'compensations.effective_date' => 'nullable|date',
-            'compensations.remarks' => 'nullable|string',
-            'compensations.is_current' => 'boolean',
+            'compensations.pay_type'       => 'required|string',
+            'compensations.basic_salary'   => 'required|numeric|min:0',
+            'compensations.allowance'      => 'nullable|numeric|min:0',
+            'compensations.monthly_rate'   => 'required|numeric|min:0',
+            'compensations.effective_date' => 'required|date',
+            'compensations.remarks'        => 'required|string',
+            // 'compensations.is_current'     => 'required|boolean',
         ];
     }
 
@@ -708,6 +714,14 @@ class EmployeeForm extends Component
             logger()->error('❌ Compensation validation failed:', $e->errors());
             throw $e;
         }
+        // Trap: convert "" to null for numeric fields
+        if ($this->compensations['allowance'] === '') {
+            $this->compensations['allowance'] = null;
+        }
+
+        $this->compensations['monthly_rate'] =
+            floatval($this->compensations['basic_salary']) + floatval($this->compensations['allowance'] ?? 0);
+
 
         $employee = Employee::findOrFail($this->employee_id);
 

@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Livewire\UserForm;
+use App\Livewire\UserIndex;
+
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
@@ -22,20 +25,21 @@ Route::middleware(['auth','role:admin|hr'])->group(function () {
     Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 });
 
-Route::middleware(['auth','role:admin'])->group(function () {
-    Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
+Route::get('/test-dropdown', function () {
+    return view('test');
 });
 
-// Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
-// // Route::get('/employee', EmployeeIndex::class)->name('employee.index');
-// Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
-// // Route::post('/employee', [EmployeeController::class, 'store'])->name('employee.store');
-// Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');
-// Route::get('/employee/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
-// // Route::put('/employee/{employee_id}', [EmployeeController::class, 'update'])->name('employee.update');
-// Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
-// // Route::get('/employee/search', [EmployeeController::class, 'search'])->name('employee.search');
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::resource('roles', RoleController::class);
+    // Route::resource('users', UserController::class);
+    Route::get('/users/{user}/edit', UserForm::class)->name('users.edit');
+    Route::get('/users', UserIndex::class)->name('users.index');
+    Route::get('/users/create', UserForm::class)->name('users.create');
+    Route::post('/users/{user}/update', UserForm::class)->name('users.update');
+    Route::post('/users/store', UserForm::class)->name('users.store');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/users/{user}/show', [UserController::class, 'show'])->name('users.show');
+});
 
 
 Route::middleware(['auth'])->group(function () {

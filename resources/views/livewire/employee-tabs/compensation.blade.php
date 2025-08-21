@@ -21,18 +21,25 @@
                             <option value="{{ $employeePayType }}">{{ $employeePayType }}</option>
                             @endforeach
                         </select>
+                        @error('compensations.pay_type')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
 
                         <!-- Basic Salary -->
                         <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white ">Basic Salary</label>
                         <input type="number" x-model="basic" wire:model="compensations.basic_salary"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]"
                             placeholder="0.00" />
+                        @error('compensations.basic_salary')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
 
                         <!-- Allowance -->
-                        <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
+                        <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Allowance <span class="italic">(if applicable)</span> </label>
                         <input type="number" x-model="allowance" wire:model="compensations.allowance"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]"
                             placeholder="0.00" />
+
 
                         <!-- Total Compensation -->
                         <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Total Compensation</label>
@@ -40,6 +47,9 @@
                             :value="`₱${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             disabled />
+                        @error('compensations.monthly_rate')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div>
                         <div>
@@ -51,9 +61,15 @@
                                     </svg>
                                 </div>
                                 <input wire:model="compensations.effective_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                                @error('compensations.effective_date')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                             <label for="compensation_remarks" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Remarks</label>
                             <textarea wire:model="compensations.remarks" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                            @error('compensations.remarks')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                             @if ($mode === 'create' || $mode === 'edit')
                             <div class="mt-4 flex justify-start">
                                 <button
