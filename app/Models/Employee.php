@@ -95,4 +95,9 @@ class Employee extends Model
     {
         return $this->hasOne(User::class, 'employee_id', 'id');
     }
+
+    public function driverLicenses()
+    {
+        return $this->hasMany(DriverLicense::class, 'fkey_employee_id', 'employee_id');
+    }
 }

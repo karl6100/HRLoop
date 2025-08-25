@@ -8,7 +8,6 @@
             </div>
         </div>
     </div>
-
     <!-- Controls: Search + Toggle View -->
     <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-4 space-y-4 sm:space-y-0 w-full">
         <div><!-- Left: Add Employee -->

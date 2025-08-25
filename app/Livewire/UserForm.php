@@ -49,7 +49,8 @@ class UserForm extends Component
     {
         $this->user = $user;
         $this->roles = Role::all();
-        $this->permissions = Permission::all();
+        // Fetch permissions in descending order by name
+        $this->permissions = Permission::orderBy('name', 'desc')->get();
 
         // Preload user role and permissions
         $this->selectedRole = $user->roles->pluck('name')->first();

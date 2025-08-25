@@ -19,7 +19,8 @@ class RolesAndPermissionsForm extends Component
         $this->role = $role;
         $this->mode = $mode;
 
-        $this->permissions = Permission::all();
+        // Fetch permissions in descending order by name
+        $this->permissions = Permission::orderBy('name', 'desc')->get();
 
         if ($mode === 'edit' || $mode === 'view') {
             $this->initializeForEdit($role);

@@ -17,13 +17,28 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth',/* 'verified'*/])
     ->name('dashboard');
 
-Route::middleware(['auth','role:admin|hr'])->group(function () {
-    Route::get('employee', [EmployeeController::class, 'index'])->name('employee.index');
-    Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
-    Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])->name('employee.show');
-    Route::get('/employee/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
-    Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
-});
+    Route::middleware(['auth'])->group(function () {
+        Route::get('employee', [EmployeeController::class, 'index'])
+            ->name('employee.index')
+            ->middleware('permission:employees.list');
+    
+        Route::get('employee/create', [EmployeeController::class, 'create'])
+            ->name('employee.create')
+            ->middleware('permission:employees.create');
+    
+        Route::get('/employee/{employee_id}', [EmployeeController::class, 'show'])
+            ->name('employee.show')
+            ->middleware('permission:employees.view');
+    
+        Route::get('/employee/{employee_id}/edit', [EmployeeController::class, 'edit'])
+            ->name('employee.edit')
+            ->middleware('permission:employees.edit');
+    
+        Route::delete('/employee/{employee_id}', [EmployeeController::class, 'destroy'])
+            ->name('employee.destroy')
+            ->middleware('permission:employees.delete');
+    });
+    
 
 Route::get('/test-dropdown', function () {
     return view('test');

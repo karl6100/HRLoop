@@ -12,11 +12,13 @@
     <div class="flex flex-wrap sm:flex-nowrap items-center justify-between pb-4 space-y-4 sm:space-y-0 w-full">
         <!-- Left: Add Employee -->
         <div>
+            @can('employees.create')
             <button onclick="window.location='{{ route('employee.create') }}'" method="GET"
                 type="submit"
                 class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                 Add Employee
             </button>
+            @endcan
         </div>
 
         <!-- Right: Search Input and Button -->
@@ -126,6 +128,7 @@
                         <td class="px-2 py-2">
                             <div class="flex gap-4">
                                 <!-- view -->
+                                @can('employees.view')
                                 <button onclick="window.location='{{ route('employee.show', $employee->employee_id) }}'" type="button"
                                     class="hover:bg-green-100 dark:hover:bg-green-900 text-white text-sm font-medium rounded-md px-1 py-1 cursor-pointer">
                                     <svg
@@ -142,7 +145,9 @@
                                         <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
                                     </svg>
                                 </button>
+                                @endcan
                                 <!-- edit -->
+                                @can('employees.edit')
                                 <button onclick="window.location='{{ route('employee.edit', $employee->employee_id) }}'" type="button"
                                     class="hover:bg-yellow-100 dark:hover:bg-yellow-600 text-white text-sm font-medium rounded-md px-1 py-1 cursor-pointer">
                                     <svg
@@ -160,7 +165,9 @@
                                         <path d="M16 5l3 3" />
                                     </svg>
                                 </button>
+                                @endcan
                                 <!-- delete -->
+                                @can('employees.delete')
                                 <form action="{{ route('employee.destroy', $employee->employee_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this employee?');" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -184,6 +191,7 @@
                                         </svg>
                                     </button>
                                 </form>
+                                @endcan
                             </div>
                         </td>
                     </tr>
@@ -212,10 +220,15 @@
             </p>
             <p class="text-sm text-gray-600 dark:text-gray-300">Department: {{ $employee->department }}</p>
             <div class="mt-3 flex items-center gap-2">
+                @can('employees.view')
                 <a href="{{ route('employee.show', $employee->employee_id) }}"
                     class="text-sm text-green-600 hover:underline">View</a>
+                @endcan
+                @can('employees.edit')
                 <a href="{{ route('employee.edit', $employee->employee_id) }}"
                     class="text-sm text-yellow-600 hover:underline">Edit</a>
+                @endcan
+                @can('employees.delete')
                 <form action="{{ route('employee.destroy', $employee->employee_id) }}" method="POST"
                     onsubmit="return confirm('Are you sure?');" class="inline">
                     @csrf
@@ -223,6 +236,7 @@
                     <button type="submit"
                         class="text-sm text-red-600 hover:underline">Delete</button>
                 </form>
+                @endcan
             </div>
         </div>
         @empty
@@ -236,7 +250,9 @@
     @endif
 
     <div class="mt-4">
+        @can('employees.create')
         <button onclick="window.location='{{ route('employee.create') }}'" method="GET"
             type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add Employee</button>
+        @endcan
     </div>
 </div>
