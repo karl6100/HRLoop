@@ -28,8 +28,24 @@ class EmployeeForm extends Component
     public $educations = [];
     public $dependents = [];
     public $emergency = [];
-    public $compensations = [];
+    public $compensationForm = [
+        'pay_type' => '',
+        'basic_salary' => '',
+        'allowance' => '',
+        'monthly_rate' => '',
+        'effective_date' => '',
+        'remarks' => '',
+    ];
+    public $compensationHistory = []; // Loaded from $employee->compensations
     public $successMessage = '';
+
+    // --- Driver Licenses ---
+    public $license_number;
+    public $license_type;
+    public $expiry_date;
+    public $license_categories = []; // for checkbox inputs
+    public $licenses = [];           // holds loaded licenses
+
 
     /**
      * Initialize the form data when the component is mounted.
@@ -106,7 +122,10 @@ class EmployeeForm extends Component
             $this->position = $employee->employeePositions()->orderByDesc('effective_date')->get();
             $this->status = $employee->employeeStatus()->orderByDesc('effective_date')->get();
 
-            $this->compensations = $employee->employeeCompensations->toArray();
+            $this->compensationHistory = $employee->employeeCompensations()
+                ->orderByDesc('effective_date')
+                ->get()
+                ->toArray();
 
             // dd($this->dependents);
         } else {
@@ -175,7 +194,7 @@ class EmployeeForm extends Component
                 'emergency_country' => ''
             ]];
 
-            $this->compensations = [[
+            $this->compensationForm = [
                 'fkey_employee_id' => '',
                 'pay_type' => '',
                 'basic_salary' => '',
@@ -184,7 +203,7 @@ class EmployeeForm extends Component
                 'effective_date' => '',
                 'remarks' => '',
                 'is_current' => false
-            ]];
+            ];
 
             $this->status = [[
                 'employment_status' => '',
@@ -200,6 +219,8 @@ class EmployeeForm extends Component
                 'effective_date' => '',
                 'remarks' => '',
             ]];
+
+            $this->loadLicenses();
         }
     }
 
@@ -232,7 +253,7 @@ class EmployeeForm extends Component
                 'string',
                 Rule::unique('employees', 'telephone_number')->ignore($this->employee_id, 'employee_id'),
             ],
-            'employee.mobile_number' => [
+            'employees.mobile_number' => [
                 'nullable',
                 'string',
                 Rule::unique('employees', 'mobile_number')->ignore($this->employee_id, 'employee_id'),
@@ -302,6 +323,11 @@ class EmployeeForm extends Component
             'emergency.*.emergency_province' => 'nullable|string',
             'emergency.*.emergency_zip_code' => 'nullable|string',
             'emergency.*.emergency_country' => 'nullable|string',
+            'license_number' => 'nullable|string|unique:driver_licenses,license_number',
+            'license_type'   => 'nullable|string',
+            'expiry_date'    => 'nullable|date',
+            'license_categories' => 'array|min:0',
+
         ];
     }
     /**
@@ -322,17 +348,16 @@ class EmployeeForm extends Component
             'employees.position_title.required' => 'Position title is required.',
             'employees.job_level.required' => 'Job level is required.',
             'employees.hired_date.required' => 'Hired date is required.',
-            'employees.telephone_number' => 'Hired date must be a valid date.',
             'employees.mobile_number.unique' => 'This mobile number is already taken.',
             'employees.sss_number.unique' => 'This SSS number is already taken.',
             'employees.philhealth_number.unique' => 'This PhilHealth number is already taken.',
             'employees.pagibig_number.unique' => 'This Pag-IBIG number is already taken.',
-            'compensations.basic_salary.required' => 'The basic salary is required.',
-            'compensations.basic_salary.numeric' => 'The basic salary must be a number.',
-            'compensations.pay_type.required' => 'Please select a pay type.',
-            'compensations.monthly_rate.required' => 'The monthly rate is required.',
-            'compensations.effective_date.required' => 'The effective date is required.',
-            'compensations.remarks.required' => 'Please provide remarks.',
+            'compensationForm.basic_salary.required' => 'The basic salary is required.',
+            'compensationForm.basic_salary.numeric'  => 'The basic salary must be a number.',
+            'compensationForm.pay_type.required'     => 'Please select a pay type.',
+            'compensationForm.monthly_rate.required' => 'The monthly rate is required.',
+            'compensationForm.effective_date.required' => 'The effective date is required.',
+            'compensationForm.remarks.required'      => 'Please provide remarks.',
         ];
     }
 
@@ -691,12 +716,12 @@ class EmployeeForm extends Component
     protected function rulesCompensation()
     {
         return [
-            'compensations.pay_type'       => 'required|string',
-            'compensations.basic_salary'   => 'required|numeric|min:0',
-            'compensations.allowance'      => 'nullable|numeric|min:0',
-            'compensations.monthly_rate'   => 'required|numeric|min:0',
-            'compensations.effective_date' => 'required|date',
-            'compensations.remarks'        => 'required|string',
+            'compensationForm.pay_type'       => 'required|string',
+            'compensationForm.basic_salary'   => 'required|numeric|min:0',
+            'compensationForm.allowance'      => 'nullable|numeric|min:0',
+            'compensationForm.monthly_rate'   => 'required|numeric|min:0',
+            'compensationForm.effective_date' => 'required|date',
+            'compensationForm.remarks'        => 'required|string',
             // 'compensations.is_current'     => 'required|boolean',
         ];
     }
@@ -705,6 +730,16 @@ class EmployeeForm extends Component
     {
         logger()->debug('💵 Saving single employee compensation...');
 
+        // Normalize allowance
+        if ($this->compensationForm['allowance'] === '') {
+            $this->compensationForm['allowance'] = null;
+        }
+
+        // Compute monthly_rate before validation
+        $this->compensationForm['monthly_rate'] =
+            floatval($this->compensationForm['basic_salary']) +
+            floatval($this->compensationForm['allowance'] ?? 0);
+
         try {
             $validated = $this->validate($this->rulesCompensation());
             logger()->debug('✅ Compensation validation passed.');
@@ -712,34 +747,38 @@ class EmployeeForm extends Component
             logger()->error('❌ Compensation validation failed:', $e->errors());
             throw $e;
         }
-        // Trap: convert "" to null for numeric fields
-        if ($this->compensations['allowance'] === '') {
-            $this->compensations['allowance'] = null;
-        }
-
-        $this->compensations['monthly_rate'] =
-            floatval($this->compensations['basic_salary']) + floatval($this->compensations['allowance'] ?? 0);
-
 
         $employee = Employee::findOrFail($this->employee_id);
-
-        // Compute monthly_rate if not present
-        $this->compensations['monthly_rate'] = floatval($this->compensations['basic_salary']) + floatval($this->compensations['allowance']);
-
-
-        $employee->employeeCompensations()->create($this->compensations);
+        $employee->employeeCompensations()->create($validated['compensationForm']);
 
         session()->flash('success', 'Employee compensation saved successfully.');
         $this->successMessage = 'Compensation saved successfully';
 
-        // Optionally reload the view with latest data
-        $this->mount($employee->employee_id, 'edit');
+        // Reload history
+        $this->compensationHistory = $employee->employeeCompensations()
+            ->orderByDesc('effective_date')
+            ->get()
+            ->toArray();
+
+        $this->resetCompensationForm();
+
+        session()->flash('message', 'Compensation saved successfully.');
+    }
+
+    private function resetCompensationForm()
+    {
+        $this->compensationForm = [
+            'pay_type' => '',
+            'basic_salary' => '',
+            'monthly_rate' => '',
+            'effective_date' => '',
+            'remarks' => '',
+        ];
     }
 
     public function deleteCompensation($compensationId)
     {
         $employee = Employee::findOrFail($this->employee_id);
-
         $compensation = $employee->employeeCompensations()->find($compensationId);
 
         if ($compensation) {
@@ -749,8 +788,55 @@ class EmployeeForm extends Component
             session()->flash('error', 'Compensation not found.');
         }
 
-        // Re-fetch the latest compensations
-        $this->compensations = $employee->employeeCompensations()->orderByDesc('effective_date')->get();
-        $this->successMessage = 'Compensation deleted successfully.';
+        // Refresh history
+        $this->compensationHistory = $employee->employeeCompensations()
+            ->orderByDesc('effective_date')
+            ->get()
+            ->toArray();
+    }
+
+    public function loadLicenses()
+    {
+        if ($this->employee_id) {
+            $employee = Employee::find($this->employee_id);
+            $this->licenses = $employee->driverLicenses()->with('categories')->get()->toArray();
+        }
+    }
+
+    public function saveLicense()
+    {
+        $this->validate([
+            'license_number' => 'required|string|unique:driver_licenses,license_number',
+            'license_type'   => 'required|string',
+            'expiry_date'    => 'required|date',
+            'license_categories' => 'required|array|min:1',
+        ]);
+
+        $employee = Employee::findOrFail($this->employee_id);
+
+        $license = $employee->driverLicenses()->create([
+            'license_number' => $this->license_number,
+            'license_type'   => $this->license_type,
+            'expiry_date'    => $this->expiry_date,
+        ]);
+
+        foreach ($this->license_categories as $code) {
+            $license->categories()->create([
+                'category_code' => $code,
+            ]);
+        }
+
+        $this->reset(['license_number', 'license_type', 'expiry_date', 'license_categories']);
+        $this->loadLicenses();
+
+        session()->flash('success', 'Driver license added successfully.');
+    }
+
+    public function deleteLicense($licenseId)
+    {
+        $employee = Employee::findOrFail($this->employee_id);
+        $employee->driverLicenses()->where('id', $licenseId)->delete();
+
+        $this->loadLicenses();
     }
 }

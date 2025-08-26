@@ -8,8 +8,8 @@ use App\Models\DriverLicense;
 use App\Models\DriverLicenseCategory;
 
 class EmployeeDriverLicenses extends Component
-{
-    public Employee $employee;
+{ 
+    public $employee;
 
     public $license_number, $license_type, $expiry_date;
     public $categories = []; // array of selected categories
@@ -23,6 +23,8 @@ class EmployeeDriverLicenses extends Component
 
     public function mount(Employee $employee)
     {
+         Log::debug('Mounting component with employee', ['employee_id' => $employee->id]);
+         $this->employee = Employee::findOrFail($employee);
         $this->employee = $employee;
     }
 
@@ -35,7 +37,7 @@ class EmployeeDriverLicenses extends Component
             'license_type'   => $this->license_type,
             'expiry_date'    => $this->expiry_date,
         ]);
-        
+
         foreach ($this->categories as $code) {
             $license->categories()->create([
                 'category_code' => $code,

@@ -248,7 +248,6 @@
             @enderror
         </div>
     </div>
-
     <!-- Emergency Contact Information -->
     {{-- Emergency Form --}}
     <div class="mb-4 mt-4 rounded p-1 transition-colors duration-300 bg-blue-100 dark:bg-gray-800">

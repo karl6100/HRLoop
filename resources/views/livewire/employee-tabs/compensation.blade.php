@@ -7,47 +7,47 @@
             <div class="relative w-full h-full mt-1  p-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
                 <div class="grid gap-6 mb-6 md:grid-cols-2">
                     <div x-data="{
-                        basic: @entangle('compensation.basic_salary'),
-                        allowance: @entangle('compensation.allowance'),
+                        basic: @entangle('compensationForm.basic_salary'),
+                        allowance: @entangle('compensationForm.allowance'),
                         get total() {
                             return (parseFloat(this.basic) || 0) + (parseFloat(this.allowance) || 0);
                         }
                     }">
                         <!-- Pay Type -->
                         <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Pay Type</label>
-                        <select wire:model="compensations.pay_type"
+                        <select wire:model="compensationForm.pay_type"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @foreach ($employeePayTypeOptions as $employeePayType)
                             <option value="{{ $employeePayType }}">{{ $employeePayType }}</option>
                             @endforeach
                         </select>
-                        @error('compensations.pay_type')
+                        @error('compensationForm.pay_type')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
 
                         <!-- Basic Salary -->
                         <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white ">Basic Salary</label>
-                        <input type="number" x-model="basic" wire:model="compensations.basic_salary"
+                        <input type="number" x-model="basic" wire:model="compensationForm.basic_salary"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]"
                             placeholder="0.00" />
-                        @error('compensations.basic_salary')
+                        @error('compensationForm.basic_salary')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
 
                         <!-- Allowance -->
                         <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Allowance <span class="italic">(if applicable)</span> </label>
-                        <input type="number" x-model="allowance" wire:model="compensations.allowance"
+                        <input type="number" x-model="allowance" wire:model="compensationForm.allowance"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [moz-appearance:textfield]"
                             placeholder="0.00" />
 
 
                         <!-- Total Compensation -->
                         <label class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Total Compensation</label>
-                        <input type="text" wire:model="compensations.monthly_rate"
+                        <input type="text" wire:model="compensationForm.monthly_rate"
                             :value="`₱${total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             disabled />
-                        @error('compensations.monthly_rate')
+                        @error('compensationForm.monthly_rate')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -60,14 +60,14 @@
                                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                     </svg>
                                 </div>
-                                <input wire:model="compensations.effective_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
-                                @error('compensations.effective_date')
+                                <input wire:model="compensationForm.effective_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                                @error('compensationForm.effective_date')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
                             <label for="compensation_remarks" class="block mb-2 mt-2 text-sm font-medium text-gray-900 dark:text-white">Remarks</label>
-                            <textarea wire:model="compensations.remarks" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                            @error('compensations.remarks')
+                            <textarea wire:model="compensationForm.remarks" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                            @error('compensationForm.remarks')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                             @if ($mode === 'create' || $mode === 'edit')
@@ -115,7 +115,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($compensations as $compensation)
+                        @forelse ($compensationHistory as $compensation)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($compensation['effective_date'])->format('m-d-Y') }}</td>
                             <td class="px-6 py-4">{{ $compensation['pay_type'] }}</td>

@@ -1,6 +1,5 @@
 <div class="p-4">
     <h2 class="text-xl font-bold mb-2">Driver’s Licenses</h2>
-
     {{-- Add Form --}}
     <form wire:submit.prevent="save" class="space-y-3">
         <input type="text" wire:model="license_number" placeholder="License Number" class="border p-2 w-full">
@@ -16,14 +15,9 @@
                 </label>
             @endforeach
         </div>
-
-
         <input type="date" wire:model="expiry_date" class="border p-2 w-full">
-
-
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
     </form>
-
     {{-- Display Licenses --}}
     <table class="mt-4 w-full border">
         <thead>

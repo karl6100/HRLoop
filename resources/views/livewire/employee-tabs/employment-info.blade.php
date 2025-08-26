@@ -21,7 +21,6 @@
             @endif
         </div>
     </div>
-
     <div class="grid gap-2 mb-2 md:grid-cols-2">
         <div>
             {{-- Position Loop (Descending by effective_date) --}}
