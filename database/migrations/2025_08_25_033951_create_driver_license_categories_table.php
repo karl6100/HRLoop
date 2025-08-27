@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('driver_license_categories', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('driver_license_id');
             $table->foreign('driver_license_id')->references('id')->on('drivers_license')->onDelete('cascade');
             $table->string('category_code');        // A, B, C, D, etc.
-            $table->string('description')->nullable(true); // ex. "Motorcycle", "Passenger Cars"
         });
     }
 
