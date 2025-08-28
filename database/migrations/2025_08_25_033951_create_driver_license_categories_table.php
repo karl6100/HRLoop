@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('driver_license_id');
-            $table->foreign('driver_license_id')->references('id')->on('drivers_license')->onDelete('cascade');
+            $table->foreign('driver_license_id')->references('id')->on('driver_licenses')->onDelete('cascade');
             $table->string('category_code');        // A, B, C, D, etc.
         });
     }

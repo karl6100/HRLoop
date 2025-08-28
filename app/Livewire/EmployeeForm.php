@@ -39,14 +39,6 @@ class EmployeeForm extends Component
     public $compensationHistory = []; // Loaded from $employee->compensations
     public $successMessage = '';
 
-    // --- Driver Licenses ---
-    public $license_number;
-    public $license_type;
-    public $expiry_date;
-    public $license_categories = []; // for checkbox inputs
-    public $licenses = [];           // holds loaded licenses
-
-
     /**
      * Initialize the form data when the component is mounted.
      */
@@ -219,8 +211,6 @@ class EmployeeForm extends Component
                 'effective_date' => '',
                 'remarks' => '',
             ]];
-
-            $this->loadLicenses();
         }
     }
 
@@ -793,50 +783,5 @@ class EmployeeForm extends Component
             ->orderByDesc('effective_date')
             ->get()
             ->toArray();
-    }
-
-    public function loadLicenses()
-    {
-        if ($this->employee_id) {
-            $employee = Employee::find($this->employee_id);
-            $this->licenses = $employee->driverLicenses()->with('categories')->get()->toArray();
-        }
-    }
-
-    public function saveLicense()
-    {
-        $this->validate([
-            'license_number' => 'required|string|unique:driver_licenses,license_number',
-            'license_type'   => 'required|string',
-            'expiry_date'    => 'required|date',
-            'license_categories' => 'required|array|min:1',
-        ]);
-
-        $employee = Employee::findOrFail($this->employee_id);
-
-        $license = $employee->driverLicenses()->create([
-            'license_number' => $this->license_number,
-            'license_type'   => $this->license_type,
-            'expiry_date'    => $this->expiry_date,
-        ]);
-
-        foreach ($this->license_categories as $code) {
-            $license->categories()->create([
-                'category_code' => $code,
-            ]);
-        }
-
-        $this->reset(['license_number', 'license_type', 'expiry_date', 'license_categories']);
-        $this->loadLicenses();
-
-        session()->flash('success', 'Driver license added successfully.');
-    }
-
-    public function deleteLicense($licenseId)
-    {
-        $employee = Employee::findOrFail($this->employee_id);
-        $employee->driverLicenses()->where('id', $licenseId)->delete();
-
-        $this->loadLicenses();
     }
 }
