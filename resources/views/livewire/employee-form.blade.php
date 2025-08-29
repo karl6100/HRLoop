@@ -49,7 +49,7 @@
         @elseif ($activeTab === 'employment-info')
         @include('livewire.employee-tabs.employment-info')
         @elseif ($activeTab === 'drivers-license')
-        <livewire:employee-driver-licenses :employee="$employee" />
+        @include('livewire.employee-tabs.drivers-license')
         @endif
     </div>
 

@@ -13,31 +13,11 @@ class EmployeeDriverLicenses extends Component
     public $license_number, $license_type, $expiry_date;
     public $categories = [];
 
-    public function rules()
+    public function mount(Employee $employee)
     {
-        $licenseId = optional(optional($this->employee)->driverLicenses->first())->id;
+        $this->employee = $employee->load('driverLicenses.categories');
 
-        return [
-            'license_number' => 'required|string|unique:driver_licenses,license_number,' . $licenseId,
-            'license_type'   => 'required|string',
-            'expiry_date'    => 'required|date',
-            'categories'     => 'required|array|min:1',
-        ];
-    }
-
-    public function mount($employee)
-    {
-        Log::info('Mounting EmployeeDriverLicenses component', [
-            'incoming_employee' => $employee,
-        ]);
-
-        $this->employee = Employee::with('driverLicenses.categories')->find($employee->id);
-
-        Log::info('Employee loaded in mount', [
-            'employee' => $this->employee,
-        ]);
-
-        if ($this->employee && $this->employee->driverLicenses->isNotEmpty()) {
+        if ($this->employee->driverLicenses->isNotEmpty()) {
             $license = $this->employee->driverLicenses->first();
             Log::info('Existing license found', [
                 'license' => $license,
@@ -57,6 +37,18 @@ class EmployeeDriverLicenses extends Component
             $this->expiry_date    = '';
             $this->categories     = [];
         }
+    }
+
+    public function rules()
+    {
+        $licenseId = optional(optional($this->employee)->driverLicenses->first())->id;
+
+        return [
+            'license_number' => 'required|string|unique:driver_licenses,license_number,' . $licenseId,
+            'license_type'   => 'required|string',
+            'expiry_date'    => 'required|date',
+            'categories'     => 'required|array|min:1',
+        ];
     }
 
     public function saveLicense()

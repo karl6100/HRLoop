@@ -1,6 +1,5 @@
-<fieldset @if($mode==='view' ) disabled @endif>
     <div class="p-4">
-        <h2 class="text-xl font-bold mb-2">Driver’s Licenses</h2>
+        <h2 class="text-xl font-bold mb-2">Driver’s License</h2>
         {{-- Add Form --}}
         <form wire:submit.prevent="saveLicense" class="space-y-3">
             <input type="text" wire:model="license_number" placeholder="License Number" class="border p-2 w-full">
@@ -33,9 +32,6 @@
                 </label>
                 @endforeach
             </div>
-            @if ($mode==='edit' || $mode==='create')
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-            @endif
         </form>
     </div>
-</fieldset>

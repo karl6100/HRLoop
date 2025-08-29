@@ -74,7 +74,7 @@ class EmployeeForm extends Component
         $this->mode = $mode;
 
         if ($employee_id) {
-            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations', 'employeeStatus', 'employeePositions'])->findOrFail($employee_id);
+            $employee = Employee::with(['employeeAddresses', 'employeeEducations', 'employeeDependents', 'employeeEmergencies', 'employeeCompensations', 'employeeStatus', 'employeePositions','driverLicenses'])->findOrFail($employee_id);
 
             $this->employee = $employee;
 
