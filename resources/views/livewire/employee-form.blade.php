@@ -12,7 +12,7 @@
                 Profile
             </a>
         </li>
-        @can('employees-compensation.view')   
+        @can('employees-compensation.view')
         <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('compensation')"
                 class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'compensation' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
@@ -57,21 +57,25 @@
     <div class="mt-6 mb-2 flex items-center gap-4">
         @if($mode === 'create')
         <!-- Save Button (visible only in create mode) -->
+        @can('employees.create')
         <button
             type="button"
             wire:click="save"
             class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
             Save
         </button>
+        @endcan
         @elseif($mode === 'edit')
         <!-- Update Button (visible only in edit mode) -->
         @if ($activeTab === 'profile')
+        @can('employees.edit')
         <button
             type="button"
             wire:click="update"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Update
         </button>
+        @endcan
         @endif
         @else
         <!-- View Mode: Edit + Delete aligned at far ends -->
@@ -86,12 +90,14 @@
 
             <!-- Delete Button (right-aligned) -->
             <div x-data>
+                @can('employees.delete')
                 <button
                     @click="if (confirm('Are you sure you want to delete this employee?')) { $wire.deleteEmployee() }"
                     class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                     type="button">
                     Delete Employee
                 </button>
+                @endcan
             </div>
         </div>
         @endif
