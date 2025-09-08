@@ -4,11 +4,7 @@
         <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('profile')"
                 class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'profile' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0" />
-                </svg>
+                <x-heroicon-o-user class="h-5 w-5" />
                 Profile
             </a>
         </li>
@@ -16,28 +12,30 @@
         <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('compensation')"
                 class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'compensation' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 8c-1.657 0-3 .843-3 1.882 0 .56.27 1.065.713 1.418l3.338 2.627a1.5 1.5 0 01-1.051 2.664h-.5m.5 0H12m0 0h.5m-.5 0h-.5M21 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z" />
-                </svg>
+                <x-heroicon-o-currency-dollar class="h-5 w-5" />  
                 Compensation
             </a>
         </li>
         @endcan
         @if ($mode !== 'create')
+        @can('employees-employment-info.view')
         <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('employment-info')"
-                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'employment-info' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'employment-info' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                <x-heroicon-o-document-text class="h-5 w-5" />
                 Employment Information
             </a>
         </li>
+        @endcan
+        @can('employees-drivers-license.view')  
         <li class="mr-2">
             <a href="#" wire:click.prevent="setActiveTab('drivers-license')"
-                class="inline-block p-4 rounded-t-lg {{ $activeTab === 'drivers-license' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                class="inline-flex items-center gap-2 p-4 rounded-t-lg {{ $activeTab === 'drivers-license' ? 'text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500' : 'hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300' }}">
+                <x-heroicon-o-identification class="h-5 w-5" />
                 Drivers License
             </a>
         </li>
+        @endcan
         @endif
     </ul>
     {{-- Tab Content --}}
