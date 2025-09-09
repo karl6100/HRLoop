@@ -32,12 +32,10 @@
         <div class="grid gap-6 md:grid-cols-2">
             <div class="p-6 rounded-2xl shadow bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                 <h3 class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Employee Growth</h3>
-
             </div>
 
             <div class="p-6 rounded-2xl shadow bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                 <h3 class="text-base font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Department Breakdown</h3>
-
             </div>
         </div>
 
