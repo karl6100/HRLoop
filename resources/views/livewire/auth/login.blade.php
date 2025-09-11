@@ -12,8 +12,11 @@ use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    #[Validate('required|string|email')]
-    public string $email = '';
+    // #[Validate('required|string|email')]
+    // public string $email = '';
+
+    #[Validate('required|string')]
+    public string $employee_id = '';
 
     #[Validate('required|string')]
     public string $password = '';
@@ -43,32 +46,67 @@ new #[Layout('components.layouts.auth')] class extends Component {
     //     $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     // }
 
+    // public function login(): void
+    // {
+    //     $this->validate();
+    //     $this->ensureIsNotRateLimited();
+
+    //     // Check if user exists and is active
+    //     $user = \App\Models\User::where('email', $this->email)->first();
+
+    //     if (! $user) {
+    //         RateLimiter::hit($this->throttleKey());
+    //         throw ValidationException::withMessages([
+    //             'email' => __('auth.failed'),
+    //         ]);
+    //     }
+
+    //     if ($user->deactivate) { // Assuming column is "is_active" (boolean)
+    //         throw ValidationException::withMessages([
+    //             'email' => __('Your account has been deactivated. Please contact the administrator.'),
+    //         ]);
+    //     }
+
+    //     // Attempt login
+    //     if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+    //         RateLimiter::hit($this->throttleKey());
+    //         throw ValidationException::withMessages([
+    //             'email' => __('auth.failed'),
+    //         ]);
+    //     }
+
+    //     RateLimiter::clear($this->throttleKey());
+    //     Session::regenerate();
+
+    //     $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    // }
+
     public function login(): void
     {
         $this->validate();
         $this->ensureIsNotRateLimited();
 
         // Check if user exists and is active
-        $user = \App\Models\User::where('email', $this->email)->first();
+        $user = \App\Models\User::where('employee_id', $this->employee_id)->first();
 
         if (! $user) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'employee_id' => __('auth.failed'),
             ]);
         }
 
-        if ($user->deactivate) { // Assuming column is "is_active" (boolean)
+        if ($user->deactivate) {
             throw ValidationException::withMessages([
-                'email' => __('Your account has been deactivated. Please contact the administrator.'),
+                'employee_id' => __('Your account has been deactivated. Please contact the administrator.'),
             ]);
         }
 
         // Attempt login
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (! Auth::attempt(['employee_id' => $this->employee_id, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'employee_id' => __('auth.failed'),
             ]);
         }
 
@@ -77,6 +115,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
+
 
     /**
      * Ensure the authentication request is not rate limited.
@@ -92,7 +131,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
+            'employee_id' => __('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -104,7 +143,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
+        return Str::transliterate(Str::lower($this->employee_id) . '|' . request()->ip());
     }
 }; ?>
 
@@ -117,13 +156,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <form wire:submit="login" class="flex flex-col gap-6">
         <!-- Email Address -->
         <flux:input
+            wire:model="employee_id"
+            :label="__('Employee ID')"
+            type="text" 
+            required
+            autofocus
+            autocomplete="username"
+            placeholder="e.g. EMP00123" />
+        <!-- <flux:input
             wire:model="email"
             :label="__('Email address')"
             type="email"
             required
             autofocus
             autocomplete="email"
-            placeholder="email@example.com" />
+            placeholder="email@example.com" /> -->
+
 
         <!-- Password -->
         <div class="relative">
