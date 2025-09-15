@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class EmployeeStatusForm extends Component
 {
-    public $employmentStatusOptions = ['Probationary', 'Regular', 'Temporary', 'Extra Helper', 'OJT'];
+    public $employmentStatusOptions = ['Probationary', 'Regular', 'Temporary', 'Extra Helper', 'OJT','Terminated','Resigned','End of Contract'];
 
     public $employee;
     public $employment_status;
