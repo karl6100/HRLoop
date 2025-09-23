@@ -1,33 +1,54 @@
 version: "3.8"
-services:
 
-  # PHP Service
-  php:
+services:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - 8000:8000
+    container_name: hrloop-app
     volumes:
-      - .:/var/www/html
-    environment:
-      DB_HOST: database
-      DB_DATABASE: ${DB_DATABASE}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
+      - .:/var/www
+    networks:
+      - hrloop
     depends_on:
-      - database
+      - db
       - redis
 
-  # Database Server
-  database:
-    image: mysql:8.0
+  web:
+    image: nginx:alpine
+    container_name: hrloop-web
     ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_DATABASE_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      - "80:80"
     volumes:
-      - db_data:/var/lib/mysql
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - hrloop
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: hrloop-db
+    environment:
+      MYSQL_DATABASE: hrloop
+      MYSQL_ROOT_PASSWORD: supersecretroot
+      MYSQL_USER: hrloop_user
+      MYSQL_PASSWORD: hrloop_pass
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - hrloop
+
+  redis:
+    image: redis:alpine
+    container_name: hrloop-redis
+    command: redis-server --appendonly yes --requirepass secret
+    networks:
+      - hrloop
+
+networks:
+  hrloop:
+
+volumes:
+  dbdata:
