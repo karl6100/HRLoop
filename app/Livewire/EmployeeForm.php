@@ -313,11 +313,6 @@ class EmployeeForm extends Component
             'emergency.*.emergency_province' => 'nullable|string',
             'emergency.*.emergency_zip_code' => 'nullable|string',
             'emergency.*.emergency_country' => 'nullable|string',
-            'license_number' => 'nullable|string|unique:driver_licenses,license_number',
-            'license_type'   => 'nullable|string',
-            'expiry_date'    => 'nullable|date',
-            'license_categories' => 'array|min:0',
-
         ];
     }
     /**
