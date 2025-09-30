@@ -67,7 +67,6 @@ class AdminUserSeeder extends Seeder
                 'name'        => $employee->first_name . ' ' . $employee->last_name,
                 'email'       => $employee->email,
                 'password'    => Hash::make('password123'), // Change after first login
-                'role'        => 'admin', // if you’re storing roles here
             ]
         );
     }
